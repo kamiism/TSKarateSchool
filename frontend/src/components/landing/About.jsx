@@ -1,4 +1,4 @@
-import { useScrollReveal } from '../hooks/useScrollReveal';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
 
 const philosophy = [
   { num: '01', title: 'Discipline First', desc: 'We instill unwavering discipline — the foundation of every great martial artist.' },

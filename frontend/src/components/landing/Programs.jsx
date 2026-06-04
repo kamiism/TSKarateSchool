@@ -1,4 +1,4 @@
-import { useScrollReveal } from '../hooks/useScrollReveal';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
 import { Shield, Zap, Flame, Clock } from 'lucide-react';
 
 const programs = [
