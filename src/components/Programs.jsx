@@ -1,22 +1,23 @@
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { Shield, Zap, Flame, Clock } from 'lucide-react';
 
 const programs = [
   {
-    icon: '🥋',
+    icon: <Shield size={40} strokeWidth={1.5} />,
     title: 'Little Warriors',
     age: 'Ages 4 – 7',
     desc: 'Fun-based karate fundamentals that build coordination, confidence, and social skills in young learners.',
     schedule: 'Mon / Wed / Fri — 4:00 PM',
   },
   {
-    icon: '⚡',
+    icon: <Zap size={40} strokeWidth={1.5} />,
     title: 'Junior Karatekas',
     age: 'Ages 8 – 14',
     desc: 'Structured training in kata, kumite, and self-defense with a focus on discipline and character development.',
     schedule: 'Mon – Sat — 5:30 PM',
   },
   {
-    icon: '🔥',
+    icon: <Flame size={40} strokeWidth={1.5} />,
     title: 'Adult & Advanced',
     age: 'Ages 15+',
     desc: 'Intensive training for serious practitioners — master advanced kata, competitive kumite, and self-defense techniques.',
@@ -46,7 +47,7 @@ export default function Programs() {
                          border-2 border-brand-white/15 bg-brand-white/[0.03] p-10
                          transition-all duration-300 hover:border-brand-ice hover:-translate-x-[3px] hover:-translate-y-[3px]`}
             >
-              <span className="text-[2.5rem] mb-6 block">{program.icon}</span>
+              <div className="mb-6 text-brand-purple">{program.icon}</div>
               <h3 className="text-xl font-bold uppercase tracking-wide mb-3">
                 {program.title}
               </h3>
@@ -57,7 +58,7 @@ export default function Programs() {
                 {program.desc}
               </p>
               <span className="font-mono text-xs text-brand-muted flex items-center gap-2">
-                ◷ {program.schedule}
+                <Clock size={14} className="text-brand-ice" /> {program.schedule}
               </span>
             </div>
           ))}

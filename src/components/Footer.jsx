@@ -1,3 +1,5 @@
+import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+
 export default function Footer() {
   const scrollTo = (id) => {
     const el = document.getElementById(id);
@@ -88,15 +90,15 @@ export default function Footer() {
             <h4 className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-5">
               Contact Us
             </h4>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {[
-                { icon: '📍', text: <>T.S Karate School,<br />Your Address Here</> },
-                { icon: '📞', text: '+91 XXXXX XXXXX' },
-                { icon: '✉', text: 'info@tskarate.com' },
-                { icon: '⏰', text: 'Mon – Sat: 4 PM – 9 PM' },
+                { icon: <MapPin size={18} />, text: <>T.S Karate School,<br />Your Address Here</> },
+                { icon: <Phone size={18} />, text: '+91 XXXXX XXXXX' },
+                { icon: <Mail size={18} />, text: 'info@tskarate.com' },
+                { icon: <Clock size={18} />, text: 'Mon – Sat: 4 PM – 9 PM' },
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-3 text-sm text-brand-ice">
-                  <span className="text-base leading-relaxed flex-shrink-0">{item.icon}</span>
+                  <span className="mt-0.5 text-brand-purple flex-shrink-0">{item.icon}</span>
                   <span>{item.text}</span>
                 </div>
               ))}
