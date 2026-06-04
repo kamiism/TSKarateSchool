@@ -1,4 +1,4 @@
-import { useCountUp } from '../hooks/useCountUp';
+import { useCountUp } from '../../hooks/useCountUp';
 
 function StatItem({ count, suffix, label }) {
   const ref = useCountUp(count, 1500, suffix);
