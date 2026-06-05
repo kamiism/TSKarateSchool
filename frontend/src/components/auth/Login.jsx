@@ -200,7 +200,7 @@ export default function Login() {
           <button
             id="login-register"
             type="button"
-            onClick={() => alert('Registration opening soon!')}
+            onClick={() => navigate('/register')}
             className="w-full font-mono text-sm font-bold uppercase tracking-wider
                        py-4 border-3 border-brand-white/30 bg-transparent text-brand-white cursor-pointer
                        transition-all duration-150
