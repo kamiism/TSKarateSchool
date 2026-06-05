@@ -51,7 +51,7 @@ export default function Login() {
 
           {/* ── Role Toggle ──────────────────── */}
           <div className="mb-8">
-            <label className="font-mono text-[0.65rem] tracking-[0.2em] uppercase text-brand-muted block mb-2.5">
+            <label className="font-mono text-[0.7rem] tracking-[0.2em] uppercase text-brand-ice block mb-2.5">
               I am a
             </label>
             <div className="grid grid-cols-2 gap-0">
@@ -89,7 +89,7 @@ export default function Login() {
             <div>
               <label
                 htmlFor="login-identifier"
-                className="font-mono text-[0.65rem] tracking-[0.2em] uppercase text-brand-muted block mb-2"
+                className="font-mono text-[0.7rem] tracking-[0.2em] uppercase text-brand-ice block mb-2"
               >
                 {role === 'student' ? 'Email or Username' : 'Sensei ID'}
               </label>
@@ -114,7 +114,7 @@ export default function Login() {
             <div>
               <label
                 htmlFor="login-password"
-                className="font-mono text-[0.65rem] tracking-[0.2em] uppercase text-brand-muted block mb-2"
+                className="font-mono text-[0.7rem] tracking-[0.2em] uppercase text-brand-ice block mb-2"
               >
                 Password
               </label>

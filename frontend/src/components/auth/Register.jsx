@@ -37,7 +37,7 @@ function StepIndicator({ current }) {
 function InputField({ id, label, type = 'text', value, onChange, placeholder, autoComplete, required = true, focusState, setFocusState, fieldKey }) {
   return (
     <div>
-      <label htmlFor={id} className="font-mono text-[0.65rem] tracking-[0.2em] uppercase text-brand-muted block mb-2">
+      <label htmlFor={id} className="font-mono text-[0.7rem] tracking-[0.2em] uppercase text-brand-ice block mb-2">
         {label}
       </label>
       <div className={`border-3 transition-all duration-150 ${focusState[fieldKey] ? 'border-brand-purple shadow-brutal-purple' : 'border-brand-white/30 hover:border-brand-white/60'}`}>
@@ -244,39 +244,39 @@ export default function Register() {
               <div className="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
                 <InputField
                   id="reg-firstname" label="First Name" value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)} placeholder="John"
+                  onChange={(e) => setFirstName(e.target.value)} placeholder="Aman"
                   autoComplete="given-name" fieldKey="firstName"
                   focusState={focusState} setFocusState={setFocusState}
                 />
                 <InputField
                   id="reg-lastname" label="Last Name" value={lastName}
-                  onChange={(e) => setLastName(e.target.value)} placeholder="Doe"
+                  onChange={(e) => setLastName(e.target.value)} placeholder="Singh"
                   autoComplete="family-name" fieldKey="lastName"
                   focusState={focusState} setFocusState={setFocusState}
                 />
               </div>
               <InputField
                 id="reg-username" label="Username" value={username}
-                onChange={(e) => setUsername(e.target.value)} placeholder="john_doe42"
+                onChange={(e) => setUsername(e.target.value)} placeholder="aman_singh26"
                 autoComplete="username" fieldKey="username"
                 focusState={focusState} setFocusState={setFocusState}
               />
               <InputField
                 id="reg-email" label="Email Address" type="email" value={email}
-                onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com"
+                onChange={(e) => setEmail(e.target.value)} placeholder="xyz@email.com"
                 autoComplete="email" fieldKey="email"
                 focusState={focusState} setFocusState={setFocusState}
               />
               <InputField
                 id="reg-phone" label="Phone Number" type="tel" value={phone}
-                onChange={(e) => setPhone(e.target.value)} placeholder="+91 98765 43210"
+                onChange={(e) => setPhone(e.target.value)} placeholder="+91 98xxxxxxx"
                 autoComplete="tel" fieldKey="phone"
                 focusState={focusState} setFocusState={setFocusState}
               />
 
               {/* ── Password ─────────────────── */}
               <div>
-                <label htmlFor="reg-password" className="font-mono text-[0.65rem] tracking-[0.2em] uppercase text-brand-muted block mb-2">
+                <label htmlFor="reg-password" className="font-mono text-[0.7rem] tracking-[0.2em] uppercase text-brand-ice block mb-2">
                   Password
                 </label>
                 <div className={`border-3 flex items-center transition-all duration-150 ${focusState.password ? 'border-brand-purple shadow-brutal-purple' : 'border-brand-white/30 hover:border-brand-white/60'}`}>
@@ -314,8 +314,8 @@ export default function Register() {
                       <div
                         key={level}
                         className={`h-1 flex-1 transition-colors duration-300 ${level <= strength
-                            ? strength <= 1 ? 'bg-red-400' : strength <= 2 ? 'bg-yellow-400' : strength <= 3 ? 'bg-brand-ice' : 'bg-green-400'
-                            : 'bg-brand-white/10'
+                          ? strength <= 1 ? 'bg-red-400' : strength <= 2 ? 'bg-yellow-400' : strength <= 3 ? 'bg-brand-ice' : 'bg-green-400'
+                          : 'bg-brand-white/10'
                           }`}
                       />
                     );
@@ -328,7 +328,7 @@ export default function Register() {
 
               {/* ── Confirm Password ─────────── */}
               <div>
-                <label htmlFor="reg-confirm" className="font-mono text-[0.65rem] tracking-[0.2em] uppercase text-brand-muted block mb-2">
+                <label htmlFor="reg-confirm" className="font-mono text-[0.7rem] tracking-[0.2em] uppercase text-brand-ice block mb-2">
                   Confirm Password
                 </label>
                 <div className={`border-3 flex items-center transition-all duration-150 ${focusState.confirm ? 'border-brand-purple shadow-brutal-purple' : 'border-brand-white/30 hover:border-brand-white/60'}`}>
