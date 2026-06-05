@@ -1,4 +1,5 @@
 import { useCountUp } from '../../hooks/useCountUp';
+import { useNavigate } from 'react-router-dom';
 import TSKar1 from './TSKar1.jpeg';
 
 
@@ -17,6 +18,8 @@ function StatItem({ count, suffix, label }) {
 }
 
 export default function Hero() {
+  const navigate = useNavigate();
+
   return (
     <section className="mt-17.5 min-h-[calc(100vh-70px)] flex flex-col relative overflow-hidden bg-brand-black text-brand-white">
       {/* Background Image */}
@@ -61,7 +64,7 @@ export default function Hero() {
           </button>
           <button
             id="hero-login"
-            onClick={() => alert('Login page coming soon!')}
+            onClick={() => navigate('/login')}
             className="inline-flex items-center justify-center font-mono text-sm font-bold uppercase tracking-wider
                        px-7 py-3.5 border-3 border-brand-white bg-transparent text-brand-white cursor-pointer
                        transition-all duration-150 hover:bg-brand-white hover:text-brand-black
