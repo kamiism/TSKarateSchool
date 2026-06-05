@@ -1,62 +1,107 @@
 import { useState } from 'react';
 
-const dailyQuiz = {
-  question: "What is the Japanese term for 'Roundhouse Kick'?",
-  options: ["Mae-geri", "Yoko-geri", "Mawashi-geri", "Ushiro-geri"],
-  correct: 2, // index of Mawashi-geri
-};
+const liveQuizQuestions = [
+  {
+    question: "What is the Japanese term for 'Roundhouse Kick'?",
+    options: ["Mae-geri", "Yoko-geri", "Mawashi-geri", "Ushiro-geri"],
+    correct: 2,
+  },
+  {
+    question: "What does 'Kata' translate to in English?",
+    options: ["Form or Pattern", "Sparring", "Basic Technique", "Breaking"],
+    correct: 0,
+  },
+  {
+    question: "Which stance is known as the 'Front Stance'?",
+    options: ["Kokutsu-dachi", "Zenkutsu-dachi", "Kiba-dachi", "Neko-ashi-dachi"],
+    correct: 1,
+  },
+  {
+    question: "What is the term for a block that goes from inside to outside?",
+    options: ["Age-uke", "Soto-uke", "Uchi-uke", "Gedan-barai"],
+    correct: 2,
+  },
+  {
+    question: "In dojo etiquette, what does 'Osu' signify?",
+    options: ["Hello", "Goodbye", "Patience/Respect/Acknowledgment", "Stop"],
+    correct: 2,
+  }
+];
 
 export default function QuizModal({ isOpen, onClose, onComplete }) {
+  const [currentStep, setCurrentStep] = useState(0);
   const [selected, setSelected] = useState(null);
+  const [score, setScore] = useState(0);
   const [submitted, setSubmitted] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleSubmit = () => {
+  const currentQ = liveQuizQuestions[currentStep];
+  const isLastQuestion = currentStep === liveQuizQuestions.length - 1;
+
+  const handleNext = () => {
     if (selected === null) return;
-    setSubmitted(true);
-    setTimeout(() => {
-      onComplete(selected === dailyQuiz.correct);
-      onClose();
-      setSubmitted(false);
+    
+    const isCorrect = selected === currentQ.correct;
+    if (isCorrect) {
+      setScore(prev => prev + 1);
+    }
+
+    if (isLastQuestion) {
+      setSubmitted(true);
+      setTimeout(() => {
+        const finalScore = score + (isCorrect ? 1 : 0);
+        onComplete(finalScore, liveQuizQuestions.length);
+        onClose();
+        // Reset state for next time
+        setSubmitted(false);
+        setCurrentStep(0);
+        setScore(0);
+        setSelected(null);
+      }, 3000);
+    } else {
+      setCurrentStep(prev => prev + 1);
       setSelected(null);
-    }, 2500);
+    }
   };
 
   return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-brand-black/80 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-brand-black/80 backdrop-blur-sm p-4">
       <div className="bg-brand-white border-4 border-brand-black w-full max-w-md p-8 relative shadow-brutal-lg">
         {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 font-mono font-bold text-xl cursor-pointer bg-transparent border-none text-brand-black hover:text-brand-purple transition-colors"
-        >
-          X
-        </button>
+        {!submitted && (
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 font-mono font-bold text-xl cursor-pointer bg-transparent border-none text-brand-black hover:text-brand-purple transition-colors"
+          >
+            X
+          </button>
+        )}
 
         <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-4 block">
-          // Daily Attendance Quiz
+          // Live Quiz ({currentStep + 1}/{liveQuizQuestions.length})
         </span>
 
         {submitted ? (
           <div className="text-center py-8">
-            <h3 className={`text-2xl font-bold mb-4 ${selected === dailyQuiz.correct ? 'text-[#228B22]' : 'text-[#D9381E]'}`}>
-              {selected === dailyQuiz.correct ? 'Correct! 🎉' : 'Incorrect! ❌'}
+            <h3 className="text-3xl font-bold mb-4 text-brand-black">
+              Quiz Complete! 🎉
             </h3>
+            <p className="text-xl font-mono mb-4 text-brand-purple font-bold">
+              You scored: {score + (selected === currentQ.correct ? 1 : 0)}/{liveQuizQuestions.length}
+            </p>
             <p className="text-brand-muted font-mono text-sm leading-relaxed">
-              {selected === dailyQuiz.correct 
-                ? 'Your attendance for today has been marked and points have been added.' 
-                : 'Better luck tomorrow. Keep studying your terminology!'}
+              Your attendance has been recorded and points have been updated.
             </p>
           </div>
         ) : (
           <>
-            <h3 className="text-xl font-bold leading-tight mb-6 text-brand-black">
-              {dailyQuiz.question}
+            <h3 className="text-xl font-bold leading-tight mb-6 text-brand-black min-h-[4rem]">
+              {currentQ.question}
             </h3>
 
             <div className="space-y-3 mb-8">
-              {dailyQuiz.options.map((option, idx) => (
+              {currentQ.options.map((option, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelected(idx)}
@@ -73,7 +118,7 @@ export default function QuizModal({ isOpen, onClose, onComplete }) {
             </div>
 
             <button
-              onClick={handleSubmit}
+              onClick={handleNext}
               disabled={selected === null}
               className={`w-full font-mono text-sm font-bold uppercase tracking-wider py-3.5 border-3 border-brand-black transition-all duration-150
                 ${selected === null 
@@ -82,7 +127,7 @@ export default function QuizModal({ isOpen, onClose, onComplete }) {
                 }
               `}
             >
-              Submit Answer
+              {isLastQuestion ? 'Submit Quiz' : 'Next Question'}
             </button>
           </>
         )}
