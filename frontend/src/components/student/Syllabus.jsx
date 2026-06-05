@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Lock } from 'lucide-react';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 
 // Placeholder syllabus — content will be provided later
@@ -104,6 +105,8 @@ const beltSyllabus = [
 ];
 
 export default function Syllabus({ currentBelt }) {
+  const currentBeltIndex = beltSyllabus.findIndex(item => item.belt === currentBelt);
+  const maxAccessibleIdx = currentBeltIndex !== -1 ? currentBeltIndex : 0;
   const [openBelt, setOpenBelt] = useState(currentBelt);
   const sectionRef = useScrollReveal();
 
@@ -122,6 +125,7 @@ export default function Syllabus({ currentBelt }) {
           {beltSyllabus.map((item, idx) => {
             const isOpen = openBelt === item.belt;
             const isCurrent = currentBelt === item.belt;
+            const isLocked = idx > maxAccessibleIdx;
 
             return (
               <div
@@ -130,10 +134,12 @@ export default function Syllabus({ currentBelt }) {
               >
                 {/* Accordion Header */}
                 <button
-                  onClick={() => setOpenBelt(isOpen ? null : item.belt)}
-                  className={`w-full flex items-center justify-between px-6 py-4 cursor-pointer
-                             bg-transparent border-none text-left transition-colors duration-200
-                             ${isOpen ? 'bg-brand-ice/20' : 'hover:bg-brand-ice/10'}`}
+                  disabled={isLocked}
+                  onClick={() => !isLocked && setOpenBelt(isOpen ? null : item.belt)}
+                  className={`w-full flex items-center justify-between px-6 py-4 transition-colors duration-200
+                             bg-transparent border-none text-left
+                             ${isLocked ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
+                             ${isOpen ? 'bg-brand-ice/20' : isLocked ? '' : 'hover:bg-brand-ice/10'}`}
                 >
                   <div className="flex items-center gap-4">
                     <div
@@ -154,11 +160,15 @@ export default function Syllabus({ currentBelt }) {
                       </span>
                     )}
                   </div>
-                  <span className={`font-mono text-xl font-bold text-brand-black transition-transform duration-300 ${
-                    isOpen ? 'rotate-45' : ''
-                  }`}>
-                    +
-                  </span>
+                  {isLocked ? (
+                    <Lock className="w-5 h-5 text-brand-muted" />
+                  ) : (
+                    <span className={`font-mono text-xl font-bold text-brand-black transition-transform duration-300 ${
+                      isOpen ? 'rotate-45' : ''
+                    }`}>
+                      +
+                    </span>
+                  )}
                 </button>
 
                 {/* Accordion Content */}
