@@ -113,9 +113,6 @@ export default function Syllabus({ currentBelt }) {
   return (
     <section id="syllabus" className="py-16 bg-brand-white" ref={sectionRef}>
       <div className="w-[min(1200px,92%)] mx-auto">
-        <span className="reveal font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-3 block">
-          // Belt-Wise Syllabus
-        </span>
         <h2 className="reveal text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight mb-10">
           Your Path<br />Forward
         </h2>
@@ -163,9 +160,8 @@ export default function Syllabus({ currentBelt }) {
                   {isLocked ? (
                     <Lock className="w-5 h-5 text-brand-muted" />
                   ) : (
-                    <span className={`font-mono text-xl font-bold text-brand-black transition-transform duration-300 ${
-                      isOpen ? 'rotate-45' : ''
-                    }`}>
+                    <span className={`font-mono text-xl font-bold text-brand-black transition-transform duration-300 ${isOpen ? 'rotate-45' : ''
+                      }`}>
                       +
                     </span>
                   )}
@@ -173,9 +169,8 @@ export default function Syllabus({ currentBelt }) {
 
                 {/* Accordion Content */}
                 <div
-                  className={`overflow-hidden transition-all duration-400 ${
-                    isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
-                  }`}
+                  className={`overflow-hidden transition-all duration-400 ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+                    }`}
                 >
                   <div className="px-6 pb-5 pt-2">
                     <div className="pl-12 border-l-3" style={{ borderColor: item.borderColor }}>

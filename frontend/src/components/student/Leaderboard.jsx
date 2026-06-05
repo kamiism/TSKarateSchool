@@ -30,9 +30,6 @@ export default function Leaderboard({ currentStudentRank }) {
   return (
     <section id="leaderboard" className="py-16 bg-brand-black text-brand-white" ref={sectionRef}>
       <div className="w-[min(1200px,92%)] mx-auto">
-        <span className="reveal font-mono text-xs tracking-[0.2em] uppercase text-brand-ice mb-3 block">
-          // Leaderboard
-        </span>
         <div className="reveal flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
           <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight text-brand-white">
             Top<br />Performers
@@ -58,9 +55,9 @@ export default function Leaderboard({ currentStudentRank }) {
                     key={entry.name}
                     className={`border-b border-brand-ice/10 transition-colors duration-200
                                ${isCurrentUser
-                                 ? 'bg-brand-purple/20 border-l-4 border-l-brand-purple'
-                                 : 'hover:bg-brand-white/5'
-                               }`}
+                        ? 'bg-brand-purple/20 border-l-4 border-l-brand-purple'
+                        : 'hover:bg-brand-white/5'
+                      }`}
                   >
                     <td className="py-3.5 px-4">
                       <span className={`font-mono font-bold ${entry.rank <= 3 ? 'text-xl' : 'text-sm text-brand-muted'}`}>

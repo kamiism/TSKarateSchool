@@ -19,9 +19,6 @@ export default function KataVideo() {
   return (
     <section id="kata" className="py-16 bg-brand-black text-brand-white" ref={sectionRef}>
       <div className="w-[min(1200px,92%)] mx-auto">
-        <span className="reveal font-mono text-xs tracking-[0.2em] uppercase text-brand-ice mb-3 block">
-          // Kata Reference
-        </span>
         <h2 className="reveal text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight text-brand-white mb-10">
           Learn Your<br />Kata
         </h2>
@@ -69,9 +66,9 @@ export default function KataVideo() {
                   className={`w-full text-left px-4 py-3.5 border-b border-brand-ice/10 cursor-pointer
                              bg-transparent border-x-0 border-t-0 transition-all duration-200 flex items-start gap-3
                              ${i === activeVideo
-                               ? 'bg-brand-purple/20 border-l-4 border-l-brand-purple'
-                               : 'hover:bg-brand-white/5'
-                             }`}
+                      ? 'bg-brand-purple/20 border-l-4 border-l-brand-purple'
+                      : 'hover:bg-brand-white/5'
+                    }`}
                 >
                   <span className="font-mono text-[0.65rem] text-brand-muted mt-0.5 shrink-0 w-5">
                     {String(i + 1).padStart(2, '0')}

@@ -15,9 +15,6 @@ export default function Dashboard({ student }) {
       <div className="w-[min(1200px,92%)] mx-auto">
         {/* Welcome */}
         <div className="reveal mb-10">
-          <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-2 block">
-            // Student Dashboard
-          </span>
           <h1 className="text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight">
             Welcome back,<br />
             <span className="text-brand-purple">{student.name}</span>

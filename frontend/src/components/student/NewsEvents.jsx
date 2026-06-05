@@ -57,9 +57,6 @@ export default function NewsEvents() {
   return (
     <section id="news" className="py-16 bg-brand-white" ref={sectionRef}>
       <div className="w-[min(1200px,92%)] mx-auto">
-        <span className="reveal font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-3 block">
-          // News & Events
-        </span>
         <h2 className="reveal text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight mb-10">
           Stay<br />Updated
         </h2>
@@ -88,9 +85,9 @@ export default function NewsEvents() {
                     </h3>
                     <span className={`font-mono text-[0.6rem] tracking-wider uppercase px-2 py-0.5 flex-shrink-0
                                     ${item.type === 'event'
-                                      ? 'bg-brand-purple text-brand-white'
-                                      : 'bg-brand-ice text-brand-black'
-                                    }`}>
+                        ? 'bg-brand-purple text-brand-white'
+                        : 'bg-brand-ice text-brand-black'
+                      }`}>
                       {item.tag}
                     </span>
                   </div>
