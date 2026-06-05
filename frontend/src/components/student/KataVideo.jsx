@@ -32,7 +32,14 @@ export default function KataVideo() {
             <div className="border-3 border-brand-ice/20 bg-brand-black">
               {/* Video iframe */}
               <div className="relative w-full aspect-video bg-brand-muted/20">
-                <iframe width="786" height="442" src="https://www.youtube.com/embed/jH6bv4GDpp0?si=nNg2mCprxPa9hhHv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe
+                  src={`https://www.youtube.com/embed/${current.id}`}
+                  title={current.title}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  loading="lazy"
+                />
               </div>
               {/* Video Info */}
               <div className="p-5 border-t-2 border-brand-ice/20">
@@ -54,7 +61,7 @@ export default function KataVideo() {
                 Kata Library
               </span>
             </div>
-            <div className="flex-1 overflow-y-auto max-h-[400px] lg:max-h-none">
+            <div className="flex-1 overflow-y-auto max-h-96 lg:max-h-none">
               {kataVideos.map((video, i) => (
                 <button
                   key={i}
@@ -66,7 +73,7 @@ export default function KataVideo() {
                                : 'hover:bg-brand-white/5'
                              }`}
                 >
-                  <span className="font-mono text-[0.65rem] text-brand-muted mt-0.5 flex-shrink-0 w-5">
+                  <span className="font-mono text-[0.65rem] text-brand-muted mt-0.5 shrink-0 w-5">
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <div>

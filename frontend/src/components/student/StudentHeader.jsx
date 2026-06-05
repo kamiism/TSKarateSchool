@@ -10,14 +10,32 @@ export default function StudentHeader({ student }) {
     document.body.style.overflow = !mobileOpen ? 'hidden' : '';
   };
 
-  const scrollTo = (id) => {
+  const handleNavClick = (id) => {
     setMobileOpen(false);
     document.body.style.overflow = '';
-    const el = document.getElementById(id);
-    if (el) {
-      const offset = 80;
-      const top = el.getBoundingClientRect().top + window.scrollY - offset;
-      window.scrollTo({ top, behavior: 'smooth' });
+    
+    if (id === 'take-quiz') {
+      navigate('/student/quiz');
+      return;
+    }
+    
+    if (window.location.pathname !== '/student') {
+      navigate('/student');
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) {
+          const offset = 80;
+          const top = el.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      const el = document.getElementById(id);
+      if (el) {
+        const offset = 80;
+        const top = el.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
     }
   };
 
@@ -27,6 +45,7 @@ export default function StudentHeader({ student }) {
 
   const navItems = [
     { label: 'Dashboard', id: 'dashboard' },
+    { label: 'Take Quiz', id: 'take-quiz' },
     { label: 'Leaderboard', id: 'leaderboard' },
     { label: 'Syllabus', id: 'syllabus' },
     { label: 'Kata Tutorial', id: 'kata' },
@@ -38,7 +57,7 @@ export default function StudentHeader({ student }) {
       <header className="fixed top-0 left-0 w-full z-50 bg-brand-black border-b-3 border-brand-purple">
         <div className="w-[min(1200px,92%)] mx-auto flex items-center justify-between py-3">
           {/* Logo */}
-          <button onClick={() => scrollTo('dashboard')} className="flex items-center gap-2.5 cursor-pointer">
+          <button onClick={() => handleNavClick('dashboard')} className="flex items-center gap-2.5 cursor-pointer bg-transparent border-none">
             <div className="w-9 h-9 bg-brand-purple text-brand-white border-3 border-brand-purple flex items-center justify-center font-mono font-bold text-sm">
               TS
             </div>
@@ -53,7 +72,7 @@ export default function StudentHeader({ student }) {
               {navItems.map((item) => (
                 <li key={item.id}>
                   <button
-                    onClick={() => scrollTo(item.id)}
+                    onClick={() => handleNavClick(item.id)}
                     className="font-mono text-[0.75rem] font-medium uppercase tracking-wider relative pb-0.5 cursor-pointer
                                after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5
                                after:bg-brand-ice after:transition-all after:duration-300 hover:after:w-full
@@ -93,17 +112,17 @@ export default function StudentHeader({ student }) {
           {/* Mobile Toggle */}
           <button
             onClick={toggleMobile}
-            className="lg:hidden flex flex-col justify-between w-7 h-5 bg-transparent border-none cursor-pointer relative z-[1001]"
+            className="lg:hidden flex flex-col justify-between w-7 h-5 bg-transparent border-none cursor-pointer relative z-1001"
             aria-label="Toggle Menu"
           >
-            <span className={`block w-full h-[2px] bg-brand-white transition-all duration-300 origin-center ${
-              mobileOpen ? 'translate-y-[9px] rotate-45' : ''
+            <span className={`block w-full h-0.5 bg-brand-white transition-all duration-300 origin-center ${
+              mobileOpen ? 'translate-y-2.25 rotate-45' : ''
             }`} />
-            <span className={`block w-full h-[2px] bg-brand-white transition-all duration-300 ${
+            <span className={`block w-full h-0.5 bg-brand-white transition-all duration-300 ${
               mobileOpen ? 'opacity-0' : ''
             }`} />
-            <span className={`block w-full h-[2px] bg-brand-white transition-all duration-300 origin-center ${
-              mobileOpen ? '-translate-y-[9px] -rotate-45' : ''
+            <span className={`block w-full h-0.5 bg-brand-white transition-all duration-300 origin-center ${
+              mobileOpen ? '-translate-y-2.25 -rotate-45' : ''
             }`} />
           </button>
         </div>
@@ -111,7 +130,7 @@ export default function StudentHeader({ student }) {
 
       {/* Mobile Menu */}
       <div
-        className={`fixed top-0 w-full h-screen bg-brand-black z-[999] flex flex-col items-center justify-center gap-6
+        className={`fixed top-0 w-full h-screen bg-brand-black z-999 flex flex-col items-center justify-center gap-6
                      border-l-3 border-brand-purple transition-all duration-400 ${
           mobileOpen ? 'right-0' : '-right-full'
         }`}
@@ -132,7 +151,7 @@ export default function StudentHeader({ student }) {
         {navItems.map((item) => (
           <button
             key={item.id}
-            onClick={() => scrollTo(item.id)}
+            onClick={() => handleNavClick(item.id)}
             className="font-mono text-xl font-bold uppercase tracking-wider bg-transparent border-none text-brand-ice cursor-pointer hover:text-brand-white transition-colors"
           >
             {item.label}
