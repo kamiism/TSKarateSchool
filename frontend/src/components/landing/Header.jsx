@@ -48,9 +48,8 @@ export default function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-50 bg-brand-white border-b-3 border-brand-black transition-transform duration-300 ${
-          hidden ? '-translate-y-full' : 'translate-y-0'
-        }`}
+        className={`fixed top-0 left-0 w-full z-50 bg-brand-white border-b-3 border-brand-black transition-transform duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0'
+          }`}
       >
         <div className="w-[min(1200px,92%)] mx-auto flex items-center justify-between py-4">
           {/* Logo */}
@@ -93,7 +92,7 @@ export default function Header() {
               </button>
               <button
                 id="btn-register"
-                onClick={() => alert('Registration opening soon!')}
+                onClick={() => navigate('/register')}
                 className="inline-flex items-center justify-center font-mono text-xs font-bold uppercase tracking-wider
                            px-5 py-2 border-3 border-brand-black bg-brand-black text-brand-white cursor-pointer
                            transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-brand-purple hover:shadow-brutal-purple
@@ -110,15 +109,12 @@ export default function Header() {
             className="md:hidden flex flex-col justify-between w-8 h-6 bg-transparent border-none cursor-pointer relative z-[1001]"
             aria-label="Toggle Menu"
           >
-            <span className={`block w-full h-[3px] bg-brand-black transition-all duration-300 origin-center ${
-              mobileOpen ? 'translate-y-[10.5px] rotate-45' : ''
-            }`} />
-            <span className={`block w-full h-[3px] bg-brand-black transition-all duration-300 ${
-              mobileOpen ? 'opacity-0' : ''
-            }`} />
-            <span className={`block w-full h-[3px] bg-brand-black transition-all duration-300 origin-center ${
-              mobileOpen ? '-translate-y-[10.5px] -rotate-45' : ''
-            }`} />
+            <span className={`block w-full h-[3px] bg-brand-black transition-all duration-300 origin-center ${mobileOpen ? 'translate-y-[10.5px] rotate-45' : ''
+              }`} />
+            <span className={`block w-full h-[3px] bg-brand-black transition-all duration-300 ${mobileOpen ? 'opacity-0' : ''
+              }`} />
+            <span className={`block w-full h-[3px] bg-brand-black transition-all duration-300 origin-center ${mobileOpen ? '-translate-y-[10.5px] -rotate-45' : ''
+              }`} />
           </button>
         </div>
       </header>
@@ -126,9 +122,8 @@ export default function Header() {
       {/* Mobile Menu */}
       <div
         className={`fixed top-0 w-full h-screen bg-brand-white z-[999] flex flex-col items-center justify-center gap-8
-                     border-l-3 border-brand-black transition-all duration-400 ${
-          mobileOpen ? 'right-0' : '-right-full'
-        }`}
+                     border-l-3 border-brand-black transition-all duration-400 ${mobileOpen ? 'right-0' : '-right-full'
+          }`}
       >
         {navItems.map((item) => (
           <button

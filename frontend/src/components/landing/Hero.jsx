@@ -23,11 +23,11 @@ export default function Hero() {
   return (
     <section className="mt-17.5 min-h-[calc(100vh-70px)] flex flex-col relative overflow-hidden bg-brand-black text-brand-white">
       {/* Background Image */}
-      <div 
+      <div
         className="absolute inset-0 z-0 bg-cover bg-center opacity-40"
         style={{ backgroundImage: `url(${TSKar1})` }}
       />
-      
+
       {/* Background Grid */}
       <div className="absolute inset-0 z-1">
         <div className="absolute inset-0 bg-linear-to-b z-2" />
@@ -54,7 +54,7 @@ export default function Hero() {
         <div className="flex gap-4 flex-wrap">
           <button
             id="hero-register"
-            onClick={() => alert('Registration opening soon!')}
+            onClick={() => navigate('/register')}
             className="inline-flex items-center justify-center font-mono text-sm font-bold uppercase tracking-wider
                        px-7 py-3.5 border-3 border-brand-white bg-brand-black text-brand-white cursor-pointer
                        transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-brand-purple hover:shadow-brutal-purple
