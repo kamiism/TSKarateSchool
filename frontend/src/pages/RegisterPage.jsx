@@ -2,7 +2,7 @@ import Register from '../components/auth/Register';
 
 export default function RegisterPage() {
   return (
-    <div className="min-h-screen bg-brand-black flex items-center justify-center relative overflow-hidden py-12">
+    <div className="min-h-screen bg-brand-black flex items-start justify-center relative overflow-hidden py-16">
       {/* Background grid pattern */}
       <div className="absolute inset-0 opacity-[0.04]"
         style={{
