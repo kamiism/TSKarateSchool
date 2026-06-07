@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import StudentHome from './pages/StudentHome';
 import QuizPage from './pages/QuizPage';
+import AdminHome from './pages/AdminHome';
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/student" element={<StudentHome />} />
         <Route path="/student/quiz" element={<QuizPage />} />
+        <Route path="/admin" element={<AdminHome />} />
       </Routes>
     </BrowserRouter>
   );
