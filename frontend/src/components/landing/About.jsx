@@ -5,8 +5,9 @@ import TSKar3 from './TSKar3.jpeg';
 import TSKar4 from './TSKar4.jpeg';
 import TSKar5 from './TSKar5.jpeg';
 import TSKar6 from './TSKar6.jpeg';
+import TSKar7 from './TSKar7.jpeg';
 
-const photos = [TSKar2, TSKar3, TSKar4, TSKar5, TSKar6];
+const photos = [TSKar7, TSKar2, TSKar3, TSKar4, TSKar5, TSKar6];
 
 const philosophy = [
   { num: '01', title: 'Discipline First', desc: 'We instill unwavering discipline — the foundation of every great martial artist.' },
