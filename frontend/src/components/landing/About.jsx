@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import TSKar2 from './TSKar2.jpeg';
 import TSKar3 from './TSKar3.jpeg';
 import TSKar4 from './TSKar4.jpeg';
@@ -19,12 +20,18 @@ export default function About() {
   const sectionRef = useScrollReveal();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % photos.length);
-    }, 3500); // Auto-slide every 3.5s
-    return () => clearInterval(timer);
+  const nextSlide = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % photos.length);
   }, []);
+
+  const prevSlide = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + photos.length) % photos.length);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(nextSlide, 3500); // Auto-slide every 3.5s
+    return () => clearInterval(timer);
+  }, [nextSlide, currentIndex]); // Reset timer when slide changes manually
 
   return (
     <section id="about" className="py-24 bg-brand-white" ref={sectionRef}>
@@ -85,6 +92,24 @@ export default function About() {
                   />
                 ))}
               </div>
+
+              {/* Navigation Arrows */}
+              <button
+                onClick={prevSlide}
+                className="absolute top-1/2 left-4 -translate-y-1/2 z-10 w-10 h-10 border-2 border-brand-black bg-brand-white/80 backdrop-blur-sm
+                           flex items-center justify-center cursor-pointer shadow-brutal hover:bg-brand-white hover:-translate-x-1 transition-all opacity-0 group-hover:opacity-100"
+                aria-label="Previous slide"
+              >
+                <ChevronLeft size={20} className="text-brand-black" />
+              </button>
+              <button
+                onClick={nextSlide}
+                className="absolute top-1/2 right-4 -translate-y-1/2 z-10 w-10 h-10 border-2 border-brand-black bg-brand-white/80 backdrop-blur-sm
+                           flex items-center justify-center cursor-pointer shadow-brutal hover:bg-brand-white hover:translate-x-1 transition-all opacity-0 group-hover:opacity-100"
+                aria-label="Next slide"
+              >
+                <ChevronRight size={20} className="text-brand-black" />
+              </button>
             </div>
             <div className="absolute top-3 left-3 -right-3 -bottom-3 bg-brand-purple -z-1" />
           </div>
