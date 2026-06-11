@@ -1,5 +1,5 @@
-import { CheckCircle, ChevronDown, ChevronUp, Flag, FlagOff, MessageSquare } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useState, useMemo } from 'react';
+import { Flag, FlagOff, ChevronDown, ChevronUp, MessageSquare, CheckCircle } from 'lucide-react';
 
 const beltMeta = {
   'White Belt': { color: '#F5F5F5', borderColor: '#999' },
@@ -144,17 +144,13 @@ export default function LiveMarking({ examConfig, students, onEndExam }) {
       </div>
 
       {/* Belt Groups */}
-      <style>{`.hide-scrollbar::-webkit-scrollbar { display: none; }`}</style>
-      <div
-        className="flex md:block gap-4 md:gap-0 md:space-y-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory touch-pan-x hide-scrollbar scroll-smooth pb-4 md:pb-0"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
+      <div className="space-y-6">
         {Object.entries(beltGroups).map(([belt, beltStudents]) => {
           const meta = beltMeta[belt] || { color: '#ccc', borderColor: '#999' };
           const isCollapsed = collapsedBelts[belt];
 
           return (
-            <div key={belt} className="w-[calc(100vw-3rem)] shrink-0 snap-center md:snap-none md:w-full border-3 border-brand-black h-fit">
+            <div key={belt} className="border-3 border-brand-black">
               {/* Belt Group Header */}
               <button
                 onClick={() => toggleBeltCollapse(belt)}
@@ -188,24 +184,25 @@ export default function LiveMarking({ examConfig, students, onEndExam }) {
                         className={`p-5 transition-colors ${studentData?.flagged ? 'bg-[#FFD700]/8 border-l-4 border-l-[#DAA520]' : ''}`}
                       >
                         {/* Student Header */}
-                        <div className="flex items-center justify-between mb-4 gap-2 min-w-0">
-                          <div className="flex items-center gap-3 min-w-0">
+                        <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                          <div className="flex items-center gap-3">
                             <div className="w-9 h-9 border-2 border-brand-black bg-brand-purple flex items-center justify-center
                                             font-mono text-xs font-bold text-brand-white uppercase">
                               {student.name.charAt(0)}
                             </div>
                             <div>
-                              <span className="font-bold text-sm text-brand-black block truncate">{student.name}</span>
+                              <span className="font-bold text-sm text-brand-black block">{student.name}</span>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2 flex-shrink-0">
-                            <span className="font-mono text-base font-bold whitespace-nowrap text-brand-black">
+                          <div className="flex items-center gap-3">
+                            <span className="font-mono text-lg font-bold text-brand-black">
                               {total}<span className="text-sm text-brand-muted">/{examConfig.totalMaxMarks}</span>
                             </span>
-                            <span className={`font-mono text-xs font-bold px-2 py-0.5 ${pct >= 70 ? 'bg-[#228B22]/10 text-[#228B22]' :
-                                pct >= 40 ? 'bg-[#DAA520]/10 text-[#DAA520]' :
-                                  'bg-[#D9381E]/10 text-[#D9381E]'
-                              }`}>
+                            <span className={`font-mono text-xs font-bold px-2 py-0.5 ${
+                              pct >= 70 ? 'bg-[#228B22]/10 text-[#228B22]' :
+                              pct >= 40 ? 'bg-[#DAA520]/10 text-[#DAA520]' :
+                              'bg-[#D9381E]/10 text-[#D9381E]'
+                            }`}>
                               {pct}%
                             </span>
                             <button
@@ -220,20 +217,20 @@ export default function LiveMarking({ examConfig, students, onEndExam }) {
                         </div>
 
                         {/* Parameter Scores — Touch-friendly */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 mb-3">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-3">
                           {examConfig.parameters.map((param) => (
-                            <div key={param.name} className="border-2 border-brand-ice/30 p-3 min-w-0">
-                              <label className="font-mono text-[0.6rem] text-brand-muted uppercase tracking-wider block mb-1.5 truncate">
+                            <div key={param.name} className="border-2 border-brand-ice/30 p-3">
+                              <label className="font-mono text-[0.6rem] text-brand-muted uppercase tracking-wider block mb-1.5">
                                 {param.name}
                               </label>
-                              <div className="flex items-end gap-1 min-w-0">
+                              <div className="flex items-end gap-1">
                                 <input
                                   type="number"
                                   min="0"
                                   max={param.maxMarks}
                                   value={studentData?.params[param.name] ?? 0}
                                   onChange={(e) => updateScore(student.id, param.name, e.target.value)}
-                                  className="w-full min-w-0 text-center font-mono text-xl font-bold border-b-3 border-brand-black
+                                  className="w-full text-center font-mono text-xl font-bold border-b-3 border-brand-black
                                              bg-transparent outline-none text-brand-black py-1
                                              focus:border-brand-purple transition-colors
                                              [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
