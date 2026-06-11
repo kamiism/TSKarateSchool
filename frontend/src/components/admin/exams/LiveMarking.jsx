@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Flag, FlagOff, ChevronDown, ChevronUp, MessageSquare, CheckCircle } from 'lucide-react';
+import { Flag, FlagOff, ChevronDown, ChevronUp, MessageSquare, CheckCircle, Check } from 'lucide-react';
 
 const beltMeta = {
   'White Belt': { color: '#F5F5F5', borderColor: '#999' },
@@ -30,6 +30,8 @@ export default function LiveMarking({ examConfig, students, onEndExam }) {
 
   const [collapsedBelts, setCollapsedBelts] = useState({});
   const [showEndConfirm, setShowEndConfirm] = useState(false);
+  // Track which parameter is open per student: { [studentId]: paramName | null }
+  const [openParam, setOpenParam] = useState({});
 
   const toggleBeltCollapse = (belt) => {
     setCollapsedBelts(prev => ({ ...prev, [belt]: !prev[belt] }));
@@ -216,36 +218,84 @@ export default function LiveMarking({ examConfig, students, onEndExam }) {
                           </div>
                         </div>
 
-                        {/* Parameter Scores — Touch-friendly */}
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-3">
-                          {examConfig.parameters.map((param) => (
-                            <div key={param.name} className="border-2 border-brand-ice/30 p-3">
-                              <label className="font-mono text-[0.6rem] text-brand-muted uppercase tracking-wider block mb-1.5">
-                                {param.name}
-                              </label>
-                              <div className="flex items-end gap-1">
-                                <input
-                                  type="number"
-                                  min="0"
-                                  max={param.maxMarks}
-                                  value={studentData?.params[param.name] ?? 0}
-                                  onChange={(e) => updateScore(student.id, param.name, e.target.value)}
-                                  className="w-full text-center font-mono text-xl font-bold border-b-3 border-brand-black
-                                             bg-transparent outline-none text-brand-black py-1
-                                             focus:border-brand-purple transition-colors
-                                             [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                />
-                                <span className="font-mono text-[0.6rem] text-brand-muted mb-1 flex-shrink-0">
-                                  /{param.maxMarks}
-                                </span>
+                        {/* Parameter Scores — Single Dropdown */}
+                        <div className="mb-3">
+                          {/* Dropdown + Score Input Row */}
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <div className="relative flex-1 min-w-[140px]">
+                              <select
+                                value={openParam[student.id] || ''}
+                                onChange={(e) => setOpenParam(prev => ({ ...prev, [student.id]: e.target.value }))}
+                                className="w-full appearance-none bg-brand-white border-2 border-brand-black px-3 py-2.5 pr-8
+                                           font-mono text-[0.75rem] font-bold uppercase tracking-wider text-brand-black
+                                           cursor-pointer outline-none focus:border-brand-purple transition-colors"
+                              >
+                                <option value="">Select parameter…</option>
+                                {examConfig.parameters.map((param) => {
+                                  const s = studentData?.params[param.name] ?? 0;
+                                  return (
+                                    <option key={param.name} value={param.name}>
+                                      {s > 0 ? '✓ ' : '○ '}{param.name} {s > 0 ? `(${s}/${param.maxMarks})` : ''}
+                                    </option>
+                                  );
+                                })}
+                              </select>
+                              <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-brand-muted">
+                                <ChevronDown size={14} />
                               </div>
-                              {param.criteria && (
-                                <span className="font-mono text-[0.5rem] text-brand-muted/60 block mt-1 leading-tight italic">
-                                  {param.criteria}
-                                </span>
-                              )}
                             </div>
-                          ))}
+
+                            {/* Score input — visible when a param is selected */}
+                            {openParam[student.id] && (() => {
+                              const selParam = examConfig.parameters.find(p => p.name === openParam[student.id]);
+                              if (!selParam) return null;
+                              return (
+                                <div className="flex items-end gap-1">
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    max={selParam.maxMarks}
+                                    value={studentData?.params[selParam.name] ?? 0}
+                                    onChange={(e) => updateScore(student.id, selParam.name, e.target.value)}
+                                    className="w-16 text-center font-mono text-xl font-bold border-b-3 border-brand-black
+                                               bg-transparent outline-none text-brand-black py-1
+                                               focus:border-brand-purple transition-colors
+                                               [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    autoFocus
+                                  />
+                                  <span className="font-mono text-xs text-brand-muted mb-1">/{selParam.maxMarks}</span>
+                                </div>
+                              );
+                            })()}
+                          </div>
+
+                          {/* Criteria hint */}
+                          {openParam[student.id] && (() => {
+                            const selParam = examConfig.parameters.find(p => p.name === openParam[student.id]);
+                            return selParam?.criteria ? (
+                              <p className="font-mono text-[0.55rem] text-brand-muted/60 mt-1 italic">{selParam.criteria}</p>
+                            ) : null;
+                          })()}
+
+                          {/* Completed params badges */}
+                          {examConfig.parameters.some(p => (studentData?.params[p.name] ?? 0) > 0) && (
+                            <div className="flex flex-wrap gap-1.5 mt-2">
+                              {examConfig.parameters.map((param) => {
+                                const score = studentData?.params[param.name] ?? 0;
+                                if (score <= 0) return null;
+                                return (
+                                  <span
+                                    key={param.name}
+                                    className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#228B22]/10 border border-[#228B22]/30
+                                               font-mono text-[0.6rem] font-bold text-[#228B22] uppercase tracking-wider"
+                                  >
+                                    <Check size={10} strokeWidth={3} />
+                                    {param.name} {score}/{param.maxMarks}
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          )}
                         </div>
 
                         {/* Remarks */}

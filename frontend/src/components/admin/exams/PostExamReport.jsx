@@ -13,8 +13,6 @@ const beltMeta = {
 
 const outcomeOptions = [
   { value: 'pass', label: 'Pass', color: '#228B22' },
-  { value: 'merit', label: 'Merit', color: '#1E90FF' },
-  { value: 'distinction', label: 'Distinction', color: '#FFD700' },
   { value: 'reexam', label: 'Re-examination', color: '#D9381E' },
 ];
 
@@ -236,11 +234,10 @@ export default function PostExamReport({ examConfig, results: initialResults, on
                         ))}
                         <td className="py-3 px-2 text-center">
                           <span className="font-mono text-sm font-bold text-brand-black">{student.total}</span>
-                          <span className={`font-mono text-[0.6rem] block ${
-                            student.percentage >= 70 ? 'text-[#228B22]' :
+                          <span className={`font-mono text-[0.6rem] block ${student.percentage >= 70 ? 'text-[#228B22]' :
                             student.percentage >= 40 ? 'text-[#DAA520]' :
-                            'text-[#D9381E]'
-                          }`}>
+                              'text-[#D9381E]'
+                            }`}>
                             {student.percentage}%
                           </span>
                         </td>
