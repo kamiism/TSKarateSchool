@@ -11,6 +11,8 @@ import {
   LogOut,
   Menu,
   X,
+  WifiOff,
+  Wifi,
 } from 'lucide-react';
 
 const navItems = [
@@ -22,7 +24,7 @@ const navItems = [
   { id: 'news', label: 'News & Events', icon: Newspaper },
 ];
 
-export default function AdminSidebar({ activeSection, onNavigate }) {
+export default function AdminSidebar({ activeSection, onNavigate, adminMode, onModeChange }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -73,6 +75,39 @@ export default function AdminSidebar({ activeSection, onNavigate }) {
                 Admin Panel
               </span>
             </div>
+          </div>
+        </div>
+
+        {/* Mode Toggle — Offline / Hybrid */}
+        <div className="px-4 py-4 border-b-2 border-brand-purple/30">
+          <label className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-brand-muted block mb-2">
+            Mode
+          </label>
+          <div className="grid grid-cols-2 gap-0">
+            <button
+              type="button"
+              onClick={() => onModeChange('offline')}
+              className={`flex items-center justify-center gap-1.5 font-mono text-[0.65rem] font-bold uppercase tracking-wider py-2 border-2 cursor-pointer
+                         transition-all duration-150
+                         ${adminMode === 'offline'
+                  ? 'bg-brand-white text-brand-black border-brand-white -translate-y-0.5 shadow-[2px_2px_0_rgba(139,92,246,0.5)]'
+                  : 'bg-transparent text-brand-muted border-brand-muted/30 hover:border-brand-ice hover:text-brand-ice'
+                }`}
+            >
+              <WifiOff size={12} /> Offline
+            </button>
+            <button
+              type="button"
+              onClick={() => onModeChange('hybrid')}
+              className={`flex items-center justify-center gap-1.5 font-mono text-[0.65rem] font-bold uppercase tracking-wider py-2 border-2 border-l-0 cursor-pointer
+                         transition-all duration-150
+                         ${adminMode === 'hybrid'
+                  ? 'bg-brand-white text-brand-black border-brand-white -translate-y-0.5 shadow-[2px_2px_0_rgba(139,92,246,0.5)]'
+                  : 'bg-transparent text-brand-muted border-brand-muted/30 hover:border-brand-ice hover:text-brand-ice'
+                }`}
+            >
+              <Wifi size={12} /> Hybrid
+            </button>
           </div>
         </div>
 

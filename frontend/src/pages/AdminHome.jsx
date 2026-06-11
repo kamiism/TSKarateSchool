@@ -10,6 +10,7 @@ import ExamManagement from '../components/admin/exams/ExamManagement';
 
 export default function AdminHome() {
   const [activeSection, setActiveSection] = useState('dashboard');
+  const [adminMode, setAdminMode] = useState('offline');
 
   // Ensure body scroll is unlocked when unmounting
   useEffect(() => {
@@ -23,15 +24,15 @@ export default function AdminHome() {
       case 'dashboard':
         return <AdminDashboard />;
       case 'students':
-        return <StudentManagement />;
+        return <StudentManagement key={adminMode} adminMode={adminMode} />;
       case 'quizzes':
-        return <QuizManagement />;
+        return <QuizManagement key={adminMode} adminMode={adminMode} />;
       case 'exams':
         return <ExamManagement />;
       case 'syllabus':
-        return <SyllabusManagement />;
+        return <SyllabusManagement key={adminMode} adminMode={adminMode} />;
       case 'kata':
-        return <KataManagement />;
+        return <KataManagement key={adminMode} adminMode={adminMode} />;
       case 'news':
         return <NewsManagement />;
       default:
@@ -41,7 +42,7 @@ export default function AdminHome() {
 
   return (
     <div className="min-h-screen bg-brand-white flex">
-      <AdminSidebar activeSection={activeSection} onNavigate={setActiveSection} />
+      <AdminSidebar activeSection={activeSection} onNavigate={setActiveSection} adminMode={adminMode} onModeChange={setAdminMode} />
       
       {/* Main Content Area */}
       <main className="flex-1 lg:ml-64 p-6 md:p-10 pt-20 lg:pt-10 transition-all duration-300">

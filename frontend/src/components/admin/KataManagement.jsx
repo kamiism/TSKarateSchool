@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Plus, Trash2, Edit, X, Play, ExternalLink } from 'lucide-react';
+import { Plus, Trash2, Edit, X, Play, ExternalLink, WifiOff, Wifi } from 'lucide-react';
 
 const beltOptions = ['White Belt', 'Yellow Belt', 'Orange Belt', 'Green Belt', 'Blue Belt', 'Brown Belt', 'Black Belt'];
 
-const initialVideos = [
+const offlineVideos = [
   { id: 1, youtubeId: 'q59hFRLjQqo', title: 'Taikyoku Shodan', belt: 'White Belt', description: 'The first and most fundamental kata. Master the basic form of stepping and punching.' },
   { id: 2, youtubeId: 'q59hFRLjQqo', title: 'Heian Shodan', belt: 'Yellow Belt', description: 'Introduces rising block and knife-hand techniques in a structured pattern.' },
   { id: 3, youtubeId: 'q59hFRLjQqo', title: 'Heian Nidan', belt: 'Orange Belt', description: 'Develops back stance, side kick, and more complex blocking sequences.' },
@@ -11,10 +11,16 @@ const initialVideos = [
   { id: 5, youtubeId: 'q59hFRLjQqo', title: 'Bassai Dai', belt: 'Brown Belt', description: 'A powerful kata emphasizing the conversion of defensive moves to offensive attacks.' },
 ];
 
+const hybridVideos = [
+  { id: 201, youtubeId: 'q59hFRLjQqo', title: 'Online: Taikyoku Shodan Tutorial', belt: 'White Belt', description: 'Step-by-step online tutorial for learning Taikyoku Shodan at home.' },
+  { id: 202, youtubeId: 'q59hFRLjQqo', title: 'Online: Heian Shodan Breakdown', belt: 'Yellow Belt', description: 'Detailed breakdown of each movement in Heian Shodan for remote practice.' },
+  { id: 203, youtubeId: 'q59hFRLjQqo', title: 'Online: Heian Nidan Analysis', belt: 'Orange Belt', description: 'Video analysis of Heian Nidan with slow-motion demonstrations.' },
+];
+
 const emptyVideo = { title: '', youtubeId: '', belt: 'White Belt', description: '' };
 
-export default function KataManagement() {
-  const [videos, setVideos] = useState(initialVideos);
+export default function KataManagement({ adminMode = 'offline' }) {
+  const [videos, setVideos] = useState(adminMode === 'hybrid' ? hybridVideos : offlineVideos);
   const [showModal, setShowModal] = useState(false);
   const [editingVideo, setEditingVideo] = useState(null);
   const [formData, setFormData] = useState({ ...emptyVideo });
@@ -55,9 +61,19 @@ export default function KataManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
         <div>
-          <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-2 block">
-            // Training
-          </span>
+          <div className="flex items-center gap-3 mb-2">
+            <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted">
+              // Training
+            </span>
+            <span className={`inline-flex items-center gap-1 px-2 py-0.5 font-mono text-[0.6rem] font-bold uppercase tracking-wider border-2 ${
+              adminMode === 'hybrid'
+                ? 'border-[#1E90FF] bg-[#1E90FF]/10 text-[#1E90FF]'
+                : 'border-brand-muted/40 bg-brand-muted/10 text-brand-muted'
+            }`}>
+              {adminMode === 'hybrid' ? <Wifi size={10} /> : <WifiOff size={10} />}
+              {adminMode}
+            </span>
+          </div>
           <h1 className="text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight">
             Kata Video<br />Library
           </h1>

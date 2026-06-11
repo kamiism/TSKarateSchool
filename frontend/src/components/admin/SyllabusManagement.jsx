@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Plus, Trash2, Edit, X, ChevronDown, ChevronUp, GripVertical } from 'lucide-react';
+import { Plus, Trash2, Edit, X, ChevronDown, ChevronUp, GripVertical, WifiOff, Wifi } from 'lucide-react';
 
-const beltData = [
+const offlineBeltData = [
   {
     belt: 'White Belt', color: '#F5F5F5', borderColor: '#999', level: '10th Kyu',
     topics: ['Basic stance (Zenkutsu-dachi, Kokutsu-dachi)', 'Oi-zuki (Lunge Punch)', 'Age-uke (Rising Block)', 'Mae-geri (Front Kick)', 'Taikyoku Shodan (Kata)', 'Dojo etiquette & Rei (Bowing)'],
@@ -32,8 +32,39 @@ const beltData = [
   },
 ];
 
-export default function SyllabusManagement() {
-  const [syllabus, setSyllabus] = useState(beltData);
+const hybridBeltData = [
+  {
+    belt: 'White Belt', color: '#F5F5F5', borderColor: '#999', level: '10th Kyu',
+    topics: ['Video: Basic stance fundamentals', 'Online quiz: Dojo etiquette', 'Live session: Taikyoku Shodan walkthrough', 'Homework: Stance practice log'],
+  },
+  {
+    belt: 'Yellow Belt', color: '#FFD700', borderColor: '#DAA520', level: '8th Kyu',
+    topics: ['Video: Reverse punch mechanics', 'Online drill: Block identification', 'Live session: Heian Shodan practice', 'Homework: Japanese terminology worksheet'],
+  },
+  {
+    belt: 'Orange Belt', color: '#FF8C00', borderColor: '#CC7000', level: '7th Kyu',
+    topics: ['Video: Roundhouse kick technique', 'Online quiz: Kata sequence memory', 'Live session: Sanbon Kumite demo', 'Homework: Self-defense scenario journal'],
+  },
+  {
+    belt: 'Green Belt', color: '#228B22', borderColor: '#1A6B1A', level: '5th Kyu',
+    topics: ['Video: Elbow strike & back kick', 'Online drill: Combination builder', 'Live session: Ippon Kumite sparring', 'Homework: Bunkai analysis report'],
+  },
+  {
+    belt: 'Blue Belt', color: '#1E90FF', borderColor: '#0B6EC5', level: '3rd Kyu',
+    topics: ['Video: Advanced combinations', 'Online quiz: Tournament rules', 'Live session: Jiyu Kumite basics', 'Homework: Tournament prep plan'],
+  },
+  {
+    belt: 'Brown Belt', color: '#8B4513', borderColor: '#6B3410', level: '1st Kyu',
+    topics: ['Video: Bassai Dai deep dive', 'Online seminar: Bunkai analysis', 'Live session: Advanced Kumite', 'Homework: Teaching plan draft'],
+  },
+  {
+    belt: 'Black Belt', color: '#000505', borderColor: '#3B3355', level: 'Shodan',
+    topics: ['Video: Mastery review series', 'Online seminar: Karate-Do philosophy', 'Live session: Instructor evaluation', 'Homework: Personal training curriculum'],
+  },
+];
+
+export default function SyllabusManagement({ adminMode = 'offline' }) {
+  const [syllabus, setSyllabus] = useState(adminMode === 'hybrid' ? hybridBeltData : offlineBeltData);
   const [expandedBelt, setExpandedBelt] = useState(null);
   const [editingTopic, setEditingTopic] = useState(null); // { beltIdx, topicIdx }
   const [editValue, setEditValue] = useState('');
@@ -84,9 +115,19 @@ export default function SyllabusManagement() {
     <div>
       {/* Header */}
       <div className="mb-10">
-        <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-2 block">
-          // Curriculum
-        </span>
+        <div className="flex items-center gap-3 mb-2">
+          <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted">
+            // Curriculum
+          </span>
+          <span className={`inline-flex items-center gap-1 px-2 py-0.5 font-mono text-[0.6rem] font-bold uppercase tracking-wider border-2 ${
+            adminMode === 'hybrid'
+              ? 'border-[#1E90FF] bg-[#1E90FF]/10 text-[#1E90FF]'
+              : 'border-brand-muted/40 bg-brand-muted/10 text-brand-muted'
+          }`}>
+            {adminMode === 'hybrid' ? <Wifi size={10} /> : <WifiOff size={10} />}
+            {adminMode}
+          </span>
+        </div>
         <h1 className="text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight">
           Syllabus<br />Editor
         </h1>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Plus, Trash2, ChevronDown, X } from 'lucide-react';
+import { Search, Plus, Trash2, ChevronDown, X, WifiOff, Wifi } from 'lucide-react';
 
 const beltOptions = [
   { belt: 'White Belt', color: '#F5F5F5', borderColor: '#999' },
@@ -11,7 +11,7 @@ const beltOptions = [
   { belt: 'Black Belt', color: '#000505', borderColor: '#3B3355' },
 ];
 
-const initialStudents = [
+const offlineStudents = [
   { id: 1, name: 'Arjun Sharma', belt: 'Orange Belt', beltColor: '#FF8C00', quizPoints: 780, attendance: 70 },
   { id: 2, name: 'Priya Patel', belt: 'Green Belt', beltColor: '#228B22', quizPoints: 950, attendance: 92 },
   { id: 3, name: 'Rahul Kumar', belt: 'Blue Belt', beltColor: '#1E90FF', quizPoints: 880, attendance: 85 },
@@ -22,8 +22,16 @@ const initialStudents = [
   { id: 8, name: 'Divya Reddy', belt: 'White Belt', beltColor: '#F5F5F5', quizPoints: 550, attendance: 60 },
 ];
 
-export default function StudentManagement() {
-  const [students, setStudents] = useState(initialStudents);
+const hybridStudents = [
+  { id: 101, name: 'Aditya Verma', belt: 'Green Belt', beltColor: '#228B22', quizPoints: 820, attendance: 88 },
+  { id: 102, name: 'Meera Iyer', belt: 'Blue Belt', beltColor: '#1E90FF', quizPoints: 910, attendance: 95 },
+  { id: 103, name: 'Rohan Das', belt: 'Orange Belt', beltColor: '#FF8C00', quizPoints: 760, attendance: 80 },
+  { id: 104, name: 'Kavya Menon', belt: 'Yellow Belt', beltColor: '#FFD700', quizPoints: 680, attendance: 75 },
+  { id: 105, name: 'Suresh Babu', belt: 'Brown Belt', beltColor: '#8B4513', quizPoints: 970, attendance: 91 },
+];
+
+export default function StudentManagement({ adminMode = 'offline' }) {
+  const [students, setStudents] = useState(adminMode === 'hybrid' ? hybridStudents : offlineStudents);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterBelt, setFilterBelt] = useState('All');
   const [showAddModal, setShowAddModal] = useState(false);
@@ -68,9 +76,19 @@ export default function StudentManagement() {
     <div>
       {/* Header */}
       <div className="mb-10">
-        <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-2 block">
-          // Management
-        </span>
+        <div className="flex items-center gap-3 mb-2">
+          <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted">
+            // Management
+          </span>
+          <span className={`inline-flex items-center gap-1 px-2 py-0.5 font-mono text-[0.6rem] font-bold uppercase tracking-wider border-2 ${
+            adminMode === 'hybrid'
+              ? 'border-[#1E90FF] bg-[#1E90FF]/10 text-[#1E90FF]'
+              : 'border-brand-muted/40 bg-brand-muted/10 text-brand-muted'
+          }`}>
+            {adminMode === 'hybrid' ? <Wifi size={10} /> : <WifiOff size={10} />}
+            {adminMode}
+          </span>
+        </div>
         <h1 className="text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight">
           Student<br />Registry
         </h1>

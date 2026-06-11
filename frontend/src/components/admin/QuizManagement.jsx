@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Plus, Trash2, X, Clock, ToggleLeft, ToggleRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, Trash2, X, Clock, ToggleLeft, ToggleRight, ChevronDown, ChevronUp, WifiOff, Wifi } from 'lucide-react';
 
-const initialQuizzes = [
+const offlineQuizzes = [
   {
     id: 1,
     name: 'Daily Kata Terminology',
@@ -36,10 +36,29 @@ const initialQuizzes = [
   },
 ];
 
+const hybridQuizzes = [
+  {
+    id: 201,
+    name: 'Online Kata Theory',
+    startHour: 10,
+    endHour: 22,
+    active: true,
+    attempts: 45,
+    avgScore: 3.9,
+    questions: [
+      { question: "What is the purpose of Kata?", options: ['Exercise', 'Practicing forms against imaginary opponents', 'Meditation', 'Stretching'], correct: 1 },
+      { question: "How many Heian Kata exist?", options: ['3', '4', '5', '6'], correct: 2 },
+      { question: "What does 'Kiai' mean?", options: ['Spirit shout', 'Bow', 'Block', 'Kick'], correct: 0 },
+      { question: "Which kata is performed first in Shotokan?", options: ['Heian Shodan', 'Taikyoku Shodan', 'Bassai Dai', 'Jion'], correct: 1 },
+      { question: "What is 'Bunkai'?", options: ['A stance', 'Application of kata movements', 'A type of kick', 'A belt rank'], correct: 1 },
+    ],
+  },
+];
+
 const emptyQuestion = { question: '', options: ['', '', '', ''], correct: 0 };
 
-export default function QuizManagement() {
-  const [quizzes, setQuizzes] = useState(initialQuizzes);
+export default function QuizManagement({ adminMode = 'offline' }) {
+  const [quizzes, setQuizzes] = useState(adminMode === 'hybrid' ? hybridQuizzes : offlineQuizzes);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [expandedQuiz, setExpandedQuiz] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
@@ -111,9 +130,19 @@ export default function QuizManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
         <div>
-          <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-2 block">
-            // Assessment
-          </span>
+          <div className="flex items-center gap-3 mb-2">
+            <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted">
+              // Assessment
+            </span>
+            <span className={`inline-flex items-center gap-1 px-2 py-0.5 font-mono text-[0.6rem] font-bold uppercase tracking-wider border-2 ${
+              adminMode === 'hybrid'
+                ? 'border-[#1E90FF] bg-[#1E90FF]/10 text-[#1E90FF]'
+                : 'border-brand-muted/40 bg-brand-muted/10 text-brand-muted'
+            }`}>
+              {adminMode === 'hybrid' ? <Wifi size={10} /> : <WifiOff size={10} />}
+              {adminMode}
+            </span>
+          </div>
           <h1 className="text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight">
             Quiz<br />Management
           </h1>
