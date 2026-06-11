@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Flag, FlagOff, ChevronDown, ChevronUp, MessageSquare, CheckCircle, Check } from 'lucide-react';
+import { Flag, FlagOff, ChevronDown, ChevronUp, MessageSquare, CheckCircle, Check, Plus, Minus } from 'lucide-react';
 
 const beltMeta = {
   'White Belt': { color: '#F5F5F5', borderColor: '#999' },
@@ -251,19 +251,33 @@ export default function LiveMarking({ examConfig, students, onEndExam }) {
                               if (!selParam) return null;
                               return (
                                 <div className="flex items-end gap-1">
+                                  <button
+                                    onClick={() => updateScore(student.id, selParam.name, (studentData?.params[selParam.name] ?? 0) - 1)}
+                                    className="p-1 mb-0.5 text-brand-black bg-brand-ice/50 hover:bg-brand-ice cursor-pointer transition-colors border-2 border-transparent hover:border-brand-black"
+                                    aria-label="Decrease score"
+                                  >
+                                    <Minus size={16} strokeWidth={3} />
+                                  </button>
                                   <input
                                     type="number"
                                     min="0"
                                     max={selParam.maxMarks}
                                     value={studentData?.params[selParam.name] ?? 0}
                                     onChange={(e) => updateScore(student.id, selParam.name, e.target.value)}
-                                    className="w-16 text-center font-mono text-xl font-bold border-b-3 border-brand-black
+                                    className="w-14 text-center font-mono text-xl font-bold border-b-3 border-brand-black
                                                bg-transparent outline-none text-brand-black py-1
                                                focus:border-brand-purple transition-colors
                                                [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     autoFocus
                                   />
-                                  <span className="font-mono text-xs text-brand-muted mb-1">/{selParam.maxMarks}</span>
+                                  <button
+                                    onClick={() => updateScore(student.id, selParam.name, (studentData?.params[selParam.name] ?? 0) + 1)}
+                                    className="p-1 mb-0.5 text-brand-black bg-brand-ice/50 hover:bg-brand-ice cursor-pointer transition-colors border-2 border-transparent hover:border-brand-black"
+                                    aria-label="Increase score"
+                                  >
+                                    <Plus size={16} strokeWidth={3} />
+                                  </button>
+                                  <span className="font-mono text-xs text-brand-muted mb-1 ml-1">/{selParam.maxMarks}</span>
                                 </div>
                               );
                             })()}
