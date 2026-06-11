@@ -9,7 +9,7 @@ import {
 // Mock data
 const stats = [
   { label: 'Total Students', value: '48', icon: Users, accent: false },
-  { label: 'Active Quizzes', value: '3', icon: FileQuestion, accent: false },
+  { label: 'Quizzes Conducted', value: '3', icon: FileQuestion, accent: false },
   { label: 'Upcoming Events', value: '5', icon: CalendarDays, accent: false },
   { label: 'Avg Attendance', value: '78%', icon: TrendingUp, accent: true },
 ];

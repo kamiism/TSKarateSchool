@@ -6,6 +6,7 @@ import QuizManagement from '../components/admin/QuizManagement';
 import NewsManagement from '../components/admin/NewsManagement';
 import SyllabusManagement from '../components/admin/SyllabusManagement';
 import KataManagement from '../components/admin/KataManagement';
+import ExamManagement from '../components/admin/exams/ExamManagement';
 
 export default function AdminHome() {
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -25,6 +26,8 @@ export default function AdminHome() {
         return <StudentManagement />;
       case 'quizzes':
         return <QuizManagement />;
+      case 'exams':
+        return <ExamManagement />;
       case 'syllabus':
         return <SyllabusManagement />;
       case 'kata':

@@ -7,6 +7,7 @@ import {
   Newspaper,
   BookOpen,
   Video,
+  ClipboardCheck,
   LogOut,
   Menu,
   X,
@@ -97,6 +98,22 @@ export default function AdminSidebar({ activeSection, onNavigate }) {
             );
           })}
         </nav>
+
+        {/* Exams (Separated) */}
+        <div className="px-3 pb-2">
+          <button
+            onClick={() => handleNav('exams')}
+            className={`w-full flex items-center gap-3 px-4 py-3 font-mono text-sm font-medium uppercase tracking-wider
+                       cursor-pointer border-none transition-all duration-150 text-left
+                       ${activeSection === 'exams'
+                ? 'bg-brand-purple text-brand-white translate-x-1'
+                : 'bg-transparent text-brand-ice hover:bg-brand-white/5 hover:text-brand-white'
+              }`}
+          >
+            <ClipboardCheck size={18} strokeWidth={2.5} />
+            Exams
+          </button>
+        </div>
 
         {/* Admin info + Logout */}
         <div className="px-4 py-4 border-t-2 border-brand-purple/30">
