@@ -17,13 +17,16 @@
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mongoose": "^9.7.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.6",
+    "@types/mongoose": "^5.11.97",
     "@types/node": "^25.9.1",
+    "@types/winston": "^2.4.4",
     "prettier": "^3.8.3",
     "typescript": "^6.0.3"
   }
