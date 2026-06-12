@@ -1,4 +1,5 @@
 import express, {
+  type Express,
   type NextFunction,
   type Request,
   type Response,
@@ -11,9 +12,11 @@ import {
 } from "./config/env.js";
 import router from "./routes/router.ts";
 import rateLimit from "express-rate-limit";
+import helmet from "helmet";
 
-const app = express();
+const app: Express = express();
 
+app.use(helmet());
 app.use(
   cors({
     origin: CORS_ORIGIN || "*",
@@ -23,6 +26,8 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 const limiter = rateLimit({
   windowMs: RATE_LIMIT_WINDOW_MS,
@@ -32,7 +37,7 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 
-app.use("/api");
+app.use("/api", limiter);
 app.use("/api/v1", router);
 
 app.get("/health", (req: Request, res: Response) => {
