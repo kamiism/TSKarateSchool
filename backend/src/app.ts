@@ -13,6 +13,8 @@ import {
 import router from "./routes/router.ts";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
+import { sendError } from "./utils/response.ts";
+import { API_RESPONSE_MESSAGES, STATUS_CODES } from "./config/constants.ts";
 
 const app: Express = express();
 
@@ -32,10 +34,18 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 const limiter = rateLimit({
   windowMs: RATE_LIMIT_WINDOW_MS,
   limit: RATE_LIMIT_MAX_REQUESTS,
-  handler: (req: Request, res: Response, next: NextFunction) => {}, // TODO: I will update this whenever i will setup response handler
+  handler: (req: Request, res: Response, next: NextFunction) => {
+    sendError(
+      res,
+      STATUS_CODES.MANY_REQUEST,
+      API_RESPONSE_MESSAGES.TOO_MANY_REQUESTS,
+    );
+  },
   standardHeaders: true,
   legacyHeaders: false,
 });
+
+// TODO: add error handlers
 
 app.use("/api", limiter);
 app.use("/api/v1", router);
