@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import logger from "../utils/logger.ts";
+import { BCRYPT_ROUNDS } from "../config/env.ts";
 
 interface IDisability {
   hasDisability: boolean;
@@ -205,7 +206,7 @@ userSchema.methods.comparePassword = async function (
 userSchema.pre("save", async function () {
   try {
     if (!this.isModified("password")) return;
-    const salt = await bcrypt.genSalt();
+    const salt = await bcrypt.genSalt(BCRYPT_ROUNDS);
     this.password = await bcrypt.hash(this.password, salt);
   } catch (err) {
     logger.error("Failed to hash password");
