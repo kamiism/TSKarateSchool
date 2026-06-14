@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import logger from "../utils/logger.ts";
 
 interface IDisability {
   hasDisability: boolean;
@@ -201,9 +202,27 @@ userSchema.methods.comparePassword = async function (
   return bcrypt.compare(password, this.password);
 };
 
-// userSchema.pre("save", async function () {
-//     if(!this.isModified("password")) return;
+userSchema.pre("save", async function () {
+  try {
+    if (!this.isModified("password")) return;
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+  } catch (err) {
+    logger.error("Failed to hash password");
+    throw err;
+  }
+});
 
-// });
+userSchema.methods.comparePassword = async function (
+  password: string,
+): Promise<boolean> {
+  try {
+    const isEqual = await bcrypt.compare(password, this.password);
+    return isEqual;
+  } catch (err) {
+    logger.error(`Error in comparing password : ${err}`);
+    return false;
+  }
+};
 
 export const User = mongoose.model("User", userSchema);
