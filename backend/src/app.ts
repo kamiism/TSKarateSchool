@@ -15,6 +15,8 @@ import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import { sendError } from "./utils/response.ts";
 import { API_RESPONSE_MESSAGES, STATUS_CODES } from "./config/constants.ts";
+import { notFoundHandler } from "./handlers/notFoundHandler.ts";
+import { errorHandler } from "./handlers/errorHandler.ts";
 
 const app: Express = express();
 
@@ -57,5 +59,8 @@ app.get("/health", (req: Request, res: Response) => {
     uptime: process.uptime(),
   });
 });
+
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 export default app;
