@@ -42,6 +42,9 @@ export interface IUser extends mongoose.Document {
 
   username: string;
   password: string;
+
+  refreshTokenExpiry: number;
+  refreshToken: string;
 }
 
 const addressSchema = new mongoose.Schema<IAddress>(
@@ -139,6 +142,7 @@ const userSchema = new mongoose.Schema<IUser>(
       trim: true,
       lowercase: true,
       unique: true,
+      index: true,
     },
 
     phoneNumber: {
@@ -185,11 +189,18 @@ const userSchema = new mongoose.Schema<IUser>(
       required: true,
       unique: true,
       trim: true,
+      index: true,
     },
 
     password: {
       type: String,
       required: true,
+    },
+    refreshTokenExpiry: {
+      type: Number,
+    },
+    refreshToken: {
+      type: String,
     },
   },
   {
