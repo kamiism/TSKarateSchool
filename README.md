@@ -13,4 +13,16 @@ The Offline mode -
 
     It include there past and present Belt Syllabus but the upcomming belt syllabus will be locked(not accessible until they reach the next belt)
 
-    They will have there past and present syllabus's Kata Video (iFrame of yotutbe)
+    They will have there past and present syllabus's Kata Video (iFrame of yotutbe video)
+
+    And they are going to have a news and event section for the upcomming events and info.
+
+The Hybrid Mode -
+
+    This mode is for those students who want to learn karate at there home and and after several assignments and weakly reviews by the instructor they will be able to take the belt upgrade examination.
+
+    In there profile they will have there syllbaus and news and events section only, however they will be getting each and every video for there syllabus content by the personal instructor (made by the instructor himself)
+
+    They will be having a assignment section where the admin will assign some work for rest of the weak and the next weak admin will review there assignmet and work and will mark as done or redo
+
+    
