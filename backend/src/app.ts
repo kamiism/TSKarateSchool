@@ -17,6 +17,7 @@ import { sendError } from "./utils/response.ts";
 import { API_RESPONSE_MESSAGES, STATUS_CODES } from "./config/constants.ts";
 import { notFoundHandler } from "./handlers/notFoundHandler.ts";
 import { errorHandler } from "./handlers/errorHandler.ts";
+import cookieParser from "cookie-parser";
 
 const app: Express = express();
 
@@ -32,6 +33,7 @@ app.use(
 );
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
+app.use(cookieParser());
 
 const limiter = rateLimit({
   windowMs: RATE_LIMIT_WINDOW_MS,
@@ -46,8 +48,6 @@ const limiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
-
-// TODO: add error handlers
 
 app.use("/api", limiter);
 app.use("/api/v1", router);
