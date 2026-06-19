@@ -275,4 +275,7 @@ userSchema.methods.generateAccessToken = function (): string {
   );
 };
 
-export const User = mongoose.model<IUser , Model<IUser , {} , IUserMethods>>("User", userSchema);
+export const User = mongoose.model<IUser, Model<IUser, {}, IUserMethods>>(
+  "User",
+  userSchema,
+);
