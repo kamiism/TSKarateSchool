@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 import bcrypt from "bcrypt";
 import logger from "../utils/logger.ts";
 import {
@@ -9,7 +9,6 @@ import {
   REFRESH_TOKEN_SECRET,
 } from "../config/env.ts";
 import jwt, { type SignOptions } from "jsonwebtoken";
-import { email } from "zod";
 
 interface IDisability {
   hasDisability: boolean;
@@ -53,6 +52,11 @@ export interface IUser extends mongoose.Document {
 
   refreshTokenExpiry: number;
   refreshToken: string;
+}
+
+interface IUserMethods {
+  generateRefreshToken: () => string;
+  generateAccessToken: () => string;
 }
 
 const addressSchema = new mongoose.Schema<IAddress>(
@@ -271,4 +275,4 @@ userSchema.methods.generateAccessToken = function (): string {
   );
 };
 
-export const User = mongoose.model("User", userSchema);
+export const User = mongoose.model<IUser , Model<IUser , {} , IUserMethods>>("User", userSchema);
