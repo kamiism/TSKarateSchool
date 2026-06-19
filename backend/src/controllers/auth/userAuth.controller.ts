@@ -11,6 +11,25 @@ export class UserAuthController {
   ): Promise<void> {
     const user = await User.create(req.body);
 
+    const refreshToken = user.generateRefreshToken();
+    const accessToken = user.generateAccessToken();
+
+    user.refreshToken = refreshToken;
+
+    await user.save({ validateBeforeSave: false });
+
+    res.cookie("refreshToken" , refreshToken , {
+      httpOnly: true,
+      secure: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.cookie("accessToken" , accessToken , {
+      httpOnly: true,
+      secure: true, 
+      maxAge: 24 * 60 * 60 * 1000,
+    })
+
     sendSuccess(res, STATUS_CODES.CREATED, API_RESPONSE_MESSAGES.CREATED, {
       username: user.username,
       email: user.email,
