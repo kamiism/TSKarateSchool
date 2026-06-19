@@ -1,4 +1,5 @@
 import { config } from "dotenv";
+import type { SignOptions } from "jsonwebtoken";
 
 config({
   path: "./.env",
@@ -13,3 +14,8 @@ export const RATE_LIMIT_WINDOW_MS =
 export const RATE_LIMIT_MAX_REQUESTS =
   Number(process.env.RATE_LIMIT_MAX_REQUESTS) || 100;
 export const BCRYPT_ROUNDS = Number(process.env.BCRYPT_ROUNDS) || 10;
+
+export const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET!;
+export const REFRESH_TOKEN_EXPIRY = process.env.REFRESH_TOKEN_EXPIRY!;
+export const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET!;
+export const ACCESS_TOKEN_EXPIRY = process.env.ACCESS_TOKEN_EXPIRY!;

@@ -1,7 +1,15 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import logger from "../utils/logger.ts";
-import { BCRYPT_ROUNDS } from "../config/env.ts";
+import {
+  ACCESS_TOKEN_EXPIRY,
+  ACCESS_TOKEN_SECRET,
+  BCRYPT_ROUNDS,
+  REFRESH_TOKEN_EXPIRY,
+  REFRESH_TOKEN_SECRET,
+} from "../config/env.ts";
+import jwt, { type SignOptions } from "jsonwebtoken";
+import { email } from "zod";
 
 interface IDisability {
   hasDisability: boolean;
@@ -235,6 +243,32 @@ userSchema.methods.comparePassword = async function (
     logger.error(`Error in comparing password : ${err}`);
     return false;
   }
+};
+
+userSchema.methods.generateRefreshToken = function (): string {
+  return jwt.sign(
+    {
+      _id: this._id,
+      username: this.username,
+      email: this.email,
+    },
+    REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: REFRESH_TOKEN_EXPIRY as SignOptions["expiresIn"],
+    },
+  );
+};
+
+userSchema.methods.generateAccessToken = function (): string {
+  return jwt.sign(
+    {
+      _id: this._id,
+    },
+    ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: ACCESS_TOKEN_EXPIRY as SignOptions["expiresIn"],
+    },
+  );
 };
 
 export const User = mongoose.model("User", userSchema);
