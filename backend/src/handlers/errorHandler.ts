@@ -15,7 +15,7 @@ export const errorHandler = (
   sendError(
     res,
     err.statusCode || STATUS_CODES.SERVER_ERROR,
-    API_RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR,
+    err.message || API_RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR,
     err,
   );
 };
