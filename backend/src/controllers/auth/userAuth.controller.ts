@@ -1,7 +1,10 @@
 import type { NextFunction, Request, Response } from "express";
-import { User } from "../../models/User.ts";
+import { User, type JwtDataType } from "../../models/User.ts";
 import { sendSuccess } from "../../utils/response.ts";
 import { API_RESPONSE_MESSAGES, STATUS_CODES } from "../../config/constants.ts";
+import { AppError } from "../../utils/error.ts";
+import jwt from "jsonwebtoken";
+import { REFRESH_TOKEN_SECRET } from "../../config/env.ts";
 
 export class UserAuthController {
   async register(
@@ -39,6 +42,18 @@ export class UserAuthController {
   async login(req: Request, res: Response, next: NextFunction): Promise<void> {}
 
   async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const user = await User.findById(req.user?._id);
+
+    if (!user) {
+      throw new AppError(
+        API_RESPONSE_MESSAGES.NOT_FOUND,
+        STATUS_CODES.NOT_FOUND,
+      );
+    }
+
+    user.refreshToken = "";
+    user?.save({ validateBeforeSave: false });
+
     res
       .clearCookie("refreshToken", {
         httpOnly: true,
@@ -49,7 +64,31 @@ export class UserAuthController {
         secure: true,
       });
 
-      sendSuccess(res , STATUS_CODES.OK , API_RESPONSE_MESSAGES.SUCCESS)
+    sendSuccess(res, STATUS_CODES.OK, API_RESPONSE_MESSAGES.SUCCESS);
+  }
+
+  async getAccessToken(req: Request, res: Response) {
+    const token = req.cookies?.refreshToken;
+    if (!token) {
+      throw new AppError(
+        API_RESPONSE_MESSAGES.UNAUTHORIZED,
+        STATUS_CODES.UNAUTHORISED,
+      );
+    }
+    const decoded = jwt.verify(token, REFRESH_TOKEN_SECRET) as JwtDataType;
+
+    const user = await User.findById(decoded._id);
+    if (!user) {
+      throw new AppError(
+        API_RESPONSE_MESSAGES.NOT_FOUND,
+        STATUS_CODES.NOT_FOUND,
+      );
+    }
+    const newToken = user.generateAccessToken();
+    res.cookie("accessToken", newToken);
+    sendSuccess(res, STATUS_CODES.OK, "Access token renewed succesfully", {
+      accessToken: newToken,
+    });
   }
 }
 
