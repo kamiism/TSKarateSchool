@@ -18,17 +18,17 @@ export class UserAuthController {
 
     await user.save({ validateBeforeSave: false });
 
-    res.cookie("refreshToken" , refreshToken , {
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.cookie("accessToken" , accessToken , {
+    res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      secure: true, 
+      secure: true,
       maxAge: 24 * 60 * 60 * 1000,
-    })
+    });
 
     sendSuccess(res, STATUS_CODES.CREATED, API_RESPONSE_MESSAGES.CREATED, {
       username: user.username,
@@ -37,6 +37,20 @@ export class UserAuthController {
   }
 
   async login(req: Request, res: Response, next: NextFunction): Promise<void> {}
+
+  async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
+    res
+      .clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: true,
+      })
+      .clearCookie("accessToken", {
+        httpOnly: true,
+        secure: true,
+      });
+
+      sendSuccess(res , STATUS_CODES.OK , API_RESPONSE_MESSAGES.SUCCESS)
+  }
 }
 
 export const userAuthController = new UserAuthController();
