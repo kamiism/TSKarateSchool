@@ -24,6 +24,6 @@ authRouter.post(
   asyncHandler(userAuthController.logout),
 );
 
-authRouter.post("/", asyncHandler(userAuthController.getAccessToken));
+authRouter.post("/access-token", asyncHandler(userAuthController.getAccessToken));
 
 export default authRouter;
