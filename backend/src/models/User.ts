@@ -50,8 +50,12 @@ export interface IUser extends mongoose.Document {
   username: string;
   password: string;
 
-  refreshTokenExpiry: number;
   refreshToken: string;
+
+  mode: string;
+  isVerified: boolean;
+
+  points: number;
 }
 
 interface IUserMethods {
@@ -208,11 +212,21 @@ const userSchema = new mongoose.Schema<IUser>(
       type: String,
       required: true,
     },
-    refreshTokenExpiry: {
-      type: Number,
-    },
     refreshToken: {
       type: String,
+    },
+
+    mode: {
+      type: String,
+      enum: ["offline", "hybrid"],
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    points: {
+      type: Number,
+      default: 0,
     },
   },
   {
