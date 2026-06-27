@@ -82,6 +82,7 @@ export default function ExamManagement() {
     }
   ]);
   const [expandedPast, setExpandedPast] = useState(null);
+  const [editingExam, setEditingExam] = useState(null);
 
   const handleStartExam = (config) => {
     setExamConfig(config);
@@ -184,6 +185,16 @@ export default function ExamManagement() {
                     <span className="font-mono text-[0.6rem] tracking-wider uppercase px-2 py-0.5 bg-brand-purple/10 text-brand-purple font-bold">
                       {exam.status}
                     </span>
+                    <button
+                      onClick={() => {
+                        setEditingExam(exam);
+                        setPhase('setup');
+                      }}
+                      className="px-4 py-2 border-2 border-brand-purple bg-transparent text-brand-purple font-mono text-[0.65rem] font-bold uppercase tracking-wider
+                                 cursor-pointer hover:bg-brand-purple hover:text-brand-white transition-colors"
+                    >
+                      Edit
+                    </button>
                     <button
                       onClick={() => {
                         setExamConfig({ title: exam.title, date: exam.date, belts: exam.belts, parameters: defaultTemplates[0].parameters });
@@ -312,7 +323,24 @@ export default function ExamManagement() {
   if (phase === 'setup') {
     return (
       <ExamSetup
-        onStartExam={handleStartExam}
+        initialConfig={editingExam}
+        onStartExam={(config) => {
+          handleStartExam(config);
+          setEditingExam(null);
+        }}
+        onScheduleExam={(config) => {
+          if (editingExam) {
+            setScheduledExams(prev => prev.map(e => e.id === editingExam.id ? { ...e, ...config } : e));
+          } else {
+            setScheduledExams(prev => [{ id: `sched-${Date.now()}`, ...config, status: 'scheduled' }, ...prev]);
+          }
+          setEditingExam(null);
+          setPhase('list');
+        }}
+        onCancel={() => {
+          setEditingExam(null);
+          setPhase('list');
+        }}
         templates={templates}
         onSaveTemplate={handleSaveTemplate}
       />

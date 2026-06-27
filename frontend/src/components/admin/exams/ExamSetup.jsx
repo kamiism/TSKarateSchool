@@ -38,12 +38,12 @@ const defaultTemplates = [
 
 const emptyParameter = { name: '', maxMarks: 10, criteria: '' };
 
-export default function ExamSetup({ onStartExam, templates, onSaveTemplate }) {
-  const [title, setTitle] = useState('');
-  const [selectedBelts, setSelectedBelts] = useState([]);
-  const [examDate, setExamDate] = useState('');
-  const [examTime, setExamTime] = useState('');
-  const [parameters, setParameters] = useState([
+export default function ExamSetup({ initialConfig, onStartExam, onScheduleExam, onCancel, templates, onSaveTemplate }) {
+  const [title, setTitle] = useState(initialConfig?.title || '');
+  const [selectedBelts, setSelectedBelts] = useState(initialConfig?.belts || []);
+  const [examDate, setExamDate] = useState(initialConfig?.date || '');
+  const [examTime, setExamTime] = useState(initialConfig?.time || '');
+  const [parameters, setParameters] = useState(initialConfig?.parameters || [
     { name: 'Punch', maxMarks: 10, criteria: '' },
     { name: 'Kick', maxMarks: 15, criteria: '' },
     { name: 'Kata', maxMarks: 20, criteria: '' },
@@ -115,10 +115,20 @@ export default function ExamSetup({ onStartExam, templates, onSaveTemplate }) {
             // Examination
           </span>
           <h1 className="text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight">
-            Exam<br />Setup
+            {initialConfig ? 'Edit' : 'Exam'}<br />{initialConfig ? 'Schedule' : 'Setup'}
           </h1>
         </div>
         <div className="flex gap-2 self-start sm:self-auto">
+          {onCancel && (
+            <button
+              onClick={onCancel}
+              className="flex items-center gap-2 font-mono text-[0.7rem] font-bold uppercase tracking-wider
+                         px-4 py-2 border-3 border-brand-black bg-transparent text-brand-black cursor-pointer
+                         transition-all duration-150 hover:bg-brand-black hover:text-brand-white hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal"
+            >
+              Cancel
+            </button>
+          )}
           <button
             onClick={() => setShowTemplateModal(true)}
             className="flex items-center gap-2 font-mono text-[0.7rem] font-bold uppercase tracking-wider
@@ -335,7 +345,21 @@ export default function ExamSetup({ onStartExam, templates, onSaveTemplate }) {
             </button>
 
             <button
-              onClick={() => alert(`Exam scheduled for ${examDate}`)}
+              onClick={() => {
+                if (onScheduleExam) {
+                  onScheduleExam({
+                    title: title.trim(),
+                    belts: selectedBelts,
+                    date: examDate,
+                    time: examTime,
+                    parameters: parameters.map(p => ({ ...p })),
+                    totalMaxMarks,
+                    totalStudents: 15, // mock
+                  });
+                } else {
+                  alert(`Exam scheduled for ${examDate}`);
+                }
+              }}
               disabled={!canStart}
               className={`w-full mt-3 flex items-center justify-center gap-2 font-mono text-sm font-bold uppercase tracking-wider
                          py-3.5 border-3 transition-all duration-150
@@ -345,7 +369,7 @@ export default function ExamSetup({ onStartExam, templates, onSaveTemplate }) {
                 }`}
             >
               <Calendar size={16} />
-              {examDate ? `Schedule for ${examDate}` : 'Schedule Date'}
+              {initialConfig ? 'Update Schedule' : (examDate ? `Schedule for ${examDate}` : 'Schedule Date')}
             </button>
 
             {/* Save as Template */}
