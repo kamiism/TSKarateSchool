@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { globalStaffData } from '../../data/staffData';
 
 export default function Login() {
   const [role, setRole] = useState('student');
@@ -18,10 +19,11 @@ export default function Login() {
     if (role === 'student') {
       navigate('/student');
     } else {
-      if (identifier === 'admin' && password === 'admin123') {
+      const match = globalStaffData.find(s => s.username === identifier && s.password === password);
+      if (match) {
         navigate('/admin');
       } else {
-        setError('Invalid admin credentials. (Hint: admin / admin123)');
+        setError('Invalid credentials.');
       }
     }
   };

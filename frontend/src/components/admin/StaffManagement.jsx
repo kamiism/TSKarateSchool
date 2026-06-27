@@ -1,23 +1,21 @@
 import { useState } from 'react';
-import { Shield, Plus, Trash2, Mail, User, ShieldAlert } from 'lucide-react';
-
-const initialStaff = [
-  { id: 1, name: 'Main Admin', email: 'admin@tskarate.com', role: 'Admin', status: 'Active' },
-  { id: 2, name: 'John Doe', email: 'john@tskarate.com', role: 'Moderator', status: 'Active' },
-];
+import { Shield, Plus, Trash2, Mail, User, ShieldAlert, Key, AtSign } from 'lucide-react';
+import { globalStaffData } from '../../data/staffData';
 
 export default function StaffManagement() {
-  const [staff, setStaff] = useState(initialStaff);
+  const [staff, setStaff] = useState(globalStaffData);
   const [showAdd, setShowAdd] = useState(false);
-  const [newStaff, setNewStaff] = useState({ name: '', email: '', role: 'Moderator' });
+  const [newStaff, setNewStaff] = useState({ name: '', email: '', username: '', password: '', role: 'Moderator' });
   const [toast, setToast] = useState(null);
 
   const handleAdd = (e) => {
     e.preventDefault();
-    if (!newStaff.name || !newStaff.email) return;
+    if (!newStaff.name || !newStaff.email || !newStaff.username || !newStaff.password) return;
 
-    setStaff([...staff, { id: Date.now(), ...newStaff, status: 'Active' }]);
-    setNewStaff({ name: '', email: '', role: 'Moderator' });
+    const added = { id: Date.now(), ...newStaff, status: 'Active' };
+    setStaff([...staff, added]);
+    globalStaffData.push(added);
+    setNewStaff({ name: '', email: '', username: '', password: '', role: 'Moderator' });
     setShowAdd(false);
     showToast('Staff member added successfully.');
   };
@@ -62,7 +60,7 @@ export default function StaffManagement() {
           <h2 className="font-mono text-sm tracking-widest uppercase text-brand-black mb-6 border-b-2 border-brand-black pb-2">
             New Staff Member
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             <div>
               <label className="font-mono text-[0.7rem] tracking-[0.15em] uppercase text-brand-muted block mb-2">
                 Name
@@ -92,6 +90,40 @@ export default function StaffManagement() {
                   value={newStaff.email}
                   onChange={(e) => setNewStaff({ ...newStaff, email: e.target.value })}
                   placeholder="Email Address"
+                  className="w-full pl-10 pr-4 py-3 border-2 border-brand-black font-mono text-sm bg-transparent
+                             outline-none focus:border-brand-purple transition-colors"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="font-mono text-[0.7rem] tracking-[0.15em] uppercase text-brand-muted block mb-2">
+                Username (Login ID)
+              </label>
+              <div className="relative">
+                <AtSign size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-muted" />
+                <input
+                  type="text"
+                  required
+                  value={newStaff.username}
+                  onChange={(e) => setNewStaff({ ...newStaff, username: e.target.value })}
+                  placeholder="sensei_user"
+                  className="w-full pl-10 pr-4 py-3 border-2 border-brand-black font-mono text-sm bg-transparent
+                             outline-none focus:border-brand-purple transition-colors"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="font-mono text-[0.7rem] tracking-[0.15em] uppercase text-brand-muted block mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <Key size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-muted" />
+                <input
+                  type="password"
+                  required
+                  value={newStaff.password}
+                  onChange={(e) => setNewStaff({ ...newStaff, password: e.target.value })}
+                  placeholder="••••••••"
                   className="w-full pl-10 pr-4 py-3 border-2 border-brand-black font-mono text-sm bg-transparent
                              outline-none focus:border-brand-purple transition-colors"
                 />
