@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Trash2, ChevronDown, Save, Play, FileText, X } from 'lucide-react';
+import { Plus, Trash2, ChevronDown, Save, Play, FileText, X, Calendar } from 'lucide-react';
 
 const beltOptions = [
   { belt: 'White Belt', color: '#F5F5F5', borderColor: '#999' },
@@ -332,6 +332,20 @@ export default function ExamSetup({ onStartExam, templates, onSaveTemplate }) {
             >
               <Play size={16} />
               Start Exam
+            </button>
+
+            <button
+              onClick={() => alert(`Exam scheduled for ${examDate}`)}
+              disabled={!canStart}
+              className={`w-full mt-3 flex items-center justify-center gap-2 font-mono text-sm font-bold uppercase tracking-wider
+                         py-3.5 border-3 transition-all duration-150
+                         ${canStart
+                  ? 'border-brand-ice bg-transparent text-brand-ice cursor-pointer hover:bg-brand-ice hover:text-brand-black hover:shadow-brutal hover:-translate-x-0.5 hover:-translate-y-0.5'
+                  : 'border-brand-muted/30 bg-transparent text-brand-muted/50 cursor-not-allowed'
+                }`}
+            >
+              <Calendar size={16} />
+              {examDate ? `Schedule for ${examDate}` : 'Schedule Date'}
             </button>
 
             {/* Save as Template */}

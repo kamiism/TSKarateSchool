@@ -19,6 +19,13 @@ export default function FeeSettings() {
     }));
   };
 
+  const updateExamBeltFee = (belt, value) => {
+    setSettings((prev) => ({
+      ...prev,
+      examFeePerBelt: { ...prev.examFeePerBelt, [belt]: Number(value) || 0 },
+    }));
+  };
+
   const handleQrUpload = (e) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -110,6 +117,41 @@ export default function FeeSettings() {
               ))}
             </div>
           )}
+        </div>
+
+        {/* Exam Fee Per Belt Tier */}
+        <div className="border-3 border-brand-black p-6 bg-brand-white">
+          <div className="flex items-center justify-between mb-6 border-b-2 border-brand-black pb-2">
+            <h3 className="font-mono text-sm tracking-widest uppercase text-brand-black">
+              Exam Fee Per Belt Tier
+            </h3>
+          </div>
+
+          <div className="space-y-3">
+            {BELTS.map((belt) => (
+              <div key={`exam-${belt.name}`} className="flex items-center gap-4">
+                <div className="flex items-center gap-2 w-32">
+                  <div
+                    className="w-5 h-2.5 border flex-shrink-0"
+                    style={{ backgroundColor: belt.color, borderColor: belt.borderColor }}
+                  />
+                  <span className="font-mono text-xs uppercase tracking-wider text-brand-muted">
+                    {belt.name.replace(' Belt', '')}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="font-mono text-sm text-brand-muted">₹</span>
+                  <input
+                    type="number"
+                    value={settings.examFeePerBelt[belt.name]}
+                    onChange={(e) => updateExamBeltFee(belt.name, e.target.value)}
+                    className="w-28 px-3 py-1.5 border-2 border-brand-black font-mono text-sm bg-brand-white
+                               focus:outline-none focus:shadow-brutal transition-all"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* QR Code Image */}

@@ -71,6 +71,16 @@ export default function ExamManagement() {
       status: 'finalized',
     },
   ]);
+  const [scheduledExams, setScheduledExams] = useState([
+    {
+      id: 'sched-1',
+      title: 'Upcoming Summer Grading',
+      date: '2026-07-15',
+      belts: ['White Belt', 'Yellow Belt', 'Orange Belt'],
+      totalStudents: 15,
+      status: 'scheduled',
+    }
+  ]);
   const [expandedPast, setExpandedPast] = useState(null);
 
   const handleStartExam = (config) => {
@@ -138,8 +148,65 @@ export default function ExamManagement() {
           </button>
         </div>
 
+        {/* Scheduled Exams */}
+        {scheduledExams.length > 0 && (
+          <div className="mb-10 space-y-3">
+            <h2 className="font-mono text-xs tracking-widest uppercase text-brand-muted mb-4 border-b-2 border-brand-ice/50 pb-2">
+              Scheduled Exams
+            </h2>
+            {scheduledExams.map((exam) => (
+              <div key={exam.id} className="border-3 border-brand-purple bg-brand-white transition-all duration-200
+                                            hover:-translate-x-[3px] hover:-translate-y-[3px] hover:shadow-brutal p-6">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div className="flex items-center gap-4">
+                    <Calendar size={18} className="text-brand-purple flex-shrink-0" />
+                    <div>
+                      <h3 className="font-bold text-base uppercase tracking-wide text-brand-black">{exam.title}</h3>
+                      <div className="flex items-center gap-3 mt-1 flex-wrap">
+                        <span className="font-mono text-[0.6rem] tracking-wider uppercase text-brand-muted">
+                          {exam.date}
+                        </span>
+                        <span className="font-mono text-[0.6rem] tracking-wider uppercase text-brand-muted">
+                          {exam.totalStudents} eligible students
+                        </span>
+                        <div className="flex gap-1">
+                          {exam.belts.map(b => {
+                            const meta = beltMeta[b];
+                            return (
+                              <div key={b} className="w-4 h-2 border" style={{ backgroundColor: meta?.color, borderColor: meta?.borderColor }} />
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="font-mono text-[0.6rem] tracking-wider uppercase px-2 py-0.5 bg-brand-purple/10 text-brand-purple font-bold">
+                      {exam.status}
+                    </span>
+                    <button
+                      onClick={() => {
+                        setExamConfig({ title: exam.title, date: exam.date, belts: exam.belts, parameters: defaultTemplates[0].parameters });
+                        setExamStudents(mockStudents.filter(s => exam.belts.includes(s.belt)));
+                        setPhase('live');
+                      }}
+                      className="px-4 py-2 border-2 border-brand-purple bg-brand-purple text-brand-white font-mono text-[0.65rem] font-bold uppercase tracking-wider
+                                 cursor-pointer hover:bg-brand-black hover:border-brand-black transition-colors"
+                    >
+                      Start Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Past Exams */}
         <div className="space-y-3">
+          <h2 className="font-mono text-xs tracking-widest uppercase text-brand-muted mb-4 border-b-2 border-brand-ice/50 pb-2">
+            Past Exams
+          </h2>
           {pastExams.length === 0 ? (
             <div className="border-3 border-brand-black p-10 text-center bg-brand-white">
               <ClipboardCheck size={40} className="mx-auto mb-4 text-brand-ice" />

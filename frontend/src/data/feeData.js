@@ -37,6 +37,15 @@ export const defaultFeeSettings = {
     'Brown Belt': 2000,
     'Black Belt': 2500,
   },
+  examFeePerBelt: {
+    'White Belt': 500,
+    'Yellow Belt': 500,
+    'Orange Belt': 750,
+    'Green Belt': 750,
+    'Blue Belt': 1000,
+    'Brown Belt': 1200,
+    'Black Belt': 1500,
+  },
   qrImage: null,
   upiId: 'tskarate@ybl',
   upiName: 'T.S Karate School',
@@ -68,6 +77,11 @@ export const studentFeeHistory = [
   { month: 'October', year: 2026, amount: 1500, status: null, paidOn: null, refId: null },
   { month: 'November', year: 2026, amount: 1500, status: null, paidOn: null, refId: null },
   { month: 'December', year: 2026, amount: 1500, status: null, paidOn: null, refId: null },
+];
+
+// Student exam fees (Mock)
+export const studentExamFees = [
+  { id: 'exam-1', title: 'Orange Belt Grading', examDate: '15 Jul 2026', amount: 500, status: FEE_STATUS.PENDING, paidOn: null, refId: null },
 ];
 
 // All students fee data for admin view
@@ -280,4 +294,41 @@ export const allStudentsFees = [
       { month: 'December', status: null },
     ],
   },
+];
+
+// All students exam fees data for admin view
+export const allStudentsExamFees = [
+  {
+    id: 1,
+    name: 'Arjun Sharma',
+    belt: 'Orange Belt',
+    beltColor: '#FF8C00',
+    examTitle: 'Orange Belt Grading',
+    amount: 750,
+    status: FEE_STATUS.PENDING,
+    paidOn: null,
+    refId: null,
+  },
+  {
+    id: 2,
+    name: 'Priya Patel',
+    belt: 'Green Belt',
+    beltColor: '#228B22',
+    examTitle: 'Green Belt Grading',
+    amount: 750,
+    status: FEE_STATUS.PAID,
+    paidOn: '10 Jul 2026',
+    refId: 'TXN891234',
+  },
+  {
+    id: 3,
+    name: 'Rahul Kumar',
+    belt: 'Blue Belt',
+    beltColor: '#1E90FF',
+    examTitle: 'Blue Belt Grading',
+    amount: 1000,
+    status: FEE_STATUS.AWAITING,
+    paidOn: '12 Jul 2026',
+    refId: 'TXN761234',
+  }
 ];

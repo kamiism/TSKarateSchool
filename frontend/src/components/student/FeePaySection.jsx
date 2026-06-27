@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
-import { FEE_STATUS, STATUS_COLORS, studentFeeHistory, defaultFeeSettings } from '../../data/feeData';
-import { QrCode, ArrowRight } from 'lucide-react';
+import { FEE_STATUS, STATUS_COLORS, studentFeeHistory, defaultFeeSettings, studentExamFees } from '../../data/feeData';
+import { QrCode, ArrowRight, FileText } from 'lucide-react';
 import PaymentConfirmModal from './PaymentConfirmModal';
 import Toast from '../Toast';
 
@@ -22,12 +22,23 @@ export default function FeePaySection() {
   const sectionRef = useScrollReveal();
   const [showModal, setShowModal] = useState(false);
   const [feeHistory, setFeeHistory] = useState(studentFeeHistory);
+  const [examFees, setExamFees] = useState(studentExamFees);
   const [toast, setToast] = useState(null);
 
   const pendingMonths = feeHistory.filter(
     (f) => f.status === FEE_STATUS.PENDING || f.status === FEE_STATUS.OVERDUE
   );
+  const pendingExamFees = examFees.filter((f) => f.status === FEE_STATUS.PENDING);
   const totalDue = pendingMonths.reduce((sum, f) => sum + f.amount, 0);
+
+  const handleExamPayment = (examId) => {
+    setExamFees((prev) =>
+      prev.map((f) =>
+        f.id === examId ? { ...f, status: FEE_STATUS.AWAITING, refId: `TXN${Math.floor(Math.random()*10000000)}` } : f
+      )
+    );
+    setToast('Exam fee payment submitted. Awaiting admin verification.');
+  };
 
   const handlePaymentSubmit = ({ months, refId }) => {
     setFeeHistory((prev) =>
@@ -48,59 +59,96 @@ export default function FeePaySection() {
     <>
       <section id="fee-pay" className="py-16 bg-brand-black text-brand-white" ref={sectionRef}>
         <div className="w-[min(1200px,92%)] mx-auto">
-          {/* Pay Now Card */}
-          <div className="reveal max-w-[520px] mx-auto border-2 border-brand-ice/20 p-8 mb-16">
-            <div className="flex items-center gap-2 mb-6">
-              <QrCode size={20} strokeWidth={2.5} className="text-brand-ice" />
-              <h3 className="font-mono text-sm font-bold tracking-[0.15em] uppercase text-brand-white">
-                Scan to Pay
-              </h3>
-            </div>
+          {/* Pay Cards Grid */}
+          <div className={`grid grid-cols-1 ${pendingExamFees.length > 0 ? 'md:grid-cols-2 gap-8' : ''} mb-16`}>
+            {/* Pay Now Card - Monthly */}
+            <div className={`reveal border-2 border-brand-ice/20 p-8 ${pendingExamFees.length === 0 ? 'max-w-[520px] mx-auto' : ''}`}>
+              <div className="flex items-center gap-2 mb-6">
+                <QrCode size={20} strokeWidth={2.5} className="text-brand-ice" />
+                <h3 className="font-mono text-sm font-bold tracking-[0.15em] uppercase text-brand-white">
+                  Monthly Fee Pay
+                </h3>
+              </div>
 
-            <div className="mb-6">
-              <span className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted block mb-1">
-                Amount Due
-              </span>
-              <span className="font-mono text-3xl font-bold text-brand-white">
-                ₹{totalDue > 0 ? totalDue.toLocaleString('en-IN') : defaultFeeSettings.monthlyFee.toLocaleString('en-IN')}
-              </span>
-              {pendingMonths.length > 0 && (
-                <span className="font-mono text-xs text-brand-muted block mt-1">
-                  (includes {pendingMonths.length} pending month(s))
+              <div className="mb-6">
+                <span className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted block mb-1">
+                  Amount Due
                 </span>
-              )}
-            </div>
-
-            {/* QR Placeholder */}
-            <div className="w-full aspect-square max-w-[240px] mx-auto border-2 border-brand-ice/20 bg-brand-white
-                            flex flex-col items-center justify-center mb-6">
-              <QrCode size={80} strokeWidth={1} className="text-brand-black mb-3" />
-              <span className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-brand-muted">
-                QR Code
-              </span>
-            </div>
-
-            <div className="space-y-2 mb-6">
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted">UPI ID:</span>
-                <span className="font-mono text-sm text-brand-white">{defaultFeeSettings.upiId}</span>
+                <span className="font-mono text-3xl font-bold text-brand-white">
+                  ₹{totalDue > 0 ? totalDue.toLocaleString('en-IN') : defaultFeeSettings.monthlyFee.toLocaleString('en-IN')}
+                </span>
+                {pendingMonths.length > 0 && (
+                  <span className="font-mono text-xs text-brand-muted block mt-1">
+                    (includes {pendingMonths.length} pending month(s))
+                  </span>
+                )}
               </div>
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted">Name:</span>
-                <span className="font-mono text-sm text-brand-white">{defaultFeeSettings.upiName}</span>
+
+              {/* QR Placeholder */}
+              <div className="w-full aspect-square max-w-[200px] mx-auto border-2 border-brand-ice/20 bg-brand-white
+                              flex flex-col items-center justify-center mb-6">
+                <QrCode size={60} strokeWidth={1} className="text-brand-black mb-3" />
+                <span className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-brand-muted">
+                  QR Code
+                </span>
               </div>
+
+              <div className="space-y-2 mb-6">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted">UPI ID:</span>
+                  <span className="font-mono text-sm text-brand-white">{defaultFeeSettings.upiId}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted">Name:</span>
+                  <span className="font-mono text-sm text-brand-white">{defaultFeeSettings.upiName}</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setShowModal(true)}
+                className="w-full flex items-center justify-center gap-2 px-6 py-3 border-2 border-brand-ice
+                           bg-transparent text-brand-ice font-mono text-[0.75rem] font-bold uppercase tracking-wider
+                           cursor-pointer transition-all duration-150
+                           hover:bg-brand-ice hover:text-brand-black
+                           active:translate-x-0.5 active:translate-y-0.5"
+              >
+                I Have Paid <ArrowRight size={14} strokeWidth={3} />
+              </button>
             </div>
 
-            <button
-              onClick={() => setShowModal(true)}
-              className="w-full flex items-center justify-center gap-2 px-6 py-3 border-2 border-brand-ice
-                         bg-transparent text-brand-ice font-mono text-[0.75rem] font-bold uppercase tracking-wider
-                         cursor-pointer transition-all duration-150
-                         hover:bg-brand-ice hover:text-brand-black
-                         active:translate-x-0.5 active:translate-y-0.5"
-            >
-              I Have Made the Payment <ArrowRight size={14} strokeWidth={3} />
-            </button>
+            {/* Exam Fee Card */}
+            {pendingExamFees.length > 0 && (
+              <div className="reveal reveal-delay-1 border-2 border-brand-black p-8 bg-brand-white text-brand-black">
+                <div className="flex items-center gap-2 mb-6">
+                  <FileText size={20} strokeWidth={2.5} className="text-brand-purple" />
+                  <h3 className="font-mono text-sm font-bold tracking-[0.15em] uppercase text-brand-black">
+                    Exam Fee Pending
+                  </h3>
+                </div>
+
+                {pendingExamFees.map((exam) => (
+                  <div key={exam.id} className="mb-6 pb-6 border-b-2 border-brand-ice/40 last:border-0 last:pb-0">
+                    <span className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted block mb-1">
+                      {exam.examDate}
+                    </span>
+                    <span className="font-bold text-lg block mb-2">{exam.title}</span>
+                    <span className="font-mono text-3xl font-bold text-brand-black block mb-4">
+                      ₹{exam.amount.toLocaleString('en-IN')}
+                    </span>
+                    <button
+                      onClick={() => handleExamPayment(exam.id)}
+                      className="w-full flex items-center justify-center gap-2 px-6 py-3 border-2 border-brand-black
+                                 bg-brand-black text-brand-white font-mono text-[0.75rem] font-bold uppercase tracking-wider
+                                 cursor-pointer transition-all duration-150
+                                 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutal
+                                 active:translate-x-0 active:translate-y-0 active:shadow-none"
+                    >
+                      Pay Exam Fee <ArrowRight size={14} strokeWidth={3} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Payment History */}

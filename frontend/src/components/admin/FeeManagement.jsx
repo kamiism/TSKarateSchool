@@ -11,7 +11,7 @@ import {
   Bell,
   IndianRupee,
 } from 'lucide-react';
-import { FEE_STATUS, STATUS_COLORS, allStudentsFees } from '../../data/feeData';
+import { FEE_STATUS, STATUS_COLORS, allStudentsFees, allStudentsExamFees } from '../../data/feeData';
 import VerifyPaymentModal from './VerifyPaymentModal';
 import StudentFeePanel from './StudentFeePanel';
 import Toast from '../Toast';
@@ -38,7 +38,9 @@ const FILTER_TABS = [
 ];
 
 export default function FeeManagement() {
+  const [feeMode, setFeeMode] = useState('monthly');
   const [students, setStudents] = useState(allStudentsFees);
+  const [examFeesData, setExamFeesData] = useState(allStudentsExamFees);
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('June 2026');
@@ -47,17 +49,20 @@ export default function FeeManagement() {
   const [toast, setToast] = useState(null);
 
   // Stats
-  const totalStudents = students.length;
-  const paidCount = students.filter((s) => s.currentMonthStatus === FEE_STATUS.PAID).length;
-  const pendingCount = students.filter(
-    (s) => s.currentMonthStatus === FEE_STATUS.PENDING || s.currentMonthStatus === FEE_STATUS.OVERDUE
+  const currentData = feeMode === 'monthly' ? students : examFeesData;
+  const currentStatusField = feeMode === 'monthly' ? 'currentMonthStatus' : 'status';
+
+  const totalStudents = currentData.length;
+  const paidCount = currentData.filter((s) => s[currentStatusField] === FEE_STATUS.PAID).length;
+  const pendingCount = currentData.filter(
+    (s) => s[currentStatusField] === FEE_STATUS.PENDING || s[currentStatusField] === FEE_STATUS.OVERDUE
   ).length;
-  const awaitingCount = students.filter((s) => s.currentMonthStatus === FEE_STATUS.AWAITING).length;
+  const awaitingCount = currentData.filter((s) => s[currentStatusField] === FEE_STATUS.AWAITING).length;
   const paidPercent = totalStudents > 0 ? Math.round((paidCount / totalStudents) * 100) : 0;
 
   // Filter & search
-  const filtered = students.filter((s) => {
-    const matchesFilter = filter === 'all' || s.currentMonthStatus === filter;
+  const filtered = currentData.filter((s) => {
+    const matchesFilter = filter === 'all' || s[currentStatusField] === filter;
     const matchesSearch = s.name.toLowerCase().includes(search.toLowerCase());
     return matchesFilter && matchesSearch;
   });
@@ -100,6 +105,17 @@ export default function FeeManagement() {
     setToast(`Marked ${month} as paid.`);
   };
 
+  const handleConfirmExam = (studentId) => {
+    setExamFeesData((prev) =>
+      prev.map((s) =>
+        s.id === studentId
+          ? { ...s, status: FEE_STATUS.PAID, paidOn: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) }
+          : s
+      )
+    );
+    setToast('Exam fee verified and marked as PAID.');
+  };
+
   const stats = [
     { label: 'Total Students', value: totalStudents, icon: Users, accent: false },
     { label: 'Paid This Month', value: `${paidCount} (${paidPercent}%)`, icon: CheckCircle, accent: false },
@@ -110,13 +126,31 @@ export default function FeeManagement() {
   return (
     <div>
       {/* Header */}
-      <div className="mb-10">
-        <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-2 block">
-          // Fee Management
-        </span>
-        <h1 className="text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight">
-          Fee<br />Payment
-        </h1>
+      <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-2 block">
+            // Fee Management
+          </span>
+          <h1 className="text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight">
+            Fee<br />Payment
+          </h1>
+        </div>
+        <div className="flex bg-brand-white border-2 border-brand-black p-1 self-start sm:self-auto">
+          <button
+            onClick={() => setFeeMode('monthly')}
+            className={`px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors border-none ${feeMode === 'monthly' ? 'bg-brand-black text-brand-white' : 'bg-transparent text-brand-muted hover:text-brand-black'}`}
+          >
+            Monthly Fees
+          </button>
+          {examFeesData.length > 0 && (
+            <button
+              onClick={() => setFeeMode('exam')}
+              className={`px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors border-none ${feeMode === 'exam' ? 'bg-brand-black text-brand-white' : 'bg-transparent text-brand-muted hover:text-brand-black'}`}
+            >
+              Exam Fees
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Stats */}
@@ -203,8 +237,18 @@ export default function FeeManagement() {
               <tr className="border-b-2 border-brand-black bg-brand-ice/10">
                 <th className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted text-left py-3 px-4">Student</th>
                 <th className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted text-left py-3 px-4">Belt</th>
-                <th className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted text-left py-3 px-4">Months Pending</th>
-                <th className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted text-left py-3 px-4">{selectedMonth.split(' ')[0]}</th>
+                {feeMode === 'monthly' ? (
+                  <>
+                    <th className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted text-left py-3 px-4">Months Pending</th>
+                    <th className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted text-left py-3 px-4">{selectedMonth.split(' ')[0]}</th>
+                  </>
+                ) : (
+                  <>
+                    <th className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted text-left py-3 px-4">Exam Title</th>
+                    <th className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted text-left py-3 px-4">Amount</th>
+                    <th className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted text-left py-3 px-4">Status</th>
+                  </>
+                )}
                 <th className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted text-left py-3 px-4">Last Paid</th>
                 <th className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted text-left py-3 px-4">Action</th>
               </tr>
@@ -214,7 +258,7 @@ export default function FeeManagement() {
                 <tr
                   key={student.id}
                   className="border-b border-brand-ice/20 hover:bg-brand-ice/5 transition-colors cursor-pointer"
-                  onClick={() => setPanelStudent(student)}
+                  onClick={() => feeMode === 'monthly' && setPanelStudent(student)}
                 >
                   <td className="py-3.5 px-4">
                     <span className="font-medium text-sm text-brand-black">{student.name}</span>
@@ -225,32 +269,42 @@ export default function FeeManagement() {
                       <span className="font-mono text-xs text-brand-muted">{student.belt}</span>
                     </div>
                   </td>
-                  <td className="py-3.5 px-4">
-                    {student.monthsPending > 0 ? (
-                      <span className="inline-block font-mono text-[0.6rem] font-bold tracking-wider uppercase px-2.5 py-1 border border-[#E8445A] text-[#E8445A] bg-[#E8445A10]">
-                        {student.monthsPending} month{student.monthsPending > 1 ? 's' : ''}
-                      </span>
-                    ) : (
-                      <span className="font-mono text-xs text-brand-muted">0</span>
-                    )}
-                  </td>
-                  <td className="py-3.5 px-4">
-                    <StatusBadge status={student.currentMonthStatus} />
-                  </td>
+                  {feeMode === 'monthly' ? (
+                    <>
+                      <td className="py-3.5 px-4">
+                        {student.monthsPending > 0 ? (
+                          <span className="inline-block font-mono text-[0.6rem] font-bold tracking-wider uppercase px-2.5 py-1 border border-[#E8445A] text-[#E8445A] bg-[#E8445A10]">
+                            {student.monthsPending} month{student.monthsPending > 1 ? 's' : ''}
+                          </span>
+                        ) : (
+                          <span className="font-mono text-xs text-brand-muted">0</span>
+                        )}
+                      </td>
+                      <td className="py-3.5 px-4">
+                        <StatusBadge status={student.currentMonthStatus} />
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td className="py-3.5 px-4 font-mono text-sm text-brand-black">{student.examTitle}</td>
+                      <td className="py-3.5 px-4 font-mono text-sm font-bold text-brand-black">₹{student.amount}</td>
+                      <td className="py-3.5 px-4"><StatusBadge status={student.status} /></td>
+                    </>
+                  )}
                   <td className="py-3.5 px-4 font-mono text-sm text-brand-muted">
-                    {student.lastPaid}
+                    {student.lastPaid || student.paidOn || '—'}
                   </td>
                   <td className="py-3.5 px-4" onClick={(e) => e.stopPropagation()}>
-                    {student.currentMonthStatus === FEE_STATUS.AWAITING ? (
+                    {student[currentStatusField] === FEE_STATUS.AWAITING ? (
                       <button
-                        onClick={() => setVerifyStudent(student)}
+                        onClick={() => feeMode === 'monthly' ? setVerifyStudent(student) : handleConfirmExam(student.id)}
                         className="flex items-center gap-1.5 px-3 py-1.5 border-2 border-[#7C5CBF] text-[#7C5CBF]
                                    font-mono text-[0.6rem] font-bold uppercase tracking-wider bg-transparent cursor-pointer
                                    hover:bg-[#7C5CBF] hover:text-brand-white transition-all"
                       >
                         <ShieldCheck size={12} /> Verify
                       </button>
-                    ) : student.currentMonthStatus === FEE_STATUS.PENDING || student.currentMonthStatus === FEE_STATUS.OVERDUE ? (
+                    ) : student[currentStatusField] === FEE_STATUS.PENDING || student[currentStatusField] === FEE_STATUS.OVERDUE ? (
                       <button
                         className="flex items-center gap-1.5 px-3 py-1.5 border-2 border-[#F5A623] text-[#F5A623]
                                    font-mono text-[0.6rem] font-bold uppercase tracking-wider bg-transparent cursor-pointer
@@ -258,7 +312,7 @@ export default function FeeManagement() {
                       >
                         <Bell size={12} /> Remind
                       </button>
-                    ) : (
+                    ) : feeMode === 'monthly' ? (
                       <button
                         onClick={() => setPanelStudent(student)}
                         className="flex items-center gap-1.5 px-3 py-1.5 border-2 border-brand-black text-brand-black
@@ -267,6 +321,8 @@ export default function FeeManagement() {
                       >
                         <Eye size={12} /> View
                       </button>
+                    ) : (
+                      <span className="font-mono text-xs text-brand-muted">Confirmed</span>
                     )}
                   </td>
                 </tr>
