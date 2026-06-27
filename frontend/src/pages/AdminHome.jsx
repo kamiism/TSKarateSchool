@@ -7,6 +7,8 @@ import NewsManagement from '../components/admin/NewsManagement';
 import SyllabusManagement from '../components/admin/SyllabusManagement';
 import KataManagement from '../components/admin/KataManagement';
 import ExamManagement from '../components/admin/exams/ExamManagement';
+import FeeManagement from '../components/admin/FeeManagement';
+import FeeSettings from '../components/admin/FeeSettings';
 
 export default function AdminHome() {
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -35,6 +37,10 @@ export default function AdminHome() {
         return <KataManagement key={adminMode} adminMode={adminMode} />;
       case 'news':
         return <NewsManagement />;
+      case 'fees':
+        return <FeeManagement />;
+      case 'fee-settings':
+        return <FeeSettings />;
       default:
         return <AdminDashboard />;
     }

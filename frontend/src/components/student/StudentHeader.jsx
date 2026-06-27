@@ -18,6 +18,11 @@ export default function StudentHeader({ student }) {
       navigate('/student/quiz');
       return;
     }
+
+    if (id === 'fee-payment') {
+      navigate('/student/fees');
+      return;
+    }
     
     if (window.location.pathname !== '/student') {
       navigate('/student');
@@ -47,6 +52,7 @@ export default function StudentHeader({ student }) {
     { label: 'Dashboard', id: 'dashboard' },
     { label: 'Take Quiz', id: 'take-quiz' },
     { label: 'Leaderboard', id: 'leaderboard' },
+    { label: 'Fee Payment', id: 'fee-payment' },
     { label: 'Syllabus', id: 'syllabus' },
     { label: 'Kata Tutorial', id: 'kata' },
     { label: 'News', id: 'news' },

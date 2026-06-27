@@ -13,12 +13,15 @@ import {
   X,
   WifiOff,
   Wifi,
+  IndianRupee,
+  Settings,
 } from 'lucide-react';
 
 const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'students', label: 'Students', icon: Users },
   { id: 'quizzes', label: 'Quizzes', icon: FileQuestion },
+  { id: 'fees', label: 'Fee Payment', icon: IndianRupee },
   { id: 'syllabus', label: 'Syllabus', icon: BookOpen },
   { id: 'kata', label: 'Kata Videos', icon: Video },
   { id: 'news', label: 'News & Events', icon: Newspaper },
@@ -147,6 +150,22 @@ export default function AdminSidebar({ activeSection, onNavigate, adminMode, onM
           >
             <ClipboardCheck size={18} strokeWidth={2.5} />
             Exams
+          </button>
+        </div>
+
+        {/* Fee Settings */}
+        <div className="px-3 pb-2 border-t border-brand-purple/20 pt-2">
+          <button
+            onClick={() => handleNav('fee-settings')}
+            className={`w-full flex items-center gap-3 px-4 py-3 font-mono text-sm font-medium uppercase tracking-wider
+                       cursor-pointer border-none transition-all duration-150 text-left
+                       ${activeSection === 'fee-settings'
+                ? 'bg-brand-purple text-brand-white translate-x-1'
+                : 'bg-transparent text-brand-ice hover:bg-brand-white/5 hover:text-brand-white'
+              }`}
+          >
+            <Settings size={18} strokeWidth={2.5} />
+            Fee Settings
           </button>
         </div>
 
