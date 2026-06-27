@@ -7,15 +7,22 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState({ identifier: false, password: false });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
+    setError('');
+
     // TODO: wire up real auth
     if (role === 'student') {
       navigate('/student');
     } else {
-      alert('Sensei dashboard coming soon!');
+      if (identifier === 'admin' && password === 'admin123') {
+        navigate('/admin');
+      } else {
+        setError('Invalid admin credentials. (Hint: admin / admin123)');
+      }
     }
   };
 
@@ -81,6 +88,12 @@ export default function Login() {
               </button>
             </div>
           </div>
+
+          {error && (
+            <div className="mb-6 p-3 border-2 border-[#D9381E] bg-[#D9381E]/10 text-[#D9381E] font-mono text-xs font-bold uppercase tracking-wider text-center">
+              {error}
+            </div>
+          )}
 
           {/* ── Form ─────────────────────────── */}
           <form onSubmit={handleLogin} className="space-y-5">

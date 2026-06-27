@@ -15,10 +15,12 @@ import {
   Wifi,
   IndianRupee,
   Settings,
+  ShieldCheck,
 } from 'lucide-react';
 
 const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'staff', label: 'Moderators', icon: ShieldCheck },
   { id: 'students', label: 'Students', icon: Users },
   { id: 'quizzes', label: 'Quizzes', icon: FileQuestion },
   { id: 'fees', label: 'Fee Payment', icon: IndianRupee },
