@@ -1,6 +1,6 @@
-import { useCountUp } from '../../hooks/useCountUp';
 import { useNavigate } from 'react-router-dom';
-import TSKar1 from './TSKar1.jpeg';
+import { useCountUp } from '../../hooks/useCountUp';
+import TSKar1 from './TSKar1.webp';
 
 
 function StatItem({ count, suffix, label }) {

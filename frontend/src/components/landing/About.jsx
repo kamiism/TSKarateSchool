@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useScrollReveal } from '../../hooks/useScrollReveal';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import TSKar2 from './TSKar2.jpeg';
-import TSKar3 from './TSKar3.jpeg';
-import TSKar4 from './TSKar4.jpeg';
-import TSKar5 from './TSKar5.jpeg';
-import TSKar6 from './TSKar6.jpeg';
-import TSKar7 from './TSKar7.jpeg';
+import { useCallback, useEffect, useState } from 'react';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
+import TSKar2 from './TSKar2.webp';
+import TSKar3 from './TSKar3.webp';
+import TSKar4 from './TSKar4.webp';
+import TSKar5 from './TSKar5.webp';
+import TSKar6 from './TSKar6.webp';
+import TSKar7 from './TSKar7.webp';
 
 const photos = [TSKar7, TSKar2, TSKar3, TSKar4, TSKar5, TSKar6];
 
