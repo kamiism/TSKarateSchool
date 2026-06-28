@@ -2,72 +2,49 @@ import { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit, X, ChevronDown, ChevronUp, GripVertical, WifiOff, Wifi } from 'lucide-react';
 
 export const offlineBeltData = [
-  {
-    belt: 'White Belt', color: '#F5F5F5', borderColor: '#999', level: '10th Kyu',
-    topics: ['Basic stance (Zenkutsu-dachi, Kokutsu-dachi)', 'Oi-zuki (Lunge Punch)', 'Age-uke (Rising Block)', 'Mae-geri (Front Kick)', 'Taikyoku Shodan (Kata)', 'Dojo etiquette & Rei (Bowing)'],
-  },
-  {
-    belt: 'Yellow Belt', color: '#FFD700', borderColor: '#DAA520', level: '8th Kyu',
-    topics: ['Gyaku-zuki (Reverse Punch)', 'Soto-uke (Outside Block)', 'Yoko-geri (Side Kick)', 'Heian Shodan (Kata)', 'Basic Kumite drills', 'Counting in Japanese (1–10)'],
-  },
-  {
-    belt: 'Orange Belt', color: '#FF8C00', borderColor: '#CC7000', level: '7th Kyu',
-    topics: ['Uchi-uke (Inside Block)', 'Shuto-uke (Knife-hand Block)', 'Mawashi-geri (Roundhouse Kick)', 'Heian Nidan (Kata)', 'Three-step sparring (Sanbon Kumite)', 'Basic self-defense techniques'],
-  },
-  {
-    belt: 'Green Belt', color: '#228B22', borderColor: '#1A6B1A', level: '5th Kyu',
-    topics: ['Empi-uchi (Elbow Strike)', 'Ushiro-geri (Back Kick)', 'Heian Sandan & Yondan (Kata)', 'One-step sparring (Ippon Kumite)', 'Combination techniques', 'Introduction to Bunkai (application)'],
-  },
-  {
-    belt: 'Blue Belt', color: '#1E90FF', borderColor: '#0B6EC5', level: '3rd Kyu',
-    topics: ['Advanced combination attacks', 'Heian Godan (Kata)', 'Tekki Shodan (Kata)', 'Free sparring basics (Jiyu Kumite)', 'Advanced self-defense', 'Tournament preparation'],
-  },
-  {
-    belt: 'Brown Belt', color: '#8B4513', borderColor: '#6B3410', level: '1st Kyu',
-    topics: ['Bassai Dai (Kata)', 'Kanku Dai (Kata)', 'Advanced Jiyu Kumite', 'Advanced Bunkai analysis', 'Teaching assistance (Sempai role)', 'Mental discipline & philosophy'],
-  },
-  {
-    belt: 'Black Belt', color: '#000505', borderColor: '#3B3355', level: 'Shodan',
-    topics: ['Jion (Kata)', 'Enpi (Kata)', 'Mastery of all previous Kata', 'Advanced tournament Kumite', 'Instructor development', 'Karate-Do philosophy & history'],
-  },
+  { belt: 'White Belt', color: '#F5F5F5', borderColor: '#999', level: '10th Kyu', topics: ['Basic stance (Zenkutsu-dachi, Kokutsu-dachi)', 'Oi-zuki (Lunge Punch)', 'Age-uke (Rising Block)', 'Mae-geri (Front Kick)', 'Taikyoku Shodan (Kata)', 'Dojo etiquette & Rei (Bowing)'] },
+  { belt: 'Yellow Belt', color: '#FFD700', borderColor: '#DAA520', level: '8th Kyu', topics: ['Gyaku-zuki (Reverse Punch)', 'Soto-uke (Outside Block)', 'Yoko-geri (Side Kick)', 'Heian Shodan (Kata)', 'Basic Kumite drills', 'Counting in Japanese (1–10)'] },
+  { belt: 'Orange Belt', color: '#FF8C00', borderColor: '#CC7000', level: '7th Kyu', topics: ['Uchi-uke (Inside Block)', 'Shuto-uke (Knife-hand Block)', 'Mawashi-geri (Roundhouse Kick)', 'Heian Nidan (Kata)', 'Three-step sparring (Sanbon Kumite)', 'Basic self-defense techniques'] },
+  { belt: 'Green Belt', color: '#228B22', borderColor: '#1A6B1A', level: '5th Kyu', topics: ['Empi-uchi (Elbow Strike)', 'Ushiro-geri (Back Kick)', 'Heian Sandan & Yondan (Kata)', 'One-step sparring (Ippon Kumite)', 'Combination techniques', 'Introduction to Bunkai (application)'] },
+  { belt: 'Blue-II Belt', color: '#1E90FF', borderColor: '#0B6EC5', level: '4th Kyu', topics: ['Advanced combination attacks', 'Heian Godan (Kata)', 'Free sparring basics (Jiyu Kumite)'] },
+  { belt: 'Blue-I Belt', color: '#0000CD', borderColor: '#00008B', level: '4th Kyu', topics: ['Tekki Shodan (Kata)', 'Advanced self-defense', 'Tournament preparation'] },
+  { belt: 'Purple-II Belt', color: '#9370DB', borderColor: '#4B0082', level: '3rd Kyu', topics: ['Purple Belt basic drills'] },
+  { belt: 'Purple-I Belt', color: '#800080', borderColor: '#4B0082', level: '3rd Kyu', topics: ['Purple Belt advanced drills'] },
+  { belt: 'Brown-III Belt', color: '#CD853F', borderColor: '#8B4513', level: '2nd Kyu', topics: ['Bassai Dai (Kata)', 'Teaching assistance (Sempai role)'] },
+  { belt: 'Brown-II Belt', color: '#A0522D', borderColor: '#8B4513', level: '1st Kyu', topics: ['Kanku Dai (Kata)', 'Advanced Jiyu Kumite'] },
+  { belt: 'Brown-I Belt', color: '#8B4513', borderColor: '#6B3410', level: '1st Kyu', topics: ['Advanced Bunkai analysis', 'Mental discipline & philosophy'] },
+  { belt: 'Black Belt', color: '#000505', borderColor: '#3B3355', level: 'Shodan', topics: ['Jion (Kata)', 'Enpi (Kata)', 'Mastery of all previous Kata', 'Advanced tournament Kumite', 'Instructor development', 'Karate-Do philosophy & history'] },
 ];
 
 const hybridBeltData = [
-  {
-    belt: 'White Belt', color: '#F5F5F5', borderColor: '#999', level: '10th Kyu',
-    topics: ['Video: Basic stance fundamentals', 'Online quiz: Dojo etiquette', 'Live session: Taikyoku Shodan walkthrough', 'Homework: Stance practice log'],
-  },
-  {
-    belt: 'Yellow Belt', color: '#FFD700', borderColor: '#DAA520', level: '8th Kyu',
-    topics: ['Video: Reverse punch mechanics', 'Online drill: Block identification', 'Live session: Heian Shodan practice', 'Homework: Japanese terminology worksheet'],
-  },
-  {
-    belt: 'Orange Belt', color: '#FF8C00', borderColor: '#CC7000', level: '7th Kyu',
-    topics: ['Video: Roundhouse kick technique', 'Online quiz: Kata sequence memory', 'Live session: Sanbon Kumite demo', 'Homework: Self-defense scenario journal'],
-  },
-  {
-    belt: 'Green Belt', color: '#228B22', borderColor: '#1A6B1A', level: '5th Kyu',
-    topics: ['Video: Elbow strike & back kick', 'Online drill: Combination builder', 'Live session: Ippon Kumite sparring', 'Homework: Bunkai analysis report'],
-  },
-  {
-    belt: 'Blue Belt', color: '#1E90FF', borderColor: '#0B6EC5', level: '3rd Kyu',
-    topics: ['Video: Advanced combinations', 'Online quiz: Tournament rules', 'Live session: Jiyu Kumite basics', 'Homework: Tournament prep plan'],
-  },
-  {
-    belt: 'Brown Belt', color: '#8B4513', borderColor: '#6B3410', level: '1st Kyu',
-    topics: ['Video: Bassai Dai deep dive', 'Online seminar: Bunkai analysis', 'Live session: Advanced Kumite', 'Homework: Teaching plan draft'],
-  },
-  {
-    belt: 'Black Belt', color: '#000505', borderColor: '#3B3355', level: 'Shodan',
-    topics: ['Video: Mastery review series', 'Online seminar: Karate-Do philosophy', 'Live session: Instructor evaluation', 'Homework: Personal training curriculum'],
-  },
+  { belt: 'White Belt', color: '#F5F5F5', borderColor: '#999', level: '10th Kyu', topics: ['Video: Basic stance fundamentals', 'Online quiz: Dojo etiquette', 'Live session: Taikyoku Shodan walkthrough', 'Homework: Stance practice log'] },
+  { belt: 'Yellow Belt', color: '#FFD700', borderColor: '#DAA520', level: '8th Kyu', topics: ['Video: Reverse punch mechanics', 'Online drill: Block identification', 'Live session: Heian Shodan practice', 'Homework: Japanese terminology worksheet'] },
+  { belt: 'Orange Belt', color: '#FF8C00', borderColor: '#CC7000', level: '7th Kyu', topics: ['Video: Roundhouse kick technique', 'Online quiz: Kata sequence memory', 'Live session: Sanbon Kumite demo', 'Homework: Self-defense scenario journal'] },
+  { belt: 'Green Belt', color: '#228B22', borderColor: '#1A6B1A', level: '5th Kyu', topics: ['Video: Elbow strike & back kick', 'Online drill: Combination builder', 'Live session: Ippon Kumite sparring', 'Homework: Bunkai analysis report'] },
+  { belt: 'Blue-II Belt', color: '#1E90FF', borderColor: '#0B6EC5', level: '4th Kyu', topics: ['Video: Advanced combinations', 'Online quiz: Tournament rules', 'Live session: Jiyu Kumite basics', 'Homework: Tournament prep plan'] },
+  { belt: 'Blue-I Belt', color: '#0000CD', borderColor: '#00008B', level: '4th Kyu', topics: ['Video: Blue I techniques'] },
+  { belt: 'Purple-II Belt', color: '#9370DB', borderColor: '#4B0082', level: '3rd Kyu', topics: ['Video: Purple II drills'] },
+  { belt: 'Purple-I Belt', color: '#800080', borderColor: '#4B0082', level: '3rd Kyu', topics: ['Video: Purple I drills'] },
+  { belt: 'Brown-III Belt', color: '#CD853F', borderColor: '#8B4513', level: '2nd Kyu', topics: ['Video: Bassai Dai deep dive'] },
+  { belt: 'Brown-II Belt', color: '#A0522D', borderColor: '#8B4513', level: '1st Kyu', topics: ['Video: Brown II techniques'] },
+  { belt: 'Brown-I Belt', color: '#8B4513', borderColor: '#6B3410', level: '1st Kyu', topics: ['Online seminar: Bunkai analysis', 'Live session: Advanced Kumite', 'Homework: Teaching plan draft'] },
+  { belt: 'Black Belt', color: '#000505', borderColor: '#3B3355', level: 'Shodan', topics: ['Video: Mastery review series', 'Online seminar: Karate-Do philosophy', 'Live session: Instructor evaluation', 'Homework: Personal training curriculum'] },
 ];
 
 export default function SyllabusManagement({ adminMode = 'offline' }) {
+  const defaultSyllabus = adminMode === 'hybrid' ? hybridBeltData : offlineBeltData;
+
   const [syllabus, setSyllabus] = useState(() => {
     const saved = localStorage.getItem(`admin_syllabus_${adminMode}`);
-    if (saved) return JSON.parse(saved);
-    return adminMode === 'hybrid' ? hybridBeltData : offlineBeltData;
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // If the schema length is different (e.g., upgraded from 7 to 12 belts),
+      // we reset it to the new default to ensure consistency.
+      if (parsed.length === defaultSyllabus.length) {
+        return parsed;
+      }
+    }
+    return defaultSyllabus;
   });
 
   useEffect(() => {

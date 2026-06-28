@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { Plus, Trash2, Edit, X, Play, ExternalLink, WifiOff, Wifi } from 'lucide-react';
 
-const beltOptions = ['White Belt', 'Yellow Belt', 'Orange Belt', 'Green Belt', 'Blue Belt', 'Brown Belt', 'Black Belt'];
+const beltOptions = ['White Belt', 'Yellow Belt', 'Orange Belt', 'Green Belt', 'Blue-II Belt', 'Blue-I Belt', 'Purple-II Belt', 'Purple-I Belt', 'Brown-III Belt', 'Brown-II Belt', 'Brown-I Belt', 'Black Belt'];
 
 const offlineVideos = [
   { id: 1, youtubeId: 'q59hFRLjQqo', title: 'Taikyoku Shodan', belt: 'White Belt', description: 'The first and most fundamental kata. Master the basic form of stepping and punching.' },
   { id: 2, youtubeId: 'q59hFRLjQqo', title: 'Heian Shodan', belt: 'Yellow Belt', description: 'Introduces rising block and knife-hand techniques in a structured pattern.' },
   { id: 3, youtubeId: 'q59hFRLjQqo', title: 'Heian Nidan', belt: 'Orange Belt', description: 'Develops back stance, side kick, and more complex blocking sequences.' },
   { id: 4, youtubeId: 'q59hFRLjQqo', title: 'Heian Sandan', belt: 'Green Belt', description: 'Introduces elbow strikes, spinning techniques, and simultaneous block-strike.' },
-  { id: 5, youtubeId: 'q59hFRLjQqo', title: 'Bassai Dai', belt: 'Brown Belt', description: 'A powerful kata emphasizing the conversion of defensive moves to offensive attacks.' },
+  { id: 5, youtubeId: 'q59hFRLjQqo', title: 'Bassai Dai', belt: 'Brown-III Belt', description: 'A powerful kata emphasizing the conversion of defensive moves to offensive attacks.' },
 ];
 
 const hybridVideos = [

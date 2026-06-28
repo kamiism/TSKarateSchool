@@ -6,15 +6,20 @@ const beltOptions = [
   { belt: 'Yellow Belt', color: '#FFD700', borderColor: '#DAA520' },
   { belt: 'Orange Belt', color: '#FF8C00', borderColor: '#CC7000' },
   { belt: 'Green Belt', color: '#228B22', borderColor: '#1A6B1A' },
-  { belt: 'Blue Belt', color: '#1E90FF', borderColor: '#0B6EC5' },
-  { belt: 'Brown Belt', color: '#8B4513', borderColor: '#6B3410' },
+  { belt: 'Blue-II Belt', color: '#1E90FF', borderColor: '#0B6EC5' },
+  { belt: 'Blue-I Belt', color: '#0000CD', borderColor: '#00008B' },
+  { belt: 'Purple-II Belt', color: '#9370DB', borderColor: '#4B0082' },
+  { belt: 'Purple-I Belt', color: '#800080', borderColor: '#4B0082' },
+  { belt: 'Brown-III Belt', color: '#CD853F', borderColor: '#8B4513' },
+  { belt: 'Brown-II Belt', color: '#A0522D', borderColor: '#8B4513' },
+  { belt: 'Brown-I Belt', color: '#8B4513', borderColor: '#6B3410' },
   { belt: 'Black Belt', color: '#000505', borderColor: '#3B3355' },
 ];
 
 const offlineStudents = [
   { id: 1, name: 'Arjun Sharma', belt: 'Orange Belt', beltColor: '#FF8C00', quizPoints: 780, attendance: 70 },
   { id: 2, name: 'Priya Patel', belt: 'Green Belt', beltColor: '#228B22', quizPoints: 950, attendance: 92 },
-  { id: 3, name: 'Rahul Kumar', belt: 'Blue Belt', beltColor: '#1E90FF', quizPoints: 880, attendance: 85 },
+  { id: 3, name: 'Rahul Kumar', belt: 'Blue-II Belt', beltColor: '#1E90FF', quizPoints: 880, attendance: 85 },
   { id: 4, name: 'Sneha Gupta', belt: 'Yellow Belt', beltColor: '#FFD700', quizPoints: 720, attendance: 78 },
   { id: 5, name: 'Vikram Singh', belt: 'Orange Belt', beltColor: '#FF8C00', quizPoints: 690, attendance: 65 },
   { id: 6, name: 'Ananya Joshi', belt: 'White Belt', beltColor: '#F5F5F5', quizPoints: 650, attendance: 88 },
@@ -24,10 +29,10 @@ const offlineStudents = [
 
 const hybridStudents = [
   { id: 101, name: 'Aditya Verma', belt: 'Green Belt', beltColor: '#228B22', quizPoints: 820, attendance: 88 },
-  { id: 102, name: 'Meera Iyer', belt: 'Blue Belt', beltColor: '#1E90FF', quizPoints: 910, attendance: 95 },
+  { id: 102, name: 'Meera Iyer', belt: 'Blue-II Belt', beltColor: '#1E90FF', quizPoints: 910, attendance: 95 },
   { id: 103, name: 'Rohan Das', belt: 'Orange Belt', beltColor: '#FF8C00', quizPoints: 760, attendance: 80 },
   { id: 104, name: 'Kavya Menon', belt: 'Yellow Belt', beltColor: '#FFD700', quizPoints: 680, attendance: 75 },
-  { id: 105, name: 'Suresh Babu', belt: 'Brown Belt', beltColor: '#8B4513', quizPoints: 970, attendance: 91 },
+  { id: 105, name: 'Suresh Babu', belt: 'Brown-I Belt', beltColor: '#8B4513', quizPoints: 970, attendance: 91 },
 ];
 
 export default function StudentManagement({ adminMode = 'offline' }) {

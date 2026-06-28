@@ -8,7 +8,7 @@ import PostExamReport from './PostExamReport';
 const mockStudents = [
   { id: 1, name: 'Arjun Sharma', belt: 'Orange Belt', beltColor: '#FF8C00' },
   { id: 2, name: 'Priya Patel', belt: 'Green Belt', beltColor: '#228B22' },
-  { id: 3, name: 'Rahul Kumar', belt: 'Blue Belt', beltColor: '#1E90FF' },
+  { id: 3, name: 'Rahul Kumar', belt: 'Blue-II Belt', beltColor: '#1E90FF' },
   { id: 4, name: 'Sneha Gupta', belt: 'Yellow Belt', beltColor: '#FFD700' },
   { id: 5, name: 'Vikram Singh', belt: 'Orange Belt', beltColor: '#FF8C00' },
   { id: 6, name: 'Ananya Joshi', belt: 'White Belt', beltColor: '#F5F5F5' },
@@ -48,8 +48,13 @@ const beltMeta = {
   'Yellow Belt': { color: '#FFD700', borderColor: '#DAA520' },
   'Orange Belt': { color: '#FF8C00', borderColor: '#CC7000' },
   'Green Belt': { color: '#228B22', borderColor: '#1A6B1A' },
-  'Blue Belt': { color: '#1E90FF', borderColor: '#0B6EC5' },
-  'Brown Belt': { color: '#8B4513', borderColor: '#6B3410' },
+  'Blue-II Belt': { color: '#1E90FF', borderColor: '#0B6EC5' },
+  'Blue-I Belt': { color: '#0000CD', borderColor: '#00008B' },
+  'Purple-II Belt': { color: '#9370DB', borderColor: '#4B0082' },
+  'Purple-I Belt': { color: '#800080', borderColor: '#4B0082' },
+  'Brown-III Belt': { color: '#CD853F', borderColor: '#8B4513' },
+  'Brown-II Belt': { color: '#A0522D', borderColor: '#8B4513' },
+  'Brown-I Belt': { color: '#8B4513', borderColor: '#6B3410' },
   'Black Belt': { color: '#000505', borderColor: '#3B3355' },
 };
 

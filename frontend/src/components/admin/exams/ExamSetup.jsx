@@ -7,8 +7,13 @@ const beltOptions = [
   { belt: 'Yellow Belt', color: '#FFD700', borderColor: '#DAA520' },
   { belt: 'Orange Belt', color: '#FF8C00', borderColor: '#CC7000' },
   { belt: 'Green Belt', color: '#228B22', borderColor: '#1A6B1A' },
-  { belt: 'Blue Belt', color: '#1E90FF', borderColor: '#0B6EC5' },
-  { belt: 'Brown Belt', color: '#8B4513', borderColor: '#6B3410' },
+  { belt: 'Blue-II Belt', color: '#1E90FF', borderColor: '#0B6EC5' },
+  { belt: 'Blue-I Belt', color: '#0000CD', borderColor: '#00008B' },
+  { belt: 'Purple-II Belt', color: '#9370DB', borderColor: '#4B0082' },
+  { belt: 'Purple-I Belt', color: '#800080', borderColor: '#4B0082' },
+  { belt: 'Brown-III Belt', color: '#CD853F', borderColor: '#8B4513' },
+  { belt: 'Brown-II Belt', color: '#A0522D', borderColor: '#8B4513' },
+  { belt: 'Brown-I Belt', color: '#8B4513', borderColor: '#6B3410' },
   { belt: 'Black Belt', color: '#000505', borderColor: '#3B3355' },
 ];
 

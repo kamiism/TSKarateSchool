@@ -19,8 +19,13 @@ const beltDistribution = [
   { belt: 'Yellow Belt', color: '#FFD700', borderColor: '#DAA520', count: 10 },
   { belt: 'Orange Belt', color: '#FF8C00', borderColor: '#CC7000', count: 8 },
   { belt: 'Green Belt', color: '#228B22', borderColor: '#1A6B1A', count: 7 },
-  { belt: 'Blue Belt', color: '#1E90FF', borderColor: '#0B6EC5', count: 5 },
-  { belt: 'Brown Belt', color: '#8B4513', borderColor: '#6B3410', count: 4 },
+  { belt: 'Blue-II Belt', color: '#1E90FF', borderColor: '#0B6EC5', count: 3 },
+  { belt: 'Blue-I Belt', color: '#0000CD', borderColor: '#00008B', count: 2 },
+  { belt: 'Purple-II Belt', color: '#9370DB', borderColor: '#4B0082', count: 2 },
+  { belt: 'Purple-I Belt', color: '#800080', borderColor: '#4B0082', count: 1 },
+  { belt: 'Brown-III Belt', color: '#CD853F', borderColor: '#8B4513', count: 2 },
+  { belt: 'Brown-II Belt', color: '#A0522D', borderColor: '#8B4513', count: 1 },
+  { belt: 'Brown-I Belt', color: '#8B4513', borderColor: '#6B3410', count: 1 },
   { belt: 'Black Belt', color: '#000505', borderColor: '#3B3355', count: 2 },
 ];
 

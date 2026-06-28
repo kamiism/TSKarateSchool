@@ -1,110 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Lock } from 'lucide-react';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
-
-// Placeholder syllabus — content will be provided later
-const beltSyllabus = [
-  {
-    belt: 'White Belt',
-    color: '#F5F5F5',
-    borderColor: '#999',
-    level: '10th Kyu',
-    topics: [
-      'Basic stance (Zenkutsu-dachi, Kokutsu-dachi)',
-      'Oi-zuki (Lunge Punch)',
-      'Age-uke (Rising Block)',
-      'Mae-geri (Front Kick)',
-      'Taikyoku Shodan (Kata)',
-      'Dojo etiquette & Rei (Bowing)',
-    ],
-  },
-  {
-    belt: 'Yellow Belt',
-    color: '#FFD700',
-    borderColor: '#DAA520',
-    level: '8th Kyu',
-    topics: [
-      'Gyaku-zuki (Reverse Punch)',
-      'Soto-uke (Outside Block)',
-      'Yoko-geri (Side Kick)',
-      'Heian Shodan (Kata)',
-      'Basic Kumite drills',
-      'Counting in Japanese (1–10)',
-    ],
-  },
-  {
-    belt: 'Orange Belt',
-    color: '#FF8C00',
-    borderColor: '#CC7000',
-    level: '7th Kyu',
-    topics: [
-      'Uchi-uke (Inside Block)',
-      'Shuto-uke (Knife-hand Block)',
-      'Mawashi-geri (Roundhouse Kick)',
-      'Heian Nidan (Kata)',
-      'Three-step sparring (Sanbon Kumite)',
-      'Basic self-defense techniques',
-    ],
-  },
-  {
-    belt: 'Green Belt',
-    color: '#228B22',
-    borderColor: '#1A6B1A',
-    level: '5th Kyu',
-    topics: [
-      'Empi-uchi (Elbow Strike)',
-      'Ushiro-geri (Back Kick)',
-      'Heian Sandan & Yondan (Kata)',
-      'One-step sparring (Ippon Kumite)',
-      'Combination techniques',
-      'Introduction to Bunkai (application)',
-    ],
-  },
-  {
-    belt: 'Blue Belt',
-    color: '#1E90FF',
-    borderColor: '#0B6EC5',
-    level: '3rd Kyu',
-    topics: [
-      'Advanced combination attacks',
-      'Heian Godan (Kata)',
-      'Tekki Shodan (Kata)',
-      'Free sparring basics (Jiyu Kumite)',
-      'Advanced self-defense',
-      'Tournament preparation',
-    ],
-  },
-  {
-    belt: 'Brown Belt',
-    color: '#8B4513',
-    borderColor: '#6B3410',
-    level: '1st Kyu',
-    topics: [
-      'Bassai Dai (Kata)',
-      'Kanku Dai (Kata)',
-      'Advanced Jiyu Kumite',
-      'Advanced Bunkai analysis',
-      'Teaching assistance (Sempai role)',
-      'Mental discipline & philosophy',
-    ],
-  },
-  {
-    belt: 'Black Belt',
-    color: '#000505',
-    borderColor: '#3B3355',
-    level: 'Shodan',
-    topics: [
-      'Jion (Kata)',
-      'Enpi (Kata)',
-      'Mastery of all previous Kata',
-      'Advanced tournament Kumite',
-      'Instructor development',
-      'Karate-Do philosophy & history',
-    ],
-  },
-];
+import { offlineBeltData } from '../admin/SyllabusManagement';
 
 export default function Syllabus({ currentBelt }) {
+  const [beltSyllabus, setBeltSyllabus] = useState(offlineBeltData);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('admin_syllabus_offline');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.length === offlineBeltData.length) {
+          setBeltSyllabus(parsed);
+        }
+      } catch (e) {}
+    }
+  }, []);
+
   const currentBeltIndex = beltSyllabus.findIndex(item => item.belt === currentBelt);
   const maxAccessibleIdx = currentBeltIndex !== -1 ? currentBeltIndex : 0;
   const [openBelt, setOpenBelt] = useState(currentBelt);
