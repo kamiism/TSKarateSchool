@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit, X, ChevronDown, ChevronUp, GripVertical, WifiOff, Wifi } from 'lucide-react';
 
-const offlineBeltData = [
+export const offlineBeltData = [
   {
     belt: 'White Belt', color: '#F5F5F5', borderColor: '#999', level: '10th Kyu',
     topics: ['Basic stance (Zenkutsu-dachi, Kokutsu-dachi)', 'Oi-zuki (Lunge Punch)', 'Age-uke (Rising Block)', 'Mae-geri (Front Kick)', 'Taikyoku Shodan (Kata)', 'Dojo etiquette & Rei (Bowing)'],
@@ -64,7 +64,16 @@ const hybridBeltData = [
 ];
 
 export default function SyllabusManagement({ adminMode = 'offline' }) {
-  const [syllabus, setSyllabus] = useState(adminMode === 'hybrid' ? hybridBeltData : offlineBeltData);
+  const [syllabus, setSyllabus] = useState(() => {
+    const saved = localStorage.getItem(`admin_syllabus_${adminMode}`);
+    if (saved) return JSON.parse(saved);
+    return adminMode === 'hybrid' ? hybridBeltData : offlineBeltData;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(`admin_syllabus_${adminMode}`, JSON.stringify(syllabus));
+  }, [syllabus, adminMode]);
+
   const [expandedBelt, setExpandedBelt] = useState(null);
   const [editingTopic, setEditingTopic] = useState(null); // { beltIdx, topicIdx }
   const [editValue, setEditValue] = useState('');

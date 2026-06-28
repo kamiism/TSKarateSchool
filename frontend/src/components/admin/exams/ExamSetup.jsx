@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Plus, Trash2, ChevronDown, Save, Play, FileText, X, Calendar } from 'lucide-react';
+import { offlineBeltData } from '../SyllabusManagement';
 
 const beltOptions = [
   { belt: 'White Belt', color: '#F5F5F5', borderColor: '#999' },
@@ -38,6 +39,38 @@ const defaultTemplates = [
 
 const emptyParameter = { name: '', maxMarks: 10, criteria: '' };
 
+const parseTopicToParameter = (topic) => {
+  const match = topic.match(/^(.*?)\s*\((.*?)\)$/);
+  if (match) {
+    return { name: match[2].trim(), maxMarks: 10, criteria: match[1].trim() };
+  }
+  return { name: topic.trim(), maxMarks: 10, criteria: '' };
+};
+
+const getBeltParameters = (belt) => {
+  const savedSyllabusStr = localStorage.getItem('admin_syllabus_offline');
+  let syllabusData = offlineBeltData;
+  
+  if (savedSyllabusStr) {
+    try {
+      syllabusData = JSON.parse(savedSyllabusStr);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  const beltInfo = syllabusData.find(b => b.belt === belt);
+  if (beltInfo && beltInfo.topics) {
+    return beltInfo.topics.map(parseTopicToParameter);
+  }
+  
+  return [
+    { name: 'Punch', maxMarks: 10, criteria: '' },
+    { name: 'Kick', maxMarks: 15, criteria: '' },
+    { name: 'Kata', maxMarks: 20, criteria: '' },
+  ];
+};
+
 export default function ExamSetup({ initialConfig, onStartExam, onScheduleExam, onCancel, templates, onSaveTemplate }) {
   const [title, setTitle] = useState(initialConfig?.title || '');
   const [selectedBelts, setSelectedBelts] = useState(initialConfig?.belts || []);
@@ -47,11 +80,7 @@ export default function ExamSetup({ initialConfig, onStartExam, onScheduleExam, 
   const [parametersByBelt, setParametersByBelt] = useState(initialConfig?.parametersByBelt || {
     // initialize with default if belts exist
     ...(initialConfig?.belts || []).reduce((acc, belt) => {
-      acc[belt] = initialConfig?.parametersByBelt?.[belt] || [
-        { name: 'Punch', maxMarks: 10, criteria: '' },
-        { name: 'Kick', maxMarks: 15, criteria: '' },
-        { name: 'Kata', maxMarks: 20, criteria: '' },
-      ];
+      acc[belt] = initialConfig?.parametersByBelt?.[belt] || getBeltParameters(belt);
       return acc;
     }, {})
   });
@@ -75,11 +104,7 @@ export default function ExamSetup({ initialConfig, onStartExam, onScheduleExam, 
         
         setParametersByBelt(p => ({
           ...p,
-          [belt]: p[belt] || [
-            { name: 'Punch', maxMarks: 10, criteria: '' },
-            { name: 'Kick', maxMarks: 15, criteria: '' },
-            { name: 'Kata', maxMarks: 20, criteria: '' },
-          ]
+          [belt]: p[belt] || getBeltParameters(belt)
         }));
       }
       return newBelts;
