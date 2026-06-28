@@ -109,7 +109,7 @@ export default function ExamManagement() {
       passRate: finalResults.length ? Math.round((passCount / finalResults.length) * 100) : 0,
       status: 'finalized',
       results: finalResults,
-      parameters: examConfig.parameters,
+      parametersByBelt: examConfig.parametersByBelt,
     }, ...prev]);
 
     // Reset
@@ -197,7 +197,12 @@ export default function ExamManagement() {
                     </button>
                     <button
                       onClick={() => {
-                        setExamConfig({ title: exam.title, date: exam.date, belts: exam.belts, parameters: defaultTemplates[0].parameters });
+                        setExamConfig({ 
+                          title: exam.title, 
+                          date: exam.date, 
+                          belts: exam.belts, 
+                          parametersByBelt: exam.parametersByBelt || exam.belts.reduce((acc, b) => ({...acc, [b]: defaultTemplates[0].parameters}), {}) 
+                        });
                         setExamStudents(mockStudents.filter(s => exam.belts.includes(s.belt)));
                         setPhase('live');
                       }}

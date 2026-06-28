@@ -43,56 +43,96 @@ export default function ExamSetup({ initialConfig, onStartExam, onScheduleExam, 
   const [selectedBelts, setSelectedBelts] = useState(initialConfig?.belts || []);
   const [examDate, setExamDate] = useState(initialConfig?.date || '');
   const [examTime, setExamTime] = useState(initialConfig?.time || '');
-  const [parameters, setParameters] = useState(initialConfig?.parameters || [
-    { name: 'Punch', maxMarks: 10, criteria: '' },
-    { name: 'Kick', maxMarks: 15, criteria: '' },
-    { name: 'Kata', maxMarks: 20, criteria: '' },
-  ]);
+  
+  const [parametersByBelt, setParametersByBelt] = useState(initialConfig?.parametersByBelt || {
+    // initialize with default if belts exist
+    ...(initialConfig?.belts || []).reduce((acc, belt) => {
+      acc[belt] = initialConfig?.parametersByBelt?.[belt] || [
+        { name: 'Punch', maxMarks: 10, criteria: '' },
+        { name: 'Kick', maxMarks: 15, criteria: '' },
+        { name: 'Kata', maxMarks: 20, criteria: '' },
+      ];
+      return acc;
+    }, {})
+  });
+
+  const [activeBeltTab, setActiveBeltTab] = useState(initialConfig?.belts?.[0] || null);
   const [showTemplateModal, setShowTemplateModal] = useState(false);
   const [templateName, setTemplateName] = useState('');
 
   const toggleBelt = (belt) => {
-    setSelectedBelts(prev =>
-      prev.includes(belt) ? prev.filter(b => b !== belt) : [...prev, belt]
-    );
-  };
-
-  const updateParam = (idx, field, value) => {
-    setParameters(prev => {
-      const updated = [...prev];
-      updated[idx] = { ...updated[idx], [field]: field === 'maxMarks' ? (parseInt(value) || 0) : value };
-      return updated;
+    setSelectedBelts(prev => {
+      const isSelected = prev.includes(belt);
+      let newBelts;
+      if (isSelected) {
+        newBelts = prev.filter(b => b !== belt);
+        if (activeBeltTab === belt) {
+          setActiveBeltTab(newBelts[0] || null);
+        }
+      } else {
+        newBelts = [...prev, belt];
+        if (!activeBeltTab) setActiveBeltTab(belt);
+        
+        setParametersByBelt(p => ({
+          ...p,
+          [belt]: p[belt] || [
+            { name: 'Punch', maxMarks: 10, criteria: '' },
+            { name: 'Kick', maxMarks: 15, criteria: '' },
+            { name: 'Kata', maxMarks: 20, criteria: '' },
+          ]
+        }));
+      }
+      return newBelts;
     });
   };
 
-  const addParameter = () => {
-    setParameters(prev => [...prev, { ...emptyParameter }]);
+  const updateParam = (belt, idx, field, value) => {
+    setParametersByBelt(prev => {
+      const updatedBeltParams = [...(prev[belt] || [])];
+      updatedBeltParams[idx] = { ...updatedBeltParams[idx], [field]: field === 'maxMarks' ? (parseInt(value) || 0) : value };
+      return { ...prev, [belt]: updatedBeltParams };
+    });
   };
 
-  const removeParameter = (idx) => {
-    if (parameters.length <= 1) return;
-    setParameters(prev => prev.filter((_, i) => i !== idx));
+  const addParameter = (belt) => {
+    setParametersByBelt(prev => ({
+      ...prev,
+      [belt]: [...(prev[belt] || []), { ...emptyParameter }]
+    }));
+  };
+
+  const removeParameter = (belt, idx) => {
+    if ((parametersByBelt[belt] || []).length <= 1) return;
+    setParametersByBelt(prev => ({
+      ...prev,
+      [belt]: prev[belt].filter((_, i) => i !== idx)
+    }));
   };
 
   const loadTemplate = (tpl) => {
-    setParameters(tpl.parameters.map(p => ({ ...p })));
+    if (!activeBeltTab) return;
+    setParametersByBelt(prev => ({
+      ...prev,
+      [activeBeltTab]: tpl.parameters.map(p => ({ ...p }))
+    }));
     setShowTemplateModal(false);
   };
 
   const handleSaveTemplate = () => {
-    if (!templateName.trim()) return;
+    if (!templateName.trim() || !activeBeltTab) return;
     onSaveTemplate({
       id: `tpl-${Date.now()}`,
       name: templateName.trim(),
-      parameters: parameters.map(p => ({ ...p })),
+      parameters: parametersByBelt[activeBeltTab].map(p => ({ ...p })),
     });
     setTemplateName('');
   };
 
-  const totalMaxMarks = parameters.reduce((sum, p) => sum + p.maxMarks, 0);
-
   const canStart = title.trim() && selectedBelts.length > 0 && examDate &&
-    parameters.length > 0 && parameters.every(p => p.name.trim() && p.maxMarks > 0);
+    selectedBelts.every(belt => 
+      (parametersByBelt[belt] || []).length > 0 && 
+      parametersByBelt[belt].every(p => p.name.trim() && p.maxMarks > 0)
+    );
 
   const handleStart = () => {
     if (!canStart) return;
@@ -101,8 +141,7 @@ export default function ExamSetup({ initialConfig, onStartExam, onScheduleExam, 
       belts: selectedBelts,
       date: examDate,
       time: examTime,
-      parameters: parameters.map(p => ({ ...p })),
-      totalMaxMarks,
+      parametersByBelt: { ...parametersByBelt }
     });
   };
 
@@ -223,66 +262,103 @@ export default function ExamSetup({ initialConfig, onStartExam, onScheduleExam, 
               <label className="font-mono text-[0.7rem] tracking-[0.15em] uppercase text-brand-muted">
                 Testing Parameters
               </label>
-              <span className="font-mono text-xs text-brand-purple font-bold">
-                Total: {totalMaxMarks} marks
-              </span>
             </div>
 
-            <div className="space-y-3">
-              {parameters.map((param, idx) => (
-                <div key={idx} className="flex items-start gap-3 border-2 border-brand-ice/30 p-3">
-                  <span className="font-mono text-[0.65rem] text-brand-muted mt-3 flex-shrink-0 w-6">
-                    {String(idx + 1).padStart(2, '0')}
-                  </span>
-                  <div className="flex-1 space-y-2">
-                    <div className="flex gap-3">
-                      <input
-                        type="text"
-                        value={param.name}
-                        onChange={(e) => updateParam(idx, 'name', e.target.value)}
-                        placeholder="Parameter name (e.g. Punch)"
-                        className="flex-1 px-3 py-2 border-2 border-brand-black font-mono text-sm bg-transparent
-                                   outline-none text-brand-black placeholder:text-brand-muted/60 focus:border-brand-purple transition-colors"
-                      />
-                      <input
-                        type="number"
-                        min="1"
-                        max="100"
-                        value={param.maxMarks}
-                        onChange={(e) => updateParam(idx, 'maxMarks', e.target.value)}
-                        className="w-20 px-3 py-2 border-2 border-brand-black font-mono text-sm bg-transparent
-                                   outline-none text-brand-black text-center focus:border-brand-purple transition-colors"
-                      />
-                    </div>
-                    <input
-                      type="text"
-                      value={param.criteria}
-                      onChange={(e) => updateParam(idx, 'criteria', e.target.value)}
-                      placeholder="Judging criteria (optional)"
-                      className="w-full px-3 py-1.5 border-b-2 border-brand-ice/30 font-mono text-xs bg-transparent
-                                 outline-none text-brand-muted placeholder:text-brand-muted/40 focus:border-brand-purple transition-colors"
-                    />
-                  </div>
-                  <button
-                    onClick={() => removeParameter(idx)}
-                    disabled={parameters.length <= 1}
-                    className={`mt-2 p-1.5 border-none bg-transparent transition-colors
-                               ${parameters.length <= 1 ? 'text-brand-ice cursor-not-allowed' : 'text-brand-muted hover:text-[#D9381E] cursor-pointer'}`}
-                  >
-                    <Trash2 size={14} />
-                  </button>
+            {selectedBelts.length === 0 ? (
+              <p className="text-sm font-mono text-brand-muted">Select belts above to configure parameters.</p>
+            ) : (
+              <div>
+                {/* Tabs */}
+                <div className="flex flex-wrap gap-1 mb-4 border-b-2 border-brand-ice/50 pb-2">
+                  {selectedBelts.map(belt => {
+                    const isActive = activeBeltTab === belt;
+                    const meta = beltOptions.find(b => b.belt === belt);
+                    return (
+                      <button
+                        key={belt}
+                        onClick={() => setActiveBeltTab(belt)}
+                        className={`px-3 py-1.5 font-mono text-[0.65rem] font-bold uppercase tracking-wider
+                                   border-2 transition-all duration-150 cursor-pointer
+                                   ${isActive 
+                                     ? 'border-brand-black bg-brand-black text-brand-white' 
+                                     : 'border-transparent bg-brand-ice/20 text-brand-muted hover:bg-brand-ice hover:text-brand-black'}`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 border" style={{ backgroundColor: meta?.color, borderColor: meta?.borderColor }} />
+                          {belt.replace(' Belt', '')}
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
-              ))}
-            </div>
 
-            <button
-              onClick={addParameter}
-              className="flex items-center gap-2 mt-4 font-mono text-[0.7rem] font-bold uppercase tracking-wider text-brand-purple
-                         bg-transparent border-none cursor-pointer hover:text-brand-black transition-colors"
-            >
-              <Plus size={14} />
-              Add Parameter
-            </button>
+                {/* Active Tab Content */}
+                {activeBeltTab && parametersByBelt[activeBeltTab] && (
+                  <>
+                    <div className="flex justify-end mb-2">
+                      <span className="font-mono text-xs text-brand-purple font-bold">
+                        Total for {activeBeltTab}: {(parametersByBelt[activeBeltTab] || []).reduce((sum, p) => sum + (parseInt(p.maxMarks) || 0), 0)} marks
+                      </span>
+                    </div>
+                    <div className="space-y-3">
+                      {(parametersByBelt[activeBeltTab] || []).map((param, idx) => (
+                        <div key={idx} className="flex items-start gap-3 border-2 border-brand-ice/30 p-3">
+                          <span className="font-mono text-[0.65rem] text-brand-muted mt-3 flex-shrink-0 w-6">
+                            {String(idx + 1).padStart(2, '0')}
+                          </span>
+                          <div className="flex-1 space-y-2">
+                            <div className="flex gap-3">
+                              <input
+                                type="text"
+                                value={param.name}
+                                onChange={(e) => updateParam(activeBeltTab, idx, 'name', e.target.value)}
+                                placeholder="Parameter name (e.g. Punch)"
+                                className="flex-1 px-3 py-2 border-2 border-brand-black font-mono text-sm bg-transparent
+                                           outline-none text-brand-black placeholder:text-brand-muted/60 focus:border-brand-purple transition-colors"
+                              />
+                              <input
+                                type="number"
+                                min="1"
+                                max="100"
+                                value={param.maxMarks}
+                                onChange={(e) => updateParam(activeBeltTab, idx, 'maxMarks', e.target.value)}
+                                className="w-20 px-3 py-2 border-2 border-brand-black font-mono text-sm bg-transparent
+                                           outline-none text-brand-black text-center focus:border-brand-purple transition-colors"
+                              />
+                            </div>
+                            <input
+                              type="text"
+                              value={param.criteria}
+                              onChange={(e) => updateParam(activeBeltTab, idx, 'criteria', e.target.value)}
+                              placeholder="Judging criteria (optional)"
+                              className="w-full px-3 py-1.5 border-b-2 border-brand-ice/30 font-mono text-xs bg-transparent
+                                         outline-none text-brand-muted placeholder:text-brand-muted/40 focus:border-brand-purple transition-colors"
+                            />
+                          </div>
+                          <button
+                            onClick={() => removeParameter(activeBeltTab, idx)}
+                            disabled={(parametersByBelt[activeBeltTab] || []).length <= 1}
+                            className={`mt-2 p-1.5 border-none bg-transparent transition-colors
+                                       ${(parametersByBelt[activeBeltTab] || []).length <= 1 ? 'text-brand-ice cursor-not-allowed' : 'text-brand-muted hover:text-[#D9381E] cursor-pointer'}`}
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    <button
+                      onClick={() => addParameter(activeBeltTab)}
+                      className="flex items-center gap-2 mt-4 font-mono text-[0.7rem] font-bold uppercase tracking-wider text-brand-purple
+                                 bg-transparent border-none cursor-pointer hover:text-brand-black transition-colors"
+                    >
+                      <Plus size={14} />
+                      Add Parameter
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -322,11 +398,21 @@ export default function ExamSetup({ initialConfig, onStartExam, onScheduleExam, 
               </div>
               <div>
                 <span className="font-mono text-[0.6rem] text-brand-muted uppercase tracking-wider block">Parameters</span>
-                <span className="font-mono text-sm text-brand-white">{parameters.filter(p => p.name.trim()).length} defined</span>
+                <span className="font-mono text-sm text-brand-white">
+                  {selectedBelts.reduce((sum, b) => sum + (parametersByBelt[b] || []).filter(p => p.name.trim()).length, 0)} total defined
+                </span>
               </div>
               <div>
                 <span className="font-mono text-[0.6rem] text-brand-muted uppercase tracking-wider block">Total Marks</span>
-                <span className="font-mono text-2xl font-bold text-brand-white">{totalMaxMarks}</span>
+                <div className="flex flex-col gap-1 mt-1">
+                  {selectedBelts.length === 0 && <span className="font-mono text-sm text-brand-white">—</span>}
+                  {selectedBelts.map(b => (
+                    <span key={b} className="font-mono text-sm text-brand-white flex justify-between">
+                      <span className="text-[0.65rem] text-brand-ice">{b.replace(' Belt', '')}:</span>
+                      {(parametersByBelt[b] || []).reduce((sum, p) => sum + (parseInt(p.maxMarks) || 0), 0)}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -352,8 +438,7 @@ export default function ExamSetup({ initialConfig, onStartExam, onScheduleExam, 
                     belts: selectedBelts,
                     date: examDate,
                     time: examTime,
-                    parameters: parameters.map(p => ({ ...p })),
-                    totalMaxMarks,
+                    parametersByBelt: { ...parametersByBelt },
                     totalStudents: 15, // mock
                   });
                 } else {
@@ -385,7 +470,7 @@ export default function ExamSetup({ initialConfig, onStartExam, onScheduleExam, 
                 />
                 <button
                   onClick={handleSaveTemplate}
-                  disabled={!templateName.trim() || parameters.length === 0}
+                  disabled={!templateName.trim() || !activeBeltTab || (parametersByBelt[activeBeltTab] || []).length === 0}
                   className="p-2 border-2 border-brand-ice/30 bg-transparent text-brand-ice cursor-pointer
                              hover:border-brand-ice hover:text-brand-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >

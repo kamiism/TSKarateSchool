@@ -21,7 +21,8 @@ export default function LiveMarking({ examConfig, students, onEndExam }) {
         remarks: '',
         flagged: false,
       };
-      examConfig.parameters.forEach(p => {
+      const beltParams = examConfig.parametersByBelt[s.belt] || [];
+      beltParams.forEach(p => {
         initial[s.id].params[p.name] = 0;
       });
     });
@@ -38,8 +39,10 @@ export default function LiveMarking({ examConfig, students, onEndExam }) {
   };
 
   const updateScore = (studentId, paramName, value) => {
-    const param = examConfig.parameters.find(p => p.name === paramName);
-    const numVal = Math.max(0, Math.min(parseInt(value) || 0, param.maxMarks));
+    const student = students.find(s => s.id === studentId);
+    const beltParams = examConfig.parametersByBelt[student?.belt] || [];
+    const param = beltParams.find(p => p.name === paramName);
+    const numVal = Math.max(0, Math.min(parseInt(value) || 0, param?.maxMarks || 0));
     setScores(prev => ({
       ...prev,
       [studentId]: {
@@ -84,17 +87,24 @@ export default function LiveMarking({ examConfig, students, onEndExam }) {
   const markedStudents = students.filter(s => isStudentMarked(s.id)).length;
   const flaggedCount = students.filter(s => scores[s.id]?.flagged).length;
 
+  const getBeltTotalMarks = (belt) => {
+    return (examConfig.parametersByBelt[belt] || []).reduce((sum, p) => sum + (parseInt(p.maxMarks) || 0), 0);
+  };
+
   const handleEnd = () => {
-    const results = students.map(s => ({
-      ...s,
-      scores: { ...scores[s.id].params },
-      originalScores: { ...scores[s.id].params },
-      total: getStudentTotal(s.id),
-      percentage: Math.round((getStudentTotal(s.id) / examConfig.totalMaxMarks) * 100),
-      remarks: scores[s.id].remarks,
-      flagged: scores[s.id].flagged,
-      outcome: null,
-    }));
+    const results = students.map(s => {
+      const beltMaxMarks = getBeltTotalMarks(s.belt);
+      return {
+        ...s,
+        scores: { ...scores[s.id].params },
+        originalScores: { ...scores[s.id].params },
+        total: getStudentTotal(s.id),
+        percentage: beltMaxMarks ? Math.round((getStudentTotal(s.id) / beltMaxMarks) * 100) : 0,
+        remarks: scores[s.id].remarks,
+        flagged: scores[s.id].flagged,
+        outcome: null,
+      };
+    });
     onEndExam(results);
   };
 
@@ -198,7 +208,7 @@ export default function LiveMarking({ examConfig, students, onEndExam }) {
                           </div>
                           <div className="flex items-center gap-3">
                             <span className="font-mono text-lg font-bold text-brand-black">
-                              {total}<span className="text-sm text-brand-muted">/{examConfig.totalMaxMarks}</span>
+                              {total}<span className="text-sm text-brand-muted">/{getBeltTotalMarks(student.belt)}</span>
                             </span>
                             <span className={`font-mono text-xs font-bold px-2 py-0.5 ${
                               pct >= 70 ? 'bg-[#228B22]/10 text-[#228B22]' :
@@ -231,7 +241,7 @@ export default function LiveMarking({ examConfig, students, onEndExam }) {
                                            cursor-pointer outline-none focus:border-brand-purple transition-colors"
                               >
                                 <option value="">Select parameter…</option>
-                                {examConfig.parameters.map((param) => {
+                                {(examConfig.parametersByBelt[student.belt] || []).map((param) => {
                                   const s = studentData?.params[param.name] ?? 0;
                                   return (
                                     <option key={param.name} value={param.name}>
@@ -247,7 +257,8 @@ export default function LiveMarking({ examConfig, students, onEndExam }) {
 
                             {/* Score input — visible when a param is selected */}
                             {openParam[student.id] && (() => {
-                              const selParam = examConfig.parameters.find(p => p.name === openParam[student.id]);
+                              const beltParams = examConfig.parametersByBelt[student.belt] || [];
+                              const selParam = beltParams.find(p => p.name === openParam[student.id]);
                               if (!selParam) return null;
                               return (
                                 <div className="flex items-end gap-1">
@@ -285,16 +296,17 @@ export default function LiveMarking({ examConfig, students, onEndExam }) {
 
                           {/* Criteria hint */}
                           {openParam[student.id] && (() => {
-                            const selParam = examConfig.parameters.find(p => p.name === openParam[student.id]);
+                            const beltParams = examConfig.parametersByBelt[student.belt] || [];
+                            const selParam = beltParams.find(p => p.name === openParam[student.id]);
                             return selParam?.criteria ? (
                               <p className="font-mono text-[0.55rem] text-brand-muted/60 mt-1 italic">{selParam.criteria}</p>
                             ) : null;
                           })()}
 
                           {/* Completed params badges */}
-                          {examConfig.parameters.some(p => (studentData?.params[p.name] ?? 0) > 0) && (
+                          {(examConfig.parametersByBelt[student.belt] || []).some(p => (studentData?.params[p.name] ?? 0) > 0) && (
                             <div className="flex flex-wrap gap-1.5 mt-2">
-                              {examConfig.parameters.map((param) => {
+                              {(examConfig.parametersByBelt[student.belt] || []).map((param) => {
                                 const score = studentData?.params[param.name] ?? 0;
                                 if (score <= 0) return null;
                                 return (

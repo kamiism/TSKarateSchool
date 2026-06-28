@@ -21,17 +21,20 @@ export default function PostExamReport({ examConfig, results: initialResults, on
   const [showFinalizeConfirm, setShowFinalizeConfirm] = useState(false);
 
   const updateScore = (studentId, paramName, value) => {
-    const param = examConfig.parameters.find(p => p.name === paramName);
-    const numVal = Math.max(0, Math.min(parseInt(value) || 0, param.maxMarks));
+    const student = initialResults.find(s => s.id === studentId);
+    const beltParams = examConfig.parametersByBelt[student?.belt] || [];
+    const param = beltParams.find(p => p.name === paramName);
+    const numVal = Math.max(0, Math.min(parseInt(value) || 0, param?.maxMarks || 0));
     setResults(prev => prev.map(r => {
       if (r.id !== studentId) return r;
       const newScores = { ...r.scores, [paramName]: numVal };
       const newTotal = Object.values(newScores).reduce((s, v) => s + v, 0);
+      const beltMaxMarks = beltParams.reduce((sum, p) => sum + (parseInt(p.maxMarks) || 0), 0);
       return {
         ...r,
         scores: newScores,
         total: newTotal,
-        percentage: Math.round((newTotal / examConfig.totalMaxMarks) * 100),
+        percentage: beltMaxMarks ? Math.round((newTotal / beltMaxMarks) * 100) : 0,
       };
     }));
   };
@@ -187,7 +190,7 @@ export default function PostExamReport({ examConfig, results: initialResults, on
                   <thead>
                     <tr className="border-b-2 border-brand-black print:border-b">
                       <th className="font-mono text-[0.6rem] tracking-[0.15em] uppercase text-brand-muted text-left py-2.5 px-3">Student</th>
-                      {examConfig.parameters.map(p => (
+                      {(examConfig.parametersByBelt[belt] || []).map(p => (
                         <th key={p.name} className="font-mono text-[0.6rem] tracking-[0.15em] uppercase text-brand-muted text-center py-2.5 px-2">
                           {p.name}<br /><span className="text-[0.5rem] font-normal">/{p.maxMarks}</span>
                         </th>
@@ -210,14 +213,14 @@ export default function PostExamReport({ examConfig, results: initialResults, on
                             <span className="font-medium text-sm text-brand-black">{student.name}</span>
                           </div>
                         </td>
-                        {examConfig.parameters.map(p => (
+                        {(examConfig.parametersByBelt[belt] || []).map(p => (
                           <td key={p.name} className="py-3 px-2 text-center">
                             <div className="relative inline-block">
                               <input
                                 type="number"
                                 min="0"
                                 max={p.maxMarks}
-                                value={student.scores[p.name]}
+                                value={student.scores[p.name] ?? 0}
                                 onChange={(e) => updateScore(student.id, p.name, e.target.value)}
                                 className={`w-14 text-center font-mono text-sm font-bold border-b-2 bg-transparent outline-none py-0.5
                                            focus:border-brand-purple transition-colors print:border-none
