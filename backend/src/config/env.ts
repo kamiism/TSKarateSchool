@@ -20,5 +20,5 @@ export const REFRESH_TOKEN_EXPIRY = process.env.REFRESH_TOKEN_EXPIRY!;
 export const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET!;
 export const ACCESS_TOKEN_EXPIRY = process.env.ACCESS_TOKEN_EXPIRY!;
 
-export const SENSEI_ID = process.env.SENSEI_ID!;
-export const SENSEI_PASSWORD = process.env.SENSEI_PASSWORD!;
+export const MAIN_ADMIN_ID = process.env.MAIN_ADMIN_ID!;
+export const MAIN_ADMIN_PASSWORD = process.env.MAIN_ADMIN_PASSWORD!;
