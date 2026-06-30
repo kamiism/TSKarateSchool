@@ -30,3 +30,9 @@ export const API_RESPONSE_MESSAGES = {
   INTERNAL_SERVER_ERROR: "Internal server error",
   SERVICE_UNAVAILABLE: "Service temporarily unavailable",
 };
+
+export enum STAFF_ROLES {
+  MAIN_ADMIN = "Main Admin",
+  ADMIN = "Admin",
+  MODERATOR = "Moderator",
+}
