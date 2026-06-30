@@ -1,12 +1,22 @@
 import type { NextFunction, Request, Response } from "express";
-import { MAIN_ADMIN_ID } from "../../config/env.ts";
+import { MAIN_ADMIN_EMAIL, MAIN_ADMIN_USERNAME } from "../../config/env.ts";
 import { sendError, sendSuccess } from "../../utils/response.ts";
-import { API_RESPONSE_MESSAGES, STATUS_CODES } from "../../config/constants.ts";
+import {
+  API_RESPONSE_MESSAGES,
+  STAFF_ROLES,
+  STATUS_CODES,
+} from "../../config/constants.ts";
 import { Staff } from "../../models/Staff.ts";
 
 export class StaffAuthController {
   async create(req: Request, res: Response, next: NextFunction) {
-    if (!(req.staff?.username == MAIN_ADMIN_ID)) {
+    if (
+      !(
+        req.staff?.username == MAIN_ADMIN_USERNAME &&
+        req.staff.email == MAIN_ADMIN_EMAIL &&
+        req.staff.role == STAFF_ROLES.MAIN_ADMIN
+      )
+    ) {
       return sendError(
         res,
         STATUS_CODES.FORBIDDEN,
@@ -32,9 +42,7 @@ export class StaffAuthController {
     sendSuccess(res, STATUS_CODES.CREATED, API_RESPONSE_MESSAGES.CREATED);
   }
 
-  async login(req: Request, res: Response, next: NextFunction) {
-    
-  }
+  async login(req: Request, res: Response, next: NextFunction) {}
 }
 
 export const staffAuthController = new StaffAuthController();

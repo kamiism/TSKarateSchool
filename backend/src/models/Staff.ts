@@ -15,7 +15,7 @@ export interface IStaff extends mongoose.Document {
   email: string;
   username: string;
   password: string;
-  role: "Admin" | "Moderator";
+  role: "Main Admin" | "Admin" | "Moderator";
   refreshToken: string;
 }
 

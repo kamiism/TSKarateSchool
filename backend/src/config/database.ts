@@ -1,6 +1,14 @@
 import mongoose from "mongoose";
 import logger from "../utils/logger.ts";
-import { MONGODB_DB_NAME, MONGODB_URI } from "./env.ts";
+import {
+  MAIN_ADMIN_USERNAME,
+  MAIN_ADMIN_PASSWORD,
+  MONGODB_DB_NAME,
+  MONGODB_URI,
+  MAIN_ADMIN_EMAIL,
+  MAIN_ADMIN_NAME,
+} from "./env.ts";
+import { Staff } from "../models/Staff.ts";
 
 export const connectDb = async (): Promise<void> => {
   try {
@@ -16,6 +24,18 @@ export const connectDb = async (): Promise<void> => {
         retryWrites: true,
       },
     );
+
+    const count = await Staff.countDocuments();
+
+    if (count == 0) {
+      await Staff.create({
+        name: MAIN_ADMIN_NAME,
+        username: MAIN_ADMIN_USERNAME,
+        email: MAIN_ADMIN_EMAIL,
+        password: MAIN_ADMIN_PASSWORD,
+        role: "Main Admin",
+      });
+    }
 
     logger.info(
       `MongoDB connected successfully: HOST: ${connection.connection.host} PORT: ${connection.connection.port} NAME: ${connection.connection.name}`,
