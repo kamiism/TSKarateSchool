@@ -2,7 +2,13 @@ import { Router } from "express";
 import { userAuthController } from "../controllers/auth/userAuth.controller.ts";
 import { asyncHandler } from "../utils/asyncHandler.ts";
 import { validate, verifyJwt } from "../middlewares/auth.middleware.ts";
-import { loginSchema, registerSchema } from "../validators/auth.validator.ts";
+import {
+  loginSchema,
+  registerSchema,
+  staffCreateSchema,
+  staffLoginSchema,
+} from "../validators/auth.validator.ts";
+import { staffAuthController } from "../controllers/auth/staffAuth.controller.ts";
 
 const authRouter = Router();
 
@@ -24,6 +30,21 @@ authRouter.post(
   asyncHandler(userAuthController.logout),
 );
 
-authRouter.post("/access-token", asyncHandler(userAuthController.getAccessToken));
+authRouter.post(
+  "/access-token",
+  asyncHandler(userAuthController.getAccessToken),
+);
+
+authRouter.post(
+  "/login/staff",
+  validate(staffLoginSchema),
+  asyncHandler(staffAuthController.login),
+);
+
+authRouter.post(
+  "/create/staff",
+  validate(staffCreateSchema),
+  asyncHandler(staffAuthController.create),
+);
 
 export default authRouter;
