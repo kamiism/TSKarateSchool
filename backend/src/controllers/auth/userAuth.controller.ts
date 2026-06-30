@@ -85,7 +85,11 @@ export class UserAuthController {
       );
     }
     const newToken = user.generateAccessToken();
-    res.cookie("accessToken", newToken);
+    res.cookie("accessToken", newToken, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
     sendSuccess(res, STATUS_CODES.OK, "Access token renewed succesfully", {
       accessToken: newToken,
     });
