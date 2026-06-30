@@ -42,3 +42,16 @@ export const loginSchema = z.object({
   username: z.string(),
   password: z.string(),
 });
+
+export const staffLoginSchema = z.object({
+  identifier: z.string(),
+  password: z.string(),
+});
+
+export const staffCreateSchema = z.object({
+  name: z.string(),
+  email: z.email(),
+  username: z.string(),
+  password: z.string(),
+  role: z.enum(["Admin", "Moderator"]),
+});
