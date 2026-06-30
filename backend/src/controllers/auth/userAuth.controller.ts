@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { User, type JwtDataType } from "../../models/User.ts";
+import { User, type UserJwtDataType } from "../../models/User.ts";
 import { sendSuccess } from "../../utils/response.ts";
 import { API_RESPONSE_MESSAGES, STATUS_CODES } from "../../config/constants.ts";
 import { AppError } from "../../utils/error.ts";
@@ -75,7 +75,7 @@ export class UserAuthController {
         STATUS_CODES.UNAUTHORISED,
       );
     }
-    const decoded = jwt.verify(token, REFRESH_TOKEN_SECRET) as JwtDataType;
+    const decoded = jwt.verify(token, REFRESH_TOKEN_SECRET) as UserJwtDataType;
 
     const user = await User.findById(decoded._id);
     if (!user) {

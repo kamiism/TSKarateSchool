@@ -1,7 +1,11 @@
 import { Router } from "express";
 import { userAuthController } from "../controllers/auth/userAuth.controller.ts";
 import { asyncHandler } from "../utils/asyncHandler.ts";
-import { validate, verifyJwt } from "../middlewares/auth.middleware.ts";
+import {
+  validate,
+  verifyStaffJwt,
+  verifyUserJwt,
+} from "../middlewares/auth.middleware.ts";
 import {
   loginSchema,
   registerSchema,
@@ -26,7 +30,7 @@ authRouter.post(
 
 authRouter.post(
   "/logout/user",
-  asyncHandler(verifyJwt),
+  asyncHandler(verifyUserJwt),
   asyncHandler(userAuthController.logout),
 );
 
@@ -43,6 +47,7 @@ authRouter.post(
 
 authRouter.post(
   "/create/staff",
+  verifyStaffJwt,
   validate(staffCreateSchema),
   asyncHandler(staffAuthController.create),
 );

@@ -3,13 +3,10 @@ import { ZodType, treeifyError } from "zod";
 import { sendError } from "../utils/response.ts";
 import { API_RESPONSE_MESSAGES, STATUS_CODES } from "../config/constants.ts";
 import jwt from "jsonwebtoken";
-import {
-  ACCESS_TOKEN_SECRET,
-  SENSEI_ID,
-  SENSEI_PASSWORD,
-} from "../config/env.ts";
-import { User, type IUser, type JwtDataType } from "../models/User.ts";
+import { ACCESS_TOKEN_SECRET } from "../config/env.ts";
+import { User, type UserJwtDataType } from "../models/User.ts";
 import { AppError } from "../utils/error.ts";
+import { Staff, type StaffJwtDataType } from "../models/Staff.ts";
 
 export const validate = (schema: ZodType) => {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -31,42 +28,52 @@ export const validate = (schema: ZodType) => {
   };
 };
 
-export const verifyJwt = async (
+export const verifyUserJwt = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const token =
-    req.cookies?.accessToken ||
-    req.headers.authorization?.replace("Bearer ", "");
+  try {
+    const token =
+      req.cookies?.accessToken ||
+      req.headers.authorization?.replace("Bearer ", "");
 
-  const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET) as JwtDataType;
-  const user = await User.findById(decoded._id);
-  if (!user) {
-    throw new AppError(API_RESPONSE_MESSAGES.NOT_FOUND, STATUS_CODES.NOT_FOUND);
+    const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET) as UserJwtDataType;
+    const user = await User.findById(decoded._id);
+    if (!user) {
+      throw new AppError(
+        API_RESPONSE_MESSAGES.NOT_FOUND,
+        STATUS_CODES.NOT_FOUND,
+      );
+    }
+    req.user = user;
+    next();
+  } catch (error: any) {
+    throw new Error(error);
   }
-  req.user = user;
-  next();
 };
 
-export const validateSensei = (
+export const verifyStaffJwt = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const { id, password } = req.body;
+  try {
+    const token =
+      req.cookies?.accessToken ||
+      req.headers.authorization?.replace("Bearer ", "");
 
-  if (!id && !password) {
-    throw new AppError(
-      API_RESPONSE_MESSAGES.UNAUTHORIZED,
-      STATUS_CODES.FORBIDDEN,
-    );
-  }
-
-  if (id == SENSEI_ID && password == SENSEI_PASSWORD) {
+    const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET) as StaffJwtDataType;
+    const staff = await Staff.findById(decoded._id);
+    if (!staff) {
+      throw new AppError(
+        API_RESPONSE_MESSAGES.NOT_FOUND,
+        STATUS_CODES.NOT_FOUND,
+      );
+    }
+    req.staff = staff;
     next();
-    return;
+  } catch (error: any) {
+    throw new Error(error);
   }
-
-  sendError(res, STATUS_CODES.FORBIDDEN, API_RESPONSE_MESSAGES.FORBIDDEN);
 };

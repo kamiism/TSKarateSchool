@@ -1,7 +1,14 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 import bcrypt from "bcrypt";
-import { BCRYPT_ROUNDS } from "../config/env.ts";
+import {
+  ACCESS_TOKEN_EXPIRY,
+  ACCESS_TOKEN_SECRET,
+  BCRYPT_ROUNDS,
+  REFRESH_TOKEN_EXPIRY,
+  REFRESH_TOKEN_SECRET,
+} from "../config/env.ts";
 import logger from "../utils/logger.ts";
+import jwt, { type SignOptions } from "jsonwebtoken";
 
 export interface IStaff extends mongoose.Document {
   name: string;
@@ -9,9 +16,17 @@ export interface IStaff extends mongoose.Document {
   username: string;
   password: string;
   role: "Admin" | "Moderator";
+  refreshToken: string;
 }
 
-const staffSchema = new mongoose.Schema<IStaff>({
+interface IStaffMethods {
+  generateRefreshToken: () => string;
+  generateAccessToken: () => string;
+}
+
+type StaffModel = Model<IStaff, {}, IStaffMethods>;
+
+const staffSchema = new mongoose.Schema<IStaff, StaffModel, IStaffMethods>({
   name: {
     type: String,
     trim: true,
@@ -43,6 +58,9 @@ const staffSchema = new mongoose.Schema<IStaff>({
     type: String,
     default: "Moderator",
   },
+  refreshToken: {
+    type: String,
+  },
 });
 
 staffSchema.pre("save", async function () {
@@ -58,4 +76,38 @@ staffSchema.pre("save", async function () {
   }
 });
 
-export const Staff = mongoose.model<IStaff>("Staff", staffSchema);
+staffSchema.methods.generateAccessToken = function (): string {
+  return jwt.sign(
+    {
+      _id: this._id,
+    },
+    ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: ACCESS_TOKEN_EXPIRY as SignOptions["expiresIn"],
+    },
+  );
+};
+
+staffSchema.methods.generateRefreshToken = function (): string {
+  return jwt.sign(
+    {
+      _id: this._id,
+      username: this.username,
+      email: this.email,
+      role: this.role,
+    },
+    REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: REFRESH_TOKEN_EXPIRY as SignOptions["expiresIn"],
+    },
+  );
+};
+
+export type StaffJwtDataType = {
+  _id: string;
+  username?: string;
+  email?: string;
+  role?: string;
+};
+
+export const Staff = mongoose.model<IStaff, StaffModel>("Staff", staffSchema);

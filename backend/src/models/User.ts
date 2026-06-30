@@ -289,7 +289,7 @@ userSchema.methods.generateAccessToken = function (): string {
   );
 };
 
-export type JwtDataType = {
+export type UserJwtDataType = {
   _id: string;
   username?: string;
   email?: string;
