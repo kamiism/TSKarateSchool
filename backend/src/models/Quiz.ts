@@ -11,6 +11,7 @@ interface IQuiz extends Document {
   quizzes: QuizType[];
   start_hour: number;
   end_hour: number;
+  isActive: boolean;
 }
 
 const quizSchema = new mongoose.Schema<IQuiz>(
@@ -52,6 +53,10 @@ const quizSchema = new mongoose.Schema<IQuiz>(
     end_hour: {
       type: Number,
       required: true,
+    },
+    isActive: {
+      type: Boolean,
+      required: false,
     },
   },
   { timestamps: true },
