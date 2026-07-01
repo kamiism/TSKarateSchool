@@ -3,8 +3,6 @@ import { User, type UserJwtDataType } from "../../models/User.ts";
 import { sendSuccess } from "../../utils/response.ts";
 import { API_RESPONSE_MESSAGES, STATUS_CODES } from "../../config/constants.ts";
 import { AppError } from "../../utils/error.ts";
-import jwt from "jsonwebtoken";
-import { REFRESH_TOKEN_SECRET } from "../../config/env.ts";
 
 export class UserAuthController {
   async register(

@@ -1,5 +1,4 @@
 import { config } from "dotenv";
-import type { SignOptions } from "jsonwebtoken";
 
 config({
   path: "./.env",
