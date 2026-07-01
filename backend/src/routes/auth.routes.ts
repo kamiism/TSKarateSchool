@@ -13,8 +13,13 @@ import {
   staffLoginSchema,
 } from "../validators/auth.validator.ts";
 import { staffAuthController } from "../controllers/auth/staffAuth.controller.ts";
+import { AuthController } from "../controllers/auth/auth.controller.ts";
+import { User } from "../models/User.ts";
+import { Staff } from "../models/Staff.ts";
 
 const authRouter = Router();
+const userAuth = new AuthController(User);
+const staffAuth = new AuthController(Staff);
 
 authRouter.post(
   "/register/user",
@@ -34,10 +39,8 @@ authRouter.post(
   asyncHandler(userAuthController.logout),
 );
 
-authRouter.post(
-  "/access-token",
-  asyncHandler(userAuthController.getAccessToken),
-);
+authRouter.post("/user/access-token", asyncHandler(userAuth.getAccessToken));
+authRouter.post("/staff/access-token", asyncHandler(staffAuth.getAccessToken));
 
 authRouter.post(
   "/login/staff",

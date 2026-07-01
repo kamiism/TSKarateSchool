@@ -66,34 +66,6 @@ export class UserAuthController {
 
     sendSuccess(res, STATUS_CODES.OK, API_RESPONSE_MESSAGES.SUCCESS);
   }
-
-  async getAccessToken(req: Request, res: Response) {
-    const token = req.cookies?.refreshToken;
-    if (!token) {
-      throw new AppError(
-        API_RESPONSE_MESSAGES.UNAUTHORIZED,
-        STATUS_CODES.UNAUTHORISED,
-      );
-    }
-    const decoded = jwt.verify(token, REFRESH_TOKEN_SECRET) as UserJwtDataType;
-
-    const user = await User.findById(decoded._id);
-    if (!user) {
-      throw new AppError(
-        API_RESPONSE_MESSAGES.NOT_FOUND,
-        STATUS_CODES.NOT_FOUND,
-      );
-    }
-    const newToken = user.generateAccessToken();
-    res.cookie("accessToken", newToken, {
-      httpOnly: true,
-      secure: true,
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-    sendSuccess(res, STATUS_CODES.OK, "Access token renewed succesfully", {
-      accessToken: newToken,
-    });
-  }
 }
 
 export const userAuthController = new UserAuthController();
