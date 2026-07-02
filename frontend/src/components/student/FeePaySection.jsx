@@ -3,6 +3,7 @@ import { useScrollReveal } from '../../hooks/useScrollReveal';
 import { FEE_STATUS, STATUS_COLORS, studentFeeHistory, defaultFeeSettings, studentExamFees } from '../../data/feeData';
 import { QrCode, ArrowRight, FileText } from 'lucide-react';
 import PaymentConfirmModal from './PaymentConfirmModal';
+import FeeQueryModal from './FeeQueryModal';
 import Toast from '../Toast';
 
 function StatusBadge({ status }) {
@@ -21,6 +22,7 @@ function StatusBadge({ status }) {
 export default function FeePaySection() {
   const sectionRef = useScrollReveal();
   const [showModal, setShowModal] = useState(false);
+  const [showQueryModal, setShowQueryModal] = useState(false);
   const [feeHistory, setFeeHistory] = useState(studentFeeHistory);
   const [examFees, setExamFees] = useState(studentExamFees);
   const [toast, setToast] = useState(null);
@@ -50,6 +52,12 @@ export default function FeePaySection() {
     );
     setShowModal(false);
     setToast('Payment submitted. Awaiting admin verification.');
+  };
+
+  const handleQuerySubmit = (queryDetails) => {
+    // In a real app, send queryDetails to API
+    setShowQueryModal(false);
+    setToast('Query submitted successfully. We will get back to you soon.');
   };
 
   // Only show months up to current (June = index 5 for display)
@@ -199,6 +207,17 @@ export default function FeePaySection() {
               </table>
             </div>
           </div>
+
+          {/* Report Issue Button */}
+          <div className="mt-8 flex justify-end">
+             <button
+                onClick={() => setShowQueryModal(true)}
+                className="flex items-center gap-2 font-mono text-[0.7rem] font-bold uppercase tracking-wider text-brand-muted hover:text-brand-white transition-colors cursor-pointer bg-transparent border-none"
+             >
+                <span className="w-5 h-5 rounded-full border border-current flex items-center justify-center">?</span>
+                Report an Issue / Raise Query
+             </button>
+          </div>
         </div>
       </section>
 
@@ -208,6 +227,14 @@ export default function FeePaySection() {
           onClose={() => setShowModal(false)}
           onSubmit={handlePaymentSubmit}
           pendingMonths={pendingMonths}
+        />
+      )}
+
+      {/* Query Modal */}
+      {showQueryModal && (
+        <FeeQueryModal
+          onClose={() => setShowQueryModal(false)}
+          onSubmit={handleQuerySubmit}
         />
       )}
 
