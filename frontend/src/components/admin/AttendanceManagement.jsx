@@ -311,22 +311,34 @@ export default function AttendanceManagement() {
             )}
           </div>
 
-          {/* Submit Button */}
-          <button
-            onClick={handleSubmit}
-            disabled={submitted}
-            className={`w-full mt-6 font-mono text-sm font-bold uppercase tracking-wider py-4 border-3 border-brand-black
-                       transition-all duration-150
-                       ${submitted
-                ? 'bg-[#228B22] border-[#228B22] text-brand-white cursor-default'
-                : 'bg-brand-black text-brand-white cursor-pointer hover:bg-brand-purple hover:border-brand-purple hover:shadow-brutal hover:-translate-x-0.5 hover:-translate-y-0.5'
-              }`}
-          >
-            {submitted
-              ? `✓ Attendance Submitted — ${presentCount}/${filteredStudents.length} Present`
-              : `Submit Attendance for ${selectedDate}`
-            }
-          </button>
+          {/* Submit / Edit Buttons */}
+          <div className="flex gap-3 mt-6">
+            <button
+              onClick={handleSubmit}
+              disabled={submitted}
+              className={`flex-1 font-mono text-sm font-bold uppercase tracking-wider py-4 border-3 border-brand-black
+                         transition-all duration-150
+                         ${submitted
+                  ? 'bg-[#228B22] border-[#228B22] text-brand-white cursor-default'
+                  : 'bg-brand-black text-brand-white cursor-pointer hover:bg-brand-purple hover:border-brand-purple hover:shadow-brutal hover:-translate-x-0.5 hover:-translate-y-0.5'
+                }`}
+            >
+              {submitted
+                ? `✓ Attendance Submitted — ${presentCount}/${filteredStudents.length} Present`
+                : `Submit Attendance for ${selectedDate}`
+              }
+            </button>
+            {submitted && (
+              <button
+                onClick={() => setSubmitted(false)}
+                className="px-6 font-mono text-sm font-bold uppercase tracking-wider py-4 border-3 border-brand-black
+                           bg-brand-white text-brand-black cursor-pointer transition-all duration-150
+                           hover:bg-brand-black hover:text-brand-white hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal"
+              >
+                Edit
+              </button>
+            )}
+          </div>
         </div>
       ) : (
         /* ─── ATTENDANCE SHEET TAB ─── */
