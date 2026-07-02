@@ -64,7 +64,7 @@ export default function QuizSection() {
                 Take the live quiz
               </h3>
               <p className="text-sm text-brand-ice leading-relaxed mb-8">
-                Test your knowledge of stances, techniques, and dojo etiquette. This 5-question live quiz will also mark your attendance for today.
+                Test your knowledge of stances, techniques, and dojo etiquette. Complete this 5-question live quiz to earn points.
               </p>
             </div>
             <button

@@ -29,7 +29,7 @@ export default function Dashboard({ student }) {
             <div className="flex items-center justify-between flex-wrap gap-6">
               <div>
                 <span className="font-mono text-[0.7rem] tracking-[0.15em] uppercase text-brand-muted block mb-3">
-                  Quiz-Based Attendance
+                  Attendance
                 </span>
                 <div className="flex items-baseline gap-1 mb-2">
                   <span className="font-mono text-5xl font-bold text-brand-black">{student.daysPresent}</span>

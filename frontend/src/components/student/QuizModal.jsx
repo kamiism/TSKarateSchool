@@ -91,7 +91,7 @@ export default function QuizModal({ isOpen, onClose, onComplete }) {
               You scored: {score + (selected === currentQ.correct ? 1 : 0)}/{liveQuizQuestions.length}
             </p>
             <p className="text-brand-muted font-mono text-sm leading-relaxed">
-              Your attendance has been recorded and points have been updated.
+              Your score has been recorded and points have been updated.
             </p>
           </div>
         ) : (

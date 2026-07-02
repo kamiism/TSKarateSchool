@@ -3,6 +3,7 @@ import AdminSidebar from '../components/admin/AdminSidebar';
 import AdminDashboard from '../components/admin/AdminDashboard';
 import StudentManagement from '../components/admin/StudentManagement';
 import QuizManagement from '../components/admin/QuizManagement';
+import AttendanceManagement from '../components/admin/AttendanceManagement';
 import NewsManagement from '../components/admin/NewsManagement';
 import SyllabusManagement from '../components/admin/SyllabusManagement';
 import KataManagement from '../components/admin/KataManagement';
@@ -32,6 +33,8 @@ export default function AdminHome() {
         return <StudentManagement key={adminMode} adminMode={adminMode} />;
       case 'quizzes':
         return <QuizManagement key={adminMode} adminMode={adminMode} />;
+      case 'attendance':
+        return <AttendanceManagement />;
       case 'exams':
         return <ExamManagement />;
       case 'syllabus':
