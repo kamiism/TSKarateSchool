@@ -30,7 +30,7 @@ export default function FeePaySection() {
   const pendingMonths = feeHistory.filter(
     (f) => f.status === FEE_STATUS.PENDING || f.status === FEE_STATUS.OVERDUE
   );
-  const pendingExamFees = examFees.filter((f) => f.status === FEE_STATUS.PENDING);
+  const activeExamFees = examFees.filter((f) => f.status === FEE_STATUS.PENDING || f.status === FEE_STATUS.AWAITING);
   const totalDue = pendingMonths.reduce((sum, f) => sum + f.amount, 0);
 
   const handleExamPayment = (examId) => {
@@ -68,9 +68,9 @@ export default function FeePaySection() {
       <section id="fee-pay" className="py-16 bg-brand-black text-brand-white" ref={sectionRef}>
         <div className="w-[min(1200px,92%)] mx-auto">
           {/* Pay Cards Grid */}
-          <div className={`grid grid-cols-1 ${pendingExamFees.length > 0 ? 'md:grid-cols-2 gap-8' : ''} mb-16`}>
+          <div className={`grid grid-cols-1 ${activeExamFees.length > 0 ? 'md:grid-cols-2 gap-8' : ''} mb-16`}>
             {/* Pay Now Card - Monthly */}
-            <div className={`reveal border-2 border-brand-ice/20 p-8 ${pendingExamFees.length === 0 ? 'max-w-[520px] mx-auto' : ''}`}>
+            <div className={`reveal border-2 border-brand-ice/20 p-8 ${activeExamFees.length === 0 ? 'max-w-[520px] mx-auto' : ''}`}>
               <div className="flex items-center gap-2 mb-6">
                 <QrCode size={20} strokeWidth={2.5} className="text-brand-ice" />
                 <h3 className="font-mono text-sm font-bold tracking-[0.15em] uppercase text-brand-white">
@@ -135,34 +135,48 @@ export default function FeePaySection() {
             </div>
 
             {/* Exam Fee Card */}
-            {pendingExamFees.length > 0 && (
+            {activeExamFees.length > 0 && (
               <div className="reveal reveal-delay-1 border-2 border-brand-black p-8 bg-brand-white text-brand-black">
                 <div className="flex items-center gap-2 mb-6">
                   <FileText size={20} strokeWidth={2.5} className="text-brand-purple" />
                   <h3 className="font-mono text-sm font-bold tracking-[0.15em] uppercase text-brand-black">
-                    Exam Fee Pending
+                    Exam Fee
                   </h3>
                 </div>
 
-                {pendingExamFees.map((exam) => (
+                {activeExamFees.map((exam) => (
                   <div key={exam.id} className="mb-6 pb-6 border-b-2 border-brand-ice/40 last:border-0 last:pb-0">
-                    <span className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted block mb-1">
-                      {exam.examDate}
-                    </span>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-brand-muted">
+                        {exam.examDate}
+                      </span>
+                      <StatusBadge status={exam.status} />
+                    </div>
                     <span className="font-bold text-lg block mb-2">{exam.title}</span>
                     <span className="font-mono text-3xl font-bold text-brand-black block mb-4">
                       ₹{exam.amount.toLocaleString('en-IN')}
                     </span>
-                    <button
-                      onClick={() => handleExamPayment(exam.id)}
-                      className="w-full flex items-center justify-center gap-2 px-6 py-3 border-2 border-brand-black
-                                 bg-brand-black text-brand-white font-mono text-[0.75rem] font-bold uppercase tracking-wider
-                                 cursor-pointer transition-all duration-150
-                                 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutal
-                                 active:translate-x-0 active:translate-y-0 active:shadow-none"
-                    >
-                      Pay Exam Fee <ArrowRight size={14} strokeWidth={3} />
-                    </button>
+                    {exam.status === FEE_STATUS.AWAITING ? (
+                      <button
+                        disabled
+                        className="w-full flex items-center justify-center px-6 py-3 border-2 border-[#7C5CBF]
+                                   bg-[#7C5CBF]/10 text-[#7C5CBF] font-mono text-[0.75rem] font-bold uppercase tracking-wider
+                                   cursor-default"
+                      >
+                        Awaiting Verification
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleExamPayment(exam.id)}
+                        className="w-full flex items-center justify-center gap-2 px-6 py-3 border-2 border-brand-black
+                                   bg-brand-black text-brand-white font-mono text-[0.75rem] font-bold uppercase tracking-wider
+                                   cursor-pointer transition-all duration-150
+                                   hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutal
+                                   active:translate-x-0 active:translate-y-0 active:shadow-none"
+                      >
+                        Pay Exam Fee <ArrowRight size={14} strokeWidth={3} />
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
