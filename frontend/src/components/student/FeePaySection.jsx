@@ -3,6 +3,7 @@ import { useScrollReveal } from '../../hooks/useScrollReveal';
 import { FEE_STATUS, STATUS_COLORS, studentFeeHistory, defaultFeeSettings, studentExamFees } from '../../data/feeData';
 import { QrCode, ArrowRight, FileText } from 'lucide-react';
 import PaymentConfirmModal from './PaymentConfirmModal';
+import ExamPaymentModal from './ExamPaymentModal';
 import FeeQueryModal from './FeeQueryModal';
 import Toast from '../Toast';
 
@@ -22,6 +23,7 @@ function StatusBadge({ status }) {
 export default function FeePaySection() {
   const sectionRef = useScrollReveal();
   const [showModal, setShowModal] = useState(false);
+  const [examToPay, setExamToPay] = useState(null);
   const [showQueryModal, setShowQueryModal] = useState(false);
   const [feeHistory, setFeeHistory] = useState(studentFeeHistory);
   const [examFees, setExamFees] = useState(studentExamFees);
@@ -33,12 +35,15 @@ export default function FeePaySection() {
   const activeExamFees = examFees.filter((f) => f.status === FEE_STATUS.PENDING || f.status === FEE_STATUS.AWAITING);
   const totalDue = pendingMonths.reduce((sum, f) => sum + f.amount, 0);
 
-  const handleExamPayment = (examId) => {
+  const handleExamPayment = (paymentData) => {
     setExamFees((prev) =>
       prev.map((f) =>
-        f.id === examId ? { ...f, status: FEE_STATUS.AWAITING, refId: `TXN${Math.floor(Math.random()*10000000)}` } : f
+        f.id === paymentData.examId 
+          ? { ...f, status: FEE_STATUS.AWAITING, refId: paymentData.refId } 
+          : f
       )
     );
+    setExamToPay(null);
     setToast('Exam fee payment submitted. Awaiting admin verification.');
   };
 
@@ -167,7 +172,7 @@ export default function FeePaySection() {
                       </button>
                     ) : (
                       <button
-                        onClick={() => handleExamPayment(exam.id)}
+                        onClick={() => setExamToPay(exam)}
                         className="w-full flex items-center justify-center gap-2 px-6 py-3 border-2 border-brand-black
                                    bg-brand-black text-brand-white font-mono text-[0.75rem] font-bold uppercase tracking-wider
                                    cursor-pointer transition-all duration-150
@@ -242,6 +247,15 @@ export default function FeePaySection() {
           onClose={() => setShowModal(false)}
           onSubmit={handlePaymentSubmit}
           pendingMonths={pendingMonths}
+        />
+      )}
+
+      {/* Exam Payment Modal */}
+      {examToPay && (
+        <ExamPaymentModal
+          exam={examToPay}
+          onClose={() => setExamToPay(null)}
+          onSubmit={handleExamPayment}
         />
       )}
 
