@@ -47,7 +47,6 @@ export default function Footer() {
             </h4>
             {[
               { label: 'About Us', id: 'about' },
-              { label: 'Programs', id: 'programs' },
               { label: 'Why Choose Us', id: 'why' },
             ].map((link) => (
               <button
@@ -68,22 +67,7 @@ export default function Footer() {
             </button>
           </div>
 
-          {/* Programs */}
-          <div>
-            <h4 className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-5">
-              Programs
-            </h4>
-            {['Little Warriors', 'Junior Karatekas', 'Adult & Advanced', 'Private Sessions'].map((name) => (
-              <button
-                key={name}
-                onClick={() => scrollTo('programs')}
-                className="block text-sm text-brand-ice py-1 transition-colors duration-200 hover:text-brand-white
-                           bg-transparent border-none cursor-pointer text-left"
-              >
-                {name}
-              </button>
-            ))}
-          </div>
+
 
           {/* Contact */}
           <div>
