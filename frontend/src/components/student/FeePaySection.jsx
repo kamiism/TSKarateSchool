@@ -118,10 +118,20 @@ export default function FeePaySection() {
                            bg-transparent text-brand-ice font-mono text-[0.75rem] font-bold uppercase tracking-wider
                            cursor-pointer transition-all duration-150
                            hover:bg-brand-ice hover:text-brand-black
-                           active:translate-x-0.5 active:translate-y-0.5"
+                           active:translate-x-0.5 active:translate-y-0.5 mb-4"
               >
                 I Have Paid <ArrowRight size={14} strokeWidth={3} />
               </button>
+
+              <div className="flex justify-center">
+                 <button
+                    onClick={() => setShowQueryModal(true)}
+                    className="flex items-center gap-2 font-mono text-[0.65rem] font-bold uppercase tracking-wider text-brand-muted hover:text-brand-white transition-colors cursor-pointer bg-transparent border-none"
+                 >
+                    <span className="w-4 h-4 rounded-full border border-current flex items-center justify-center">?</span>
+                    Report an Issue / Raise Query
+                 </button>
+              </div>
             </div>
 
             {/* Exam Fee Card */}
@@ -208,16 +218,7 @@ export default function FeePaySection() {
             </div>
           </div>
 
-          {/* Report Issue Button */}
-          <div className="mt-8 flex justify-end">
-             <button
-                onClick={() => setShowQueryModal(true)}
-                className="flex items-center gap-2 font-mono text-[0.7rem] font-bold uppercase tracking-wider text-brand-muted hover:text-brand-white transition-colors cursor-pointer bg-transparent border-none"
-             >
-                <span className="w-5 h-5 rounded-full border border-current flex items-center justify-center">?</span>
-                Report an Issue / Raise Query
-             </button>
-          </div>
+
         </div>
       </section>
 
