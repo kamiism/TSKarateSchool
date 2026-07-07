@@ -16,6 +16,7 @@ import { staffAuthController } from "../controllers/auth/staffAuth.controller.ts
 import { AuthController } from "../controllers/auth/auth.controller.ts";
 import { User } from "../models/User.ts";
 import { Staff } from "../models/Staff.ts";
+import { upload } from "../config/multer.ts";
 
 const authRouter = Router();
 const userAuth = new AuthController(User);
@@ -24,6 +25,7 @@ const staffAuth = new AuthController(Staff);
 authRouter.post(
   "/register/user",
   validate(registerSchema),
+  upload.single("passport"),
   asyncHandler(userAuthController.register),
 );
 
