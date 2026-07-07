@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { apiFetch } from '../../api/api';
 
 const STEPS = ['Personal', 'Contact', 'Physical', 'Account'];
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
@@ -281,8 +282,89 @@ export default function Register() {
     e.preventDefault();
     if (!validateStep(step)) return;
     if (step === 3) {
-      alert('Registration successful! Redirecting to login...');
-      navigate('/login');
+      const formData = new FormData();
+
+      // Personal
+      formData.append("firstName", firstName);
+      formData.append("middleName", middleName);
+      formData.append("lastName", lastName);
+      formData.append("dob", dateOfBirth);
+      formData.append("age", age);
+
+      formData.append("sex", sex.toLowerCase());
+
+      formData.append("bloodGroup", bloodGroup);
+      formData.append("nationality", nationality);
+
+      formData.append(
+        "maritalStatus",
+        maritalStatus.toLowerCase()
+      );
+
+      formData.append("fatherName", fatherName);
+      formData.append("motherName", motherName);
+
+
+      // Contact
+      formData.append("email", email);
+      formData.append("phoneNumber", phone);
+
+
+      // postal address
+      formData.append(
+        "postalAddress",
+        JSON.stringify({
+          address: postalAddress,
+          pinCode: postalPin
+        })
+      );
+
+
+      // permanent address
+      formData.append(
+        "permanentAddress",
+        JSON.stringify({
+          address: permanentAddress,
+          pinCode: permanentPin
+        })
+      );
+
+
+      // Physical
+      formData.append("height", height);
+      formData.append("weight", weight);
+
+      formData.append(
+        "disability",
+        JSON.stringify({
+          hasDisability: hasDisability === "Yes",
+          description: disabilityDetails
+        })
+      );
+
+
+      // Account
+      formData.append("username", username);
+      formData.append("password", password);
+
+
+      // Image
+      if (photo) {
+        formData.append("passport", photo);
+      }
+
+      apiFetch("/auth/register/user" , "POST" , {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        data: formData
+      }).then(data => {
+        if(data.success) {
+        }else{
+          navigate("/register")
+        }
+      })
+      
       return;
     }
     setStep(step + 1);

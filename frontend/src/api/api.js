@@ -4,18 +4,18 @@ export const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const apiFetch = async (endpoint, method = "GET", options = {}) => {
   try {
-    const options = {
+    const axiosOptions = {
       method,
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": options.headers["Content-Type"] || "application/json",
         ...(options.headers || {}),
       },
       withCredentials: true,
     };
     if (method != "GET" && options.data) {
-      options.data = data;
+      axiosOptions.data = options.data;
     }
-    const res = await axios(`${BASE_URL}${endpoint}`, options);
+    const res = await axios(`${BASE_URL}${endpoint}`, axiosOptions);
 
     return res.data || {};
   } catch (err) {
