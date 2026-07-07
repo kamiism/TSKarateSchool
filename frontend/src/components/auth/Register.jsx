@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const STEPS = ['Personal', 'Contact', 'Physical', 'Account', 'Verify'];
+const STEPS = ['Personal', 'Contact', 'Physical', 'Account'];
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
 function StepIndicator({ current }) {
@@ -199,11 +199,6 @@ export default function Register() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
-  // ── Step 4: OTP ──
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
-  const [resendTimer, setResendTimer] = useState(0);
-  const otpRefs = useRef([]);
-
   // Shared
   const [focusState, setFocusState] = useState({});
   const [error, setError] = useState('');
@@ -229,13 +224,6 @@ export default function Register() {
       setPermanentPin(postalPin);
     }
   }, [sameAsPostal, postalAddress, postalPin]);
-
-  // Resend countdown
-  useEffect(() => {
-    if (resendTimer <= 0) return;
-    const t = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
-    return () => clearTimeout(t);
-  }, [resendTimer]);
 
   // Photo handler
   const handlePhotoChange = (e) => {
@@ -293,7 +281,9 @@ export default function Register() {
     e.preventDefault();
     if (!validateStep(step)) return;
     if (step === 3) {
-      setResendTimer(30);
+      alert('Registration successful! Redirecting to login...');
+      navigate('/login');
+      return;
     }
     setStep(step + 1);
   };
@@ -301,46 +291,6 @@ export default function Register() {
   const handleBack = () => {
     setError('');
     setStep(step - 1);
-  };
-
-  // ── OTP handlers ──
-  const handleOtpChange = (index, value) => {
-    if (!/^\d?$/.test(value)) return;
-    const next = [...otp];
-    next[index] = value;
-    setOtp(next);
-    if (value && index < 5) otpRefs.current[index + 1]?.focus();
-  };
-
-  const handleOtpKeyDown = (index, e) => {
-    if (e.key === 'Backspace' && !otp[index] && index > 0) {
-      otpRefs.current[index - 1]?.focus();
-    }
-  };
-
-  const handleOtpPaste = (e) => {
-    e.preventDefault();
-    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
-    if (!pasted.length) return;
-    const next = [...otp];
-    for (let i = 0; i < 6; i++) next[i] = pasted[i] || '';
-    setOtp(next);
-    otpRefs.current[Math.min(pasted.length, 5)]?.focus();
-  };
-
-  const handleVerify = (e) => {
-    e.preventDefault();
-    if (otp.join('').length < 6) { setError('Enter the full 6-digit code'); return; }
-    setError('');
-    alert('Registration successful! Redirecting to login...');
-    navigate('/login');
-  };
-
-  const handleResendOtp = () => {
-    if (resendTimer > 0) return;
-    setOtp(['', '', '', '', '', '']);
-    setResendTimer(30);
-    setError('');
   };
 
   const EyeIcon = ({ off }) => off ? (
@@ -774,88 +724,7 @@ export default function Register() {
                 </p>
               </label>
 
-              <NavButtons nextLabel="Verify Email →" />
-            </form>
-          )}
-
-          {/* ═══════════════════════════════════════════
-              STEP 4 — OTP Verification
-              ═══════════════════════════════════════════ */}
-          {step === 4 && (
-            <form onSubmit={handleVerify} className="space-y-6">
-              <div className="border-3 border-brand-white/10 bg-brand-white/[0.03] p-5 text-center">
-                <p className="font-mono text-[0.7rem] tracking-[0.1em] uppercase text-brand-muted mb-1">
-                  Verification code sent to
-                </p>
-                <p className="font-mono text-sm text-brand-ice font-bold">{email}</p>
-              </div>
-
-              {/* OTP Inputs */}
-              <div>
-                <label className="font-mono text-[0.65rem] tracking-[0.2em] uppercase text-brand-muted block mb-3 text-center">
-                  Enter 6-digit code
-                </label>
-                <div className="flex justify-center gap-2.5" onPaste={handleOtpPaste}>
-                  {otp.map((digit, i) => (
-                    <input
-                      key={i}
-                      ref={(el) => (otpRefs.current[i] = el)}
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={1}
-                      value={digit}
-                      onChange={(e) => handleOtpChange(i, e.target.value)}
-                      onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                      className={`w-12 h-14 max-sm:w-10 max-sm:h-12 text-center font-mono text-xl font-bold border-3 bg-transparent text-brand-white
-                                 outline-none transition-all duration-150
-                                 ${digit ? 'border-brand-purple shadow-brutal-purple' : 'border-brand-white/30'}
-                                 focus:border-brand-purple focus:shadow-brutal-purple`}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Resend */}
-              <div className="text-center">
-                {resendTimer > 0 ? (
-                  <p className="font-mono text-[0.65rem] tracking-[0.1em] uppercase text-brand-muted">
-                    Resend code in <span className="text-brand-ice font-bold">{resendTimer}s</span>
-                  </p>
-                ) : (
-                  <button
-                    type="button" onClick={handleResendOtp}
-                    className="font-mono text-[0.7rem] tracking-[0.1em] uppercase text-brand-muted bg-transparent border-none cursor-pointer
-                               relative pb-0.5
-                               after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px]
-                               after:bg-brand-purple after:transition-all after:duration-300 hover:after:w-full hover:text-brand-ice"
-                  >
-                    Resend Code
-                  </button>
-                )}
-              </div>
-
-              <div className="flex gap-3">
-                <button
-                  type="button" onClick={handleBack}
-                  className="flex-1 font-mono text-sm font-bold uppercase tracking-wider
-                             py-4 border-3 border-brand-white/30 bg-transparent text-brand-white cursor-pointer
-                             transition-all duration-150
-                             hover:border-brand-ice hover:text-brand-ice
-                             active:translate-x-0.5 active:translate-y-0.5"
-                >
-                  ← Back
-                </button>
-                <button
-                  id="reg-submit" type="submit"
-                  className="flex-[2] font-mono text-sm font-bold uppercase tracking-wider
-                             py-4 border-3 border-brand-white bg-brand-white text-brand-black cursor-pointer
-                             transition-all duration-150
-                             hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-brand-purple hover:text-brand-white hover:border-brand-purple hover:shadow-brutal-purple
-                             active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
-                >
-                  Complete Registration
-                </button>
-              </div>
+              <NavButtons nextLabel="Complete Registration" />
             </form>
           )}
 
