@@ -360,8 +360,9 @@ export default function Register() {
         data: formData
       }).then(data => {
         if(data.success) {
+          navigate("/");
         }else{
-          navigate("/register")
+          navigate("/register");
         }
       })
       
