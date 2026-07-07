@@ -724,7 +724,7 @@ export default function Register() {
                 </p>
               </label>
 
-              <NavButtons nextLabel="Complete Registration" />
+              <NavButtons nextLabel="Complete Registration →" />
             </form>
           )}
 
