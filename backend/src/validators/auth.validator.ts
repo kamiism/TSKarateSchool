@@ -32,8 +32,7 @@ export const registerSchema = z.object({
     hasDisability: z.boolean().default(false),
     description: z.string().default(""),
   }),
-
-  passportPhoto: z.string(),
+  
   username: z.string(),
   password: z.string(),
 });
