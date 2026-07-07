@@ -24,8 +24,8 @@ const staffAuth = new AuthController(Staff);
 
 authRouter.post(
   "/register/user",
-  validate(registerSchema),
   upload.single("passport"),
+  validate(registerSchema),
   asyncHandler(userAuthController.register),
 );
 

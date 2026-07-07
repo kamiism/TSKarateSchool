@@ -16,6 +16,8 @@ export class UserAuthController {
     const accessToken = user.generateAccessToken();
 
     user.refreshToken = refreshToken;
+    const passportPhoto = req.file?.path as string;
+    user.passportPhoto = passportPhoto;
 
     await user.save({ validateBeforeSave: false });
 

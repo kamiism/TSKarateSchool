@@ -30,7 +30,7 @@ export interface IUser extends mongoose.Document {
   sex: "male" | "female" | "others";
   bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
   nationality?: string;
-  maritalStatus?: "single" | "married";
+  maritalStatus?: "unmarried" | "married";
 
   fatherName: string;
   motherName: string;
@@ -137,7 +137,7 @@ const userSchema = new mongoose.Schema<IUser>(
 
     maritalStatus: {
       type: String,
-      enum: ["single", "married"],
+      enum: ["unmarried", "married"],
     },
 
     fatherName: {
@@ -197,7 +197,6 @@ const userSchema = new mongoose.Schema<IUser>(
 
     passportPhoto: {
       type: String,
-      required: true,
     },
 
     username: {

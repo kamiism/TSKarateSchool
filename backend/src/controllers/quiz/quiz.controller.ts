@@ -21,6 +21,8 @@ export class QuizController {
       quiz,
     });
   }
+
+  async delete(req: Request, res: Response, next: NextFunction) {}
 }
 
 export const quizController = new QuizController();
