@@ -38,6 +38,11 @@ export class UserAuthController {
       _id: user._id,
       username: user.username,
       email: user.email,
+      firstName: user.firstName,
+      middleName: user.middleName || "",
+      lastName: user.lastName,
+      points: user.points,
+      mode: user.mode,
       accessToken,
     }); // TODO: Might change the data part
   }
@@ -86,6 +91,11 @@ export class UserAuthController {
       _id: user._id,
       username: user.username,
       email: user.email,
+      firstName: user.firstName,
+      middleName: user.middleName || "",
+      lastName: user.lastName,
+      points: user.points,
+      mode: user.mode,
       accessToken,
     });
   }
@@ -114,6 +124,33 @@ export class UserAuthController {
       });
 
     sendSuccess(res, STATUS_CODES.OK, API_RESPONSE_MESSAGES.SUCCESS);
+  }
+
+  async userProfile(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    const user = await User.findById(req.user?._id);
+
+    if (!user) {
+      return sendError(
+        res,
+        STATUS_CODES.NOT_FOUND,
+        API_RESPONSE_MESSAGES.NOT_FOUND,
+      );
+    }
+
+    sendSuccess(res, STATUS_CODES.OK, API_RESPONSE_MESSAGES.SUCCESS, {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      firstName: user.firstName,
+      middleName: user.middleName || "",
+      lastName: user.lastName,
+      points: user.points,
+      mode: user.mode,
+    });
   }
 }
 

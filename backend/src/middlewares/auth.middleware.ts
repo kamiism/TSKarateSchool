@@ -38,6 +38,9 @@ export const verifyUserJwt = async (
       req.cookies?.accessToken ||
       req.headers.authorization?.replace("Bearer ", "");
 
+    if (!token || token == "undefined") {
+      throw new Error();
+    }
     const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET) as UserJwtDataType;
     const user = await User.findById(decoded._id);
     if (!user) {

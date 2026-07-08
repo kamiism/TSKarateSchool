@@ -57,4 +57,10 @@ authRouter.post(
   asyncHandler(staffAuthController.create),
 );
 
+authRouter.post(
+  "/user/profile",
+  verifyUserJwt,
+  asyncHandler(userAuthController.userProfile),
+);
+
 export default authRouter;
