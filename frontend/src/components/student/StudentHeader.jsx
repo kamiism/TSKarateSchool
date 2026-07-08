@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { apiFetch } from '../../api/api';
 
 export default function StudentHeader({ student }) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -45,7 +46,16 @@ export default function StudentHeader({ student }) {
   };
 
   const handleLogout = () => {
-    navigate('/');
+    apiFetch("/auth/logout/user" , "POST" , {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+      }
+    }).then(data => {
+      if(data.success) {
+        navigate("/");
+        return;
+      }
+    })
   };
 
   const navItems = [
