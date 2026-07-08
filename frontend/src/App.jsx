@@ -8,6 +8,7 @@ import QuizPage from './pages/QuizPage';
 import AdminHome from './pages/AdminHome';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { Redirect } from './components/Redirect';
 
 export default function App() {
   return (
@@ -15,7 +16,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<Redirect to="/student"><LoginPage /></Redirect>} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/student" element={<ProtectedRoute><StudentHome /></ProtectedRoute>} />
           <Route path="/student/fees" element={<ProtectedRoute><StudentFees /></ProtectedRoute>} />

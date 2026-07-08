@@ -5,11 +5,13 @@ import Syllabus from '../components/student/Syllabus';
 import KataVideo from '../components/student/KataVideo';
 import NewsEvents from '../components/student/NewsEvents';
 import StudentFooter from '../components/student/StudentFooter';
+import { useAuth } from '../context/AuthContext';
 
 export default function StudentHome() {
   // Placeholder student data — will be replaced with real data later
+  const { user } = useAuth();
   const student = {
-    name: 'Arjun Sharma',
+    name: `${user.firstName} ${user.middleName} ${user.lastName}`,
     belt: 'Orange Belt',
     beltColor: '#FF8C00',
     daysPresent: 42,

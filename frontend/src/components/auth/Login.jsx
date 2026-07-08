@@ -18,7 +18,6 @@ export default function Login() {
     e.preventDefault();
     setError('');
 
-    // TODO: wire up real auth
     if (role === 'student') {
       apiFetch("/auth/login/user", "POST", {
         data: {
@@ -27,14 +26,20 @@ export default function Login() {
         }
       }).then(data => {
         if(data.success) {
-          localStorage.setItem("accessToken" , data.accessToken)
+          localStorage.setItem("accessToken" , data.data.accessToken)
           setUser({
-            _id: data._id,
-            username: data.username,
-            email: data.email,
+            _id: data.data._id,
+            username: data.data.username,
+            email: data.data.email,
+            firstName: data.data.firstName,
+            middleName: data.data.middleName || "",
+            lastName: data.data.lastName,
+            points: data.data.points,
+            mode: data.data.mode,
           })
+          navigate("/student");
         }else{
-          setError("Error in signing up")
+          setError("Invalid email or password")
         }
       });
     } else {

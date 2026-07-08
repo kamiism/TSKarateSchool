@@ -365,9 +365,9 @@ export default function Register() {
         if(data.success) {
           localStorage.setItem("accessToken" , data.data.accessToken);
           setUser({
-            _id: data._id,
-            username: data.username,
-            email: data.email
+            _id: data.data._id,
+            username: data.data.username,
+            email: data.data.email
           })
           navigate("/");
         }else{

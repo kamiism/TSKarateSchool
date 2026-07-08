@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiFetch } from '../../api/api';
+import { useAuth } from '../../context/AuthContext';
 
 export default function StudentHeader({ student }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const toggleMobile = () => {
     setMobileOpen(!mobileOpen);
@@ -46,16 +48,19 @@ export default function StudentHeader({ student }) {
   };
 
   const handleLogout = () => {
-    apiFetch("/auth/logout/user" , "POST" , {
+    apiFetch("/auth/logout/user", "POST", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`
       }
-    }).then(data => {
-      if(data.success) {
-        navigate("/");
-        return;
+    }).then(
+      data => {
+        if(data.success) {
+          localStorage.removeItem("accessToken")
+          setUser(null);
+          navigate("/");
+        }
       }
-    })
+    )
   };
 
   const navItems = [
