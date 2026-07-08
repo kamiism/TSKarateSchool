@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiFetch } from '../../api/api';
+import { useAuth } from '../../context/AuthContext';
 
 const STEPS = ['Personal', 'Contact', 'Physical', 'Account'];
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
@@ -204,6 +205,8 @@ export default function Register() {
   const [focusState, setFocusState] = useState({});
   const [error, setError] = useState('');
 
+  const { user , setUser } = useAuth();
+
   // Auto-calculate age from DOB
   useEffect(() => {
     if (dateOfBirth) {
@@ -360,6 +363,12 @@ export default function Register() {
         data: formData
       }).then(data => {
         if(data.success) {
+          localStorage.setItem("accessToken" , data.data.accessToken);
+          setUser({
+            _id: data._id,
+            username: data.username,
+            email: data.email
+          })
           navigate("/");
         }else{
           navigate("/register");
