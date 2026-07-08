@@ -7,6 +7,7 @@ import StudentFees from './pages/StudentFees';
 import QuizPage from './pages/QuizPage';
 import AdminHome from './pages/AdminHome';
 import { AuthProvider } from './context/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 export default function App() {
   return (
@@ -16,9 +17,9 @@ export default function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/student" element={<StudentHome />} />
-          <Route path="/student/fees" element={<StudentFees />} />
-          <Route path="/student/quiz" element={<QuizPage />} />
+          <Route path="/student" element={<ProtectedRoute><StudentHome /></ProtectedRoute>} />
+          <Route path="/student/fees" element={<ProtectedRoute><StudentFees /></ProtectedRoute>} />
+          <Route path="/student/quiz" element={<ProtectedRoute><QuizPage /></ProtectedRoute>} />
           <Route path="/admin" element={<AdminHome />} />
         </Routes>
       </BrowserRouter>
