@@ -34,8 +34,10 @@ export class UserAuthController {
     });
 
     sendSuccess(res, STATUS_CODES.CREATED, API_RESPONSE_MESSAGES.CREATED, {
+      _id: user._id,
       username: user.username,
       email: user.email,
+      accessToken,
     }); // TODO: Might change the data part
   }
 

@@ -25,21 +25,27 @@ export const registerSchema = z.object({
   motherName: z.string(),
   email: z.email(),
   phoneNumber: z.string(),
-  postalAddress: jsonObject(z.object({
-    address: z.string(),
-    pinCode: z.coerce.number(),
-  })),
+  postalAddress: jsonObject(
+    z.object({
+      address: z.string(),
+      pinCode: z.coerce.number(),
+    }),
+  ),
 
-  permanentAddress: jsonObject(z.object({
-    address: z.string(),
-    pinCode: z.coerce.number(),
-  })),
+  permanentAddress: jsonObject(
+    z.object({
+      address: z.string(),
+      pinCode: z.coerce.number(),
+    }),
+  ),
   height: z.coerce.number(),
   weight: z.coerce.number(),
-  disability: jsonObject(z.object({
-    hasDisability: z.coerce.boolean().default(false),
-    description: z.string().default(""),
-  })),
+  disability: jsonObject(
+    z.object({
+      hasDisability: z.coerce.boolean().default(false),
+      description: z.string().default(""),
+    }),
+  ),
 
   username: z.string(),
   password: z.string(),
