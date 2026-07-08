@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { globalStaffData } from '../../data/staffData';
+import { apiFetch } from '../../api/api';
+import { useAuth } from '../../context/AuthContext';
 
 export default function Login() {
   const [role, setRole] = useState('student');
@@ -10,6 +12,7 @@ export default function Login() {
   const [isFocused, setIsFocused] = useState({ identifier: false, password: false });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const {user , setUser} = useAuth();
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -17,7 +20,23 @@ export default function Login() {
 
     // TODO: wire up real auth
     if (role === 'student') {
-      navigate('/student');
+      apiFetch("/auth/login/user", "POST", {
+        data: {
+          identifier,
+          password: password,
+        }
+      }).then(data => {
+        if(data.success) {
+          localStorage.setItem("accessToken" , data.accessToken)
+          setUser({
+            _id: data._id,
+            username: data.username,
+            email: data.email,
+          })
+        }else{
+          setError("Error in signing up")
+        }
+      });
     } else {
       const match = globalStaffData.find(s => s.username === identifier && s.password === password);
       if (match) {

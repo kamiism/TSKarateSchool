@@ -7,11 +7,17 @@ export const apiFetch = async (endpoint, method = "GET", options = {}) => {
     const axiosOptions = {
       method,
       headers: {
-        "Content-Type": options.headers["Content-Type"] || "application/json",
         ...(options.headers || {}),
       },
       withCredentials: true,
     };
+
+    if(options.headers && Object.keys(options.headers).includes("Content-Type")){
+      axiosOptions.headers["Content-Type"] = options.headers["Content-Type"];
+    }else{
+      axiosOptions.headers["Content-Type"] = "application/json";
+    }
+
     if (method != "GET" && options.data) {
       axiosOptions.data = options.data;
     }

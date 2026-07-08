@@ -11,7 +11,11 @@ export function AuthProvider({ children }) {
     fetchData();
   }, []);
 
-  return <AuthContext.Provider value={user , loading}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, setUser, loading }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
