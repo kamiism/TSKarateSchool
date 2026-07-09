@@ -7,9 +7,7 @@ export function ProtectedRoute({ role = "user", children }) {
   if (loading) {
     return <div>Loading...</div>; // Frontend guy please change it
   }
-  if (role == "user" && user) {
-    return children;
-  } else if (role == "staff" && staff) {
+  if ((role == "user" && user) || (role == "staff" && staff)) {
     return children;
   }
   return <Navigate to="/login" />;
