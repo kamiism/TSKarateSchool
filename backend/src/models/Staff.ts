@@ -38,7 +38,7 @@ const staffSchema = new mongoose.Schema<IStaff, StaffModel, IStaffMethods>({
     required: true,
     unique: true,
     match: [
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/,
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       "Please provide a valid email",
     ],
     index: true,
