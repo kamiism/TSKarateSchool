@@ -41,8 +41,8 @@ authRouter.post(
   asyncHandler(userAuthController.logout),
 );
 
-authRouter.post("/user/access-token", asyncHandler(userAuth.getAccessToken));
-authRouter.post("/staff/access-token", asyncHandler(staffAuth.getAccessToken));
+authRouter.get("/user/access-token", asyncHandler(userAuth.getAccessToken));
+authRouter.get("/staff/access-token", asyncHandler(staffAuth.getAccessToken));
 
 authRouter.post(
   "/login/staff",
@@ -57,10 +57,16 @@ authRouter.post(
   asyncHandler(staffAuthController.create),
 );
 
-authRouter.post(
+authRouter.get(
   "/user/profile",
   verifyUserJwt,
   asyncHandler(userAuthController.userProfile),
+);
+
+authRouter.get(
+  "/staff/profile",
+  verifyStaffJwt,
+  asyncHandler(staffAuthController.staffProfile),
 );
 
 export default authRouter;

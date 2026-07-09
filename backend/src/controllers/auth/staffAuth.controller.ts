@@ -84,7 +84,36 @@ export class StaffAuthController {
     });
 
     sendSuccess(res, STATUS_CODES.OK, API_RESPONSE_MESSAGES.SUCCESS, {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      name: user.name,
+      role: user.role,
       accessToken,
+    });
+  }
+
+  async staffProfile(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    const user = await Staff.findById(req.staff?._id);
+
+    if (!user) {
+      return sendError(
+        res,
+        STATUS_CODES.NOT_FOUND,
+        API_RESPONSE_MESSAGES.NOT_FOUND,
+      );
+    }
+
+    sendSuccess(res, STATUS_CODES.OK, API_RESPONSE_MESSAGES.SUCCESS, {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      name: user.name,
+      role: user.role,
     });
   }
 }
