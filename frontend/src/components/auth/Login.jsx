@@ -12,7 +12,7 @@ export default function Login() {
   const [isFocused, setIsFocused] = useState({ identifier: false, password: false });
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const {user , setUser} = useAuth();
+  const {user , setUser, staff, setStaff} = useAuth();
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -26,7 +26,7 @@ export default function Login() {
         }
       }).then(data => {
         if(data.success) {
-          localStorage.setItem("accessToken" , data.data.accessToken)
+          localStorage.setItem("userAccessToken" , data.data.accessToken)
           setUser({
             _id: data.data._id,
             username: data.data.username,
@@ -43,12 +43,27 @@ export default function Login() {
         }
       });
     } else {
-      const match = globalStaffData.find(s => s.username === identifier && s.password === password);
-      if (match) {
-        navigate('/admin');
-      } else {
-        setError('Invalid credentials.');
-      }
+        apiFetch("/auth/login/staff", "POST", {
+          data: {
+            identifier,
+            password
+          }
+        }).then(data => {
+          if(data.success){
+            localStorage.setItem("staffAccessToken", data.data.accessToken)
+            setStaff({
+              _id: data.data._id,
+              username: data.data.username,
+              email: data.data.email,
+              name: data.data.name,
+              role: data.data.role,
+            })
+            navigate("/admin")
+          }else{
+            setError("Invalid credentials")
+          }
+        })
+      
     }
   };
 

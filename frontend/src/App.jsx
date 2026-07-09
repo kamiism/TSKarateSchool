@@ -21,7 +21,7 @@ export default function App() {
           <Route path="/student" element={<ProtectedRoute><StudentHome /></ProtectedRoute>} />
           <Route path="/student/fees" element={<ProtectedRoute><StudentFees /></ProtectedRoute>} />
           <Route path="/student/quiz" element={<ProtectedRoute><QuizPage /></ProtectedRoute>} />
-          <Route path="/admin" element={<AdminHome />} />
+          <Route path="/admin" element={<ProtectedRoute role="staff"><AdminHome /></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

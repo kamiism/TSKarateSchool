@@ -363,7 +363,7 @@ export default function Register() {
         data: formData
       }).then(data => {
         if(data.success) {
-          localStorage.setItem("accessToken" , data.data.accessToken);
+          localStorage.setItem("userAccessToken" , data.data.accessToken);
           setUser({
             _id: data.data._id,
             username: data.data.username,

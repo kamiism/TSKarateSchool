@@ -50,12 +50,12 @@ export default function StudentHeader({ student }) {
   const handleLogout = () => {
     apiFetch("/auth/logout/user", "POST", {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+        Authorization: `Bearer ${localStorage.getItem("userAccessToken")}`
       }
     }).then(
       data => {
         if(data.success) {
-          localStorage.removeItem("accessToken")
+          localStorage.removeItem("userAccessToken")
           setUser(null);
           navigate("/");
         }
