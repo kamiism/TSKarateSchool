@@ -8,15 +8,14 @@ import StudentFooter from '../components/student/StudentFooter';
 import { useAuth } from '../context/AuthContext';
 
 export default function StudentHome() {
-  // Placeholder student data — will be replaced with real data later
   const { user } = useAuth();
   const student = {
     name: `${user.firstName} ${user.middleName} ${user.lastName}`,
-    belt: 'Orange Belt',
+    belt: `${user.belt ? `${user.belt} Belt` : ""}`,
     beltColor: '#FF8C00',
     daysPresent: 42,
     totalDays: 60,
-    quizPoints: 780,
+    quizPoints: Number(user.points),
     rank: 3,
   };
 

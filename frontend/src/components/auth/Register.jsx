@@ -367,7 +367,13 @@ export default function Register() {
           setUser({
             _id: data.data._id,
             username: data.data.username,
-            email: data.data.email
+            email: data.data.email,
+            firstName: data.data.firstName,
+            middleName: data.data.middleName || "",
+            lastName: data.data.lastName,
+            points: data.data.points,
+            mode: data.data.mode,
+            belt: data.data.belt,
           })
           navigate("/");
         }else{

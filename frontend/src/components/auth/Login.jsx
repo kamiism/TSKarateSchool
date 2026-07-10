@@ -36,6 +36,7 @@ export default function Login() {
             lastName: data.data.lastName,
             points: data.data.points,
             mode: data.data.mode,
+            belt: data.data.belt,
           })
           navigate("/student");
         }else{
