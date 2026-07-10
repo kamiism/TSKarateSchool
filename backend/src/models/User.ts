@@ -56,6 +56,19 @@ export interface IUser extends mongoose.Document {
   isVerified: boolean;
 
   points: number;
+  belt:
+    | "White"
+    | "Yellow"
+    | "Orange"
+    | "Green"
+    | "Blue-II"
+    | "Blue-I"
+    | "Purple-II"
+    | "Purple-I"
+    | "Brown-III"
+    | "Brown-II"
+    | "Brown-I"
+    | "Black";
 }
 
 interface IUserMethods {
@@ -226,6 +239,23 @@ const userSchema = new mongoose.Schema<IUser>(
     points: {
       type: Number,
       default: 0,
+    },
+    belt: {
+      type: String,
+      enum: [
+        "White",
+        "Yellow",
+        "Orange",
+        "Green",
+        "Blue-II",
+        "Blue-I",
+        "Purple-II",
+        "Purple-I",
+        "Brown-III",
+        "Brown-II",
+        "Brown-I",
+        "Black",
+      ],
     },
   },
   {

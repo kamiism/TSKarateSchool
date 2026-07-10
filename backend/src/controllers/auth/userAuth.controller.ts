@@ -42,7 +42,8 @@ export class UserAuthController {
       middleName: user.middleName || "",
       lastName: user.lastName,
       points: user.points,
-      mode: user.mode,
+      mode: user?.mode,
+      belt: user?.belt,
       accessToken,
     }); // TODO: Might change the data part
   }
@@ -95,7 +96,8 @@ export class UserAuthController {
       middleName: user.middleName || "",
       lastName: user.lastName,
       points: user.points,
-      mode: user.mode,
+      mode: user?.mode,
+      belt: user?.belt,
       accessToken,
     });
   }
@@ -149,7 +151,8 @@ export class UserAuthController {
       middleName: user.middleName || "",
       lastName: user.lastName,
       points: user.points,
-      mode: user.mode,
+      mode: user?.mode,
+      belt: user?.belt,
     });
   }
 }
