@@ -1,10 +1,22 @@
+import { ChevronDown, ChevronUp, Clock, Plus, Shield, ToggleLeft, ToggleRight, Trash2, Wifi, WifiOff, X } from 'lucide-react';
 import { useState } from 'react';
-import { Plus, Trash2, X, Clock, ToggleLeft, ToggleRight, ChevronDown, ChevronUp, WifiOff, Wifi } from 'lucide-react';
+
+const BELT_OPTIONS = [
+  'White', 'Yellow', 'Orange', 'Green', 'Blue-II', 'Blue-I',
+  'Purple-II', 'Purple-I', 'Brown-III', 'Brown-II', 'Brown-I', 'Black',
+];
+
+const BELT_COLORS = {
+  'White': '#E5E7EB', 'Yellow': '#FACC15', 'Orange': '#FB923C', 'Green': '#22C55E',
+  'Blue-II': '#60A5FA', 'Blue-I': '#3B82F6', 'Purple-II': '#C084FC', 'Purple-I': '#A855F7',
+  'Brown-III': '#A8876A', 'Brown-II': '#92705A', 'Brown-I': '#7C594A', 'Black': '#1F2937',
+};
 
 const offlineQuizzes = [
   {
     id: 1,
     name: 'Daily Kata Terminology',
+    belts: ['White', 'Yellow', 'Orange'],
     startHour: 18,
     endHour: 20,
     active: true,
@@ -21,6 +33,7 @@ const offlineQuizzes = [
   {
     id: 2,
     name: 'Basic Stances Review',
+    belts: ['Green', 'Blue-II', 'Blue-I'],
     startHour: 18,
     endHour: 20,
     active: false,
@@ -40,6 +53,7 @@ const hybridQuizzes = [
   {
     id: 201,
     name: 'Online Kata Theory',
+    belts: ['White', 'Yellow', 'Orange', 'Green', 'Blue-II', 'Blue-I', 'Purple-II', 'Purple-I', 'Brown-III', 'Brown-II', 'Brown-I', 'Black'],
     startHour: 10,
     endHour: 22,
     active: true,
@@ -64,6 +78,7 @@ export default function QuizManagement({ adminMode = 'offline' }) {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [newQuiz, setNewQuiz] = useState({
     name: '',
+    belts: [],
     startHour: 18,
     endHour: 20,
     questions: [
@@ -74,6 +89,22 @@ export default function QuizManagement({ adminMode = 'offline' }) {
       { ...emptyQuestion, options: [...emptyQuestion.options] },
     ],
   });
+
+  const toggleBelt = (belt) => {
+    setNewQuiz(prev => ({
+      ...prev,
+      belts: prev.belts.includes(belt)
+        ? prev.belts.filter(b => b !== belt)
+        : [...prev.belts, belt],
+    }));
+  };
+
+  const selectAllBelts = () => {
+    setNewQuiz(prev => ({
+      ...prev,
+      belts: prev.belts.length === BELT_OPTIONS.length ? [] : [...BELT_OPTIONS],
+    }));
+  };
 
   const toggleActive = (id) => {
     setQuizzes(prev => prev.map(q => q.id === id ? { ...q, active: !q.active } : q));
@@ -103,6 +134,7 @@ export default function QuizManagement({ adminMode = 'offline' }) {
 
   const handleCreateQuiz = () => {
     if (!newQuiz.name.trim()) return;
+    if (newQuiz.belts.length === 0) return;
     const hasAllQuestions = newQuiz.questions.every(
       q => q.question.trim() && q.options.every(o => o.trim())
     );
@@ -118,6 +150,7 @@ export default function QuizManagement({ adminMode = 'offline' }) {
     setQuizzes(prev => [quiz, ...prev]);
     setNewQuiz({
       name: '',
+      belts: [],
       startHour: 18,
       endHour: 20,
       questions: Array(5).fill(null).map(() => ({ ...emptyQuestion, options: [...emptyQuestion.options] })),
@@ -134,11 +167,10 @@ export default function QuizManagement({ adminMode = 'offline' }) {
             <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted">
               // Assessment
             </span>
-            <span className={`inline-flex items-center gap-1 px-2 py-0.5 font-mono text-[0.6rem] font-bold uppercase tracking-wider border-2 ${
-              adminMode === 'hybrid'
+            <span className={`inline-flex items-center gap-1 px-2 py-0.5 font-mono text-[0.6rem] font-bold uppercase tracking-wider border-2 ${adminMode === 'hybrid'
                 ? 'border-[#1E90FF] bg-[#1E90FF]/10 text-[#1E90FF]'
                 : 'border-brand-muted/40 bg-brand-muted/10 text-brand-muted'
-            }`}>
+              }`}>
               {adminMode === 'hybrid' ? <Wifi size={10} /> : <WifiOff size={10} />}
               {adminMode}
             </span>
@@ -185,6 +217,25 @@ export default function QuizManagement({ adminMode = 'offline' }) {
                     <span className="font-mono text-[0.6rem] tracking-wider uppercase text-brand-muted">
                       avg: {quiz.avgScore}/5
                     </span>
+                    {quiz.belts && quiz.belts.length > 0 && (
+                      <span className="flex items-center gap-1 flex-wrap">
+                        <Shield size={10} className="text-brand-muted" />
+                        {quiz.belts.map(b => (
+                          <span
+                            key={b}
+                            className="font-mono text-[0.55rem] font-bold uppercase tracking-wider px-1.5 py-0.5"
+                            style={{
+                              backgroundColor: `${BELT_COLORS[b]}20`,
+                              color: b === 'White' ? '#6B7280' : (b === 'Black' ? '#F9FAFB' : BELT_COLORS[b]),
+                              border: `1.5px solid ${BELT_COLORS[b]}`,
+                              ...(b === 'Black' ? { backgroundColor: BELT_COLORS[b] } : {}),
+                            }}
+                          >
+                            {b}
+                          </span>
+                        ))}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -249,8 +300,8 @@ export default function QuizManagement({ adminMode = 'offline' }) {
                               <span
                                 key={oi}
                                 className={`font-mono text-xs px-2 py-1 ${oi === q.correct
-                                    ? 'bg-brand-purple/10 text-brand-purple font-bold border-l-2 border-brand-purple'
-                                    : 'text-brand-muted'
+                                  ? 'bg-brand-purple/10 text-brand-purple font-bold border-l-2 border-brand-purple'
+                                  : 'text-brand-muted'
                                   }`}
                               >
                                 {opt}
@@ -297,6 +348,52 @@ export default function QuizManagement({ adminMode = 'offline' }) {
                 className="w-full px-4 py-3 border-3 border-brand-black font-mono text-sm bg-transparent
                            outline-none text-brand-black placeholder:text-brand-muted/60 focus:border-brand-purple transition-colors"
               />
+            </div>
+
+            {/* Belt Selector */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <label className="font-mono text-[0.7rem] tracking-[0.15em] uppercase text-brand-muted flex items-center gap-1.5">
+                  <Shield size={12} />
+                  Target Belts
+                </label>
+                <button
+                  type="button"
+                  onClick={selectAllBelts}
+                  className="font-mono text-[0.6rem] font-bold uppercase tracking-wider px-2 py-1
+                             border-2 border-brand-muted/30 bg-transparent text-brand-muted cursor-pointer
+                             hover:border-brand-purple hover:text-brand-purple transition-all duration-150"
+                >
+                  {newQuiz.belts.length === BELT_OPTIONS.length ? 'Deselect All' : 'Select All'}
+                </button>
+              </div>
+              {newQuiz.belts.length === 0 && (
+                <span className="font-mono text-[0.6rem] text-[#D9381E] block mb-2">Select at least one belt</span>
+              )}
+              <div className="flex flex-wrap gap-2">
+                {BELT_OPTIONS.map(belt => {
+                  const isSelected = newQuiz.belts.includes(belt);
+                  return (
+                    <button
+                      key={belt}
+                      type="button"
+                      onClick={() => toggleBelt(belt)}
+                      className="font-mono text-[0.65rem] font-bold uppercase tracking-wider px-3 py-1.5
+                                 cursor-pointer transition-all duration-150 border-2"
+                      style={{
+                        borderColor: isSelected ? BELT_COLORS[belt] : '#D1D5DB',
+                        backgroundColor: isSelected ? `${BELT_COLORS[belt]}20` : 'transparent',
+                        color: isSelected
+                          ? (belt === 'White' ? '#6B7280' : (belt === 'Black' ? '#1F2937' : BELT_COLORS[belt]))
+                          : '#9CA3AF',
+                        ...(isSelected && belt === 'Black' ? { backgroundColor: '#1F2937', color: '#F9FAFB' } : {}),
+                      }}
+                    >
+                      {belt}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Time Window */}
