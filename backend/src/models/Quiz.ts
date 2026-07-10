@@ -1,4 +1,5 @@
 import mongoose, { Document } from "mongoose";
+import { BELT_OPTIONS, type BELT_OPTIONS_ENUM } from "../config/constants.ts";
 
 type QuizType = {
   question: string;
@@ -8,6 +9,7 @@ type QuizType = {
 
 interface IQuiz extends Document {
   name: string;
+  belt: BELT_OPTIONS_ENUM;
   quizzes: QuizType[];
   start_hour: number;
   end_hour: number;
@@ -20,6 +22,11 @@ const quizSchema = new mongoose.Schema<IQuiz>(
       type: String,
       required: true,
       trim: true,
+    },
+    belt: {
+      type: String,
+      required: true,
+      enum: BELT_OPTIONS,
     },
     quizzes: [
       {

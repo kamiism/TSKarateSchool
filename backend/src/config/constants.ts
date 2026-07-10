@@ -36,3 +36,33 @@ export enum STAFF_ROLES {
   ADMIN = "Admin",
   MODERATOR = "Moderator",
 }
+
+export const BELT_OPTIONS = [
+  "White",
+  "Yellow",
+  "Orange",
+  "Green",
+  "Blue-II",
+  "Blue-I",
+  "Purple-II",
+  "Purple-I",
+  "Brown-III",
+  "Brown-II",
+  "Brown-I",
+  "Black",
+];
+
+export enum BELT_OPTIONS_ENUM {
+  White = "White",
+  Yellow = "Yellow",
+  Orange = "Orange",
+  Green = "Green",
+  BlueII = "Blue-II",
+  BlueI = "Blue-I",
+  PurpleII = "Purple-II",
+  PurpleI = "Purple-I",
+  BrownIII = "Brown-III",
+  BrownII = "Brown-II",
+  BrownI = "Brown-I",
+  Black = "Black",
+}

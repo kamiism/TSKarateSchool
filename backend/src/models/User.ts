@@ -9,6 +9,7 @@ import {
   REFRESH_TOKEN_SECRET,
 } from "../config/env.ts";
 import jwt, { type SignOptions } from "jsonwebtoken";
+import { BELT_OPTIONS, BELT_OPTIONS_ENUM } from "../config/constants.ts";
 
 interface IDisability {
   hasDisability: boolean;
@@ -56,19 +57,7 @@ export interface IUser extends mongoose.Document {
   isVerified: boolean;
 
   points: number;
-  belt:
-    | "White"
-    | "Yellow"
-    | "Orange"
-    | "Green"
-    | "Blue-II"
-    | "Blue-I"
-    | "Purple-II"
-    | "Purple-I"
-    | "Brown-III"
-    | "Brown-II"
-    | "Brown-I"
-    | "Black";
+  belt: BELT_OPTIONS_ENUM;
 }
 
 interface IUserMethods {
@@ -242,20 +231,7 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     belt: {
       type: String,
-      enum: [
-        "White",
-        "Yellow",
-        "Orange",
-        "Green",
-        "Blue-II",
-        "Blue-I",
-        "Purple-II",
-        "Purple-I",
-        "Brown-III",
-        "Brown-II",
-        "Brown-I",
-        "Black",
-      ],
+      enum: BELT_OPTIONS,
     },
   },
   {
