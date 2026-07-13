@@ -7,6 +7,7 @@ export const errorHandler = (
   err: any | AppError,
   req: Request,
   res: Response,
+  next: NextFunction,
 ) => {
   if (err.code == 11000) {
     sendError(res, STATUS_CODES.CONFLICT, API_RESPONSE_MESSAGES.CONFLICT);

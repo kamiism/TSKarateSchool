@@ -16,7 +16,10 @@ interface IMethods {
 type JwtDataType = UserJwtDataType | StaffJwtDataType;
 
 export class AuthController<T> {
-  constructor(private readonly model: Model<T, {}, IMethods>) {}
+  private readonly model;
+  constructor(model: Model<T, {}, IMethods>) {
+    this.model = model;
+  }
   async getAccessToken(req: Request, res: Response) {
     const token = req.cookies?.refreshToken;
     if (!token) {

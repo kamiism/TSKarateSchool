@@ -52,9 +52,12 @@ export const verifyUserJwt = async (
     req.user = user;
     next();
   } catch (error: any) {
-    throw new AppError(
-      error.message || "Invalid jwt token",
-      STATUS_CODES.BAD_REQUEST,
+    next(
+      new AppError(
+        error.message || "Invalid jwt token",
+        STATUS_CODES.BAD_REQUEST,
+        error.name,
+      ),
     );
   }
 };
@@ -80,9 +83,12 @@ export const verifyStaffJwt = async (
     req.staff = staff;
     next();
   } catch (error: any) {
-    throw new AppError(
-      error.message || "Invalid jwt token",
-      STATUS_CODES.BAD_REQUEST,
+    next(
+      new AppError(
+        error.message || "Invalid jwt token",
+        STATUS_CODES.BAD_REQUEST,
+        error.name,
+      ),
     );
   }
 };
