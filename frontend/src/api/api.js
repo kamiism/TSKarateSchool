@@ -12,9 +12,12 @@ export const apiFetch = async (endpoint, method = "GET", options = {}) => {
       withCredentials: true,
     };
 
-    if(options.headers && Object.keys(options.headers).includes("Content-Type")){
+    if (
+      options.headers &&
+      Object.keys(options.headers).includes("Content-Type")
+    ) {
       axiosOptions.headers["Content-Type"] = options.headers["Content-Type"];
-    }else{
+    } else {
       axiosOptions.headers["Content-Type"] = "application/json";
     }
 
@@ -25,7 +28,9 @@ export const apiFetch = async (endpoint, method = "GET", options = {}) => {
 
     return res.data || {};
   } catch (err) {
-    console.error("API fetch error:", err);
-    return { success: false, message: err.message };
+    if (axios.isAxiosError(err)) {
+      return err.response.data ?? { success: false, message: err.message };
+    }
+    return { success: false, message: "Something went wrong" };
   }
 };
