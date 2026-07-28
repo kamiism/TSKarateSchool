@@ -29,9 +29,6 @@ export default function WhyUs() {
   return (
     <section id="why" className="py-24 bg-brand-white" ref={sectionRef}>
       <div className="w-[min(1200px,92%)] mx-auto">
-        <span className="reveal font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-3 block">
-          // Why Choose Us
-        </span>
         <h2 className="reveal text-[clamp(2.2rem,5vw,3.8rem)] font-bold leading-[1.05] tracking-tight mb-6">
           Built<br />Different
         </h2>

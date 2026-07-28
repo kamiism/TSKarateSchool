@@ -135,9 +135,6 @@ export default function ExamManagement() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
           <div>
-            <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-2 block">
-              // Examination
-            </span>
             <h1 className="text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight">
               Practical<br />Exams
             </h1>

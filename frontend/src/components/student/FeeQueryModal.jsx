@@ -27,9 +27,6 @@ export default function FeeQueryModal({ onClose, onSubmit }) {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b-2 border-brand-black bg-brand-ice/10">
           <div>
-            <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted block mb-1">
-              // Support
-            </span>
             <h3 className="font-mono text-sm font-bold tracking-[0.15em] uppercase text-brand-black">
               Raise a Query
             </h3>

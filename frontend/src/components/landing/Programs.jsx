@@ -31,9 +31,6 @@ export default function Programs() {
   return (
     <section id="programs" className="py-24 bg-brand-black text-brand-white" ref={sectionRef}>
       <div className="w-[min(1200px,92%)] mx-auto">
-        <span className="reveal font-mono text-xs tracking-[0.2em] uppercase text-brand-ice mb-3 block">
-          // Our Programs
-        </span>
         <h2 className="reveal text-[clamp(2.2rem,5vw,3.8rem)] font-bold leading-[1.05] tracking-tight mb-6 text-brand-white">
           Train at<br />Every Level
         </h2>

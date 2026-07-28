@@ -44,9 +44,6 @@ export default function QuizSection() {
     <section id="take-quiz" className="py-16 bg-brand-white" ref={sectionRef}>
       <div className="w-[min(1200px,92%)] mx-auto">
         <div className="reveal mb-10">
-          <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-2 block">
-            // Assessment
-          </span>
           <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight text-brand-black">
             Quiz Center
           </h2>

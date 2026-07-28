@@ -128,9 +128,6 @@ export default function FeeManagement() {
       {/* Header */}
       <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-2 block">
-            // Fee Management
-          </span>
           <h1 className="text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight">
             Fee<br />Payment
           </h1>

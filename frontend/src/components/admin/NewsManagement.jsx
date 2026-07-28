@@ -61,9 +61,6 @@ export default function NewsManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
         <div>
-          <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-2 block">
-            // Communications
-          </span>
           <h1 className="text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight">
             News &<br />Events
           </h1>
@@ -168,9 +165,6 @@ export default function NewsManagement() {
               <X size={20} />
             </button>
 
-            <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-4 block">
-              // {editingItem ? 'Edit' : 'New'} Entry
-            </span>
             <h3 className="text-xl font-bold mb-6">{editingItem ? 'Edit' : 'Add'} News / Event</h3>
 
             <div className="space-y-4">

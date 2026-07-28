@@ -102,9 +102,6 @@ export default function SyllabusManagement({ adminMode = 'offline' }) {
       {/* Header */}
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-2">
-          <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted">
-            // Curriculum
-          </span>
           <span className={`inline-flex items-center gap-1 px-2 py-0.5 font-mono text-[0.6rem] font-bold uppercase tracking-wider border-2 ${
             adminMode === 'hybrid'
               ? 'border-[#1E90FF] bg-[#1E90FF]/10 text-[#1E90FF]'

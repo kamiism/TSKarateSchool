@@ -42,9 +42,6 @@ export default function FeeSettings() {
     <div>
       {/* Header */}
       <div className="mb-10">
-        <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-2 block">
-          // Configuration
-        </span>
         <h1 className="text-[clamp(1.8rem,4vw,3rem)] font-bold leading-tight tracking-tight">
           Fee<br />Settings
         </h1>

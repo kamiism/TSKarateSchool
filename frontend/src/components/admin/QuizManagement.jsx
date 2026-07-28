@@ -164,9 +164,6 @@ export default function QuizManagement({ adminMode = 'offline' }) {
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted">
-              // Assessment
-            </span>
             <span className={`inline-flex items-center gap-1 px-2 py-0.5 font-mono text-[0.6rem] font-bold uppercase tracking-wider border-2 ${adminMode === 'hybrid'
                 ? 'border-[#1E90FF] bg-[#1E90FF]/10 text-[#1E90FF]'
                 : 'border-brand-muted/40 bg-brand-muted/10 text-brand-muted'
@@ -330,9 +327,6 @@ export default function QuizManagement({ adminMode = 'offline' }) {
               <X size={20} />
             </button>
 
-            <span className="font-mono text-xs tracking-[0.2em] uppercase text-brand-muted mb-4 block">
-              // New Quiz
-            </span>
             <h3 className="text-xl font-bold mb-6">Create Quiz</h3>
 
             {/* Quiz Name */}
