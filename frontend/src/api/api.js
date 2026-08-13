@@ -29,7 +29,7 @@ export const apiFetch = async (endpoint, method = "GET", options = {}) => {
     return res.data || {};
   } catch (err) {
     if (axios.isAxiosError(err)) {
-      return err.response.data ?? { success: false, message: err.message };
+      return err.response?.data ?? { success: false, message: err.message };
     }
     return { success: false, message: "Something went wrong" };
   }
